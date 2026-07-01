@@ -1,0 +1,256 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Account.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-lg">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="text-center">
+                        Create New Account
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="Register" method="post">
+
+                        <div asp-validation-summary="All"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <label asp-for="FirstName"></label>
+
+                                <input asp-for="FirstName"
+                                       class="form-control" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label asp-for="LastName"></label>
+
+                                <input asp-for="LastName"
+                                       class="form-control" />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <label asp-for="Email"></label>
+
+                        <input asp-for="Email"
+                               class="form-control" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+
+                        <br />
+
+                        <label asp-for="Password"></label>
+
+                        <input asp-for="Password"
+                               class="form-control" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+
+                        <br />
+
+                        <label asp-for="ConfirmPassword"></label>
+
+                        <input asp-for="ConfirmPassword"
+                               class="form-control" />
+
+                        <span asp-validation-for="ConfirmPassword"
+                              class="text-danger"></span>
+
+                        <br />
+
+                        <label asp-for="PhoneNumber"></label>
+
+                        <input asp-for="PhoneNumber"
+                               class="form-control" />
+
+                        <span asp-validation-for="PhoneNumber"
+                              class="text-danger"></span>
+
+                        <br />
+
+                        <label asp-for="Address"></label>
+
+                        <input asp-for="Address"
+                               class="form-control" />
+
+                        <br />
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <label asp-for="City"></label>
+
+                                <input asp-for="City"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Governorate"></label>
+
+                                <input asp-for="Governorate"
+                                       class="form-control" />
+
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Gender"></label>
+
+                                <select asp-for="Gender"
+                                        class="form-select">
+
+                                    <option value="">Choose</option>
+
+                                    <option>Male</option>
+
+                                    <option>Female</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Age"></label>
+
+                                <input asp-for="Age"
+                                       class="form-control" />
+
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <label asp-for="Role"></label>
+
+                        <select asp-for="Role"
+                                class="form-select"
+                                id="roleSelect">
+
+                            <option value="">Choose Role</option>
+
+                            <option>Patient</option>
+
+                            <option>Nurse</option>
+
+                        </select>
+
+                        <br />
+
+                        <div id="patientFields">
+
+                            <label asp-for="MedicalHistory"></label>
+
+                            <textarea asp-for="MedicalHistory"
+                                          class="form-control">
+                            </textarea>
+
+                            </div>
+
+                            <div id="nurseFields"
+                                 style="display:none">
+
+                                <label asp-for="YearsExperience"></label>
+
+                                <input asp-for="YearsExperience"
+                                       class="form-control" />
+
+                                <br />
+
+                                <label asp-for="Specialization"></label>
+
+                                <input asp-for="Specialization"
+                                       class="form-control" />
+
+                            </div>
+
+                            <br />
+
+                            <button class="btn btn-success w-100">
+
+                                Register
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @section Scripts {
+
+        <partial name="_ValidationScriptsPartial" />
+
+        <script>
+
+            const role=document.getElementById("roleSelect");
+
+            const patient=document.getElementById("patientFields");
+
+            const nurse=document.getElementById("nurseFields");
+
+            role.addEventListener("change",function(){
+
+            if(role.value==="Nurse")
+            {
+            patient.style.display="none";
+            nurse.style.display="block";
+            }
+            else
+            {
+            patient.style.display="block";
+            nurse.style.display="none";
+            }
+
+            });
+
+        </script>
+
+    }
