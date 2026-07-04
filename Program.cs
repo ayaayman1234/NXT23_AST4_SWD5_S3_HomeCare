@@ -4,6 +4,7 @@ using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Services.Interfaces;
 using NursingCarePlatform.Web.Services.Implementations;
+using NursingCarePlatform.Web.Services;
 
 namespace NursingCarePlatform.Web
 {
@@ -44,6 +45,8 @@ namespace NursingCarePlatform.Web
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<INurseService, NurseManagementService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<ICareRequestService, CareRequestService>();
+
 
             var app = builder.Build();
 
