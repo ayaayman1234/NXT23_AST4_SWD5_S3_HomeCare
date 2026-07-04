@@ -1,0 +1,63 @@
+﻿@model NursingCarePlatform.Web.ViewModels.CareRequestDetailsViewModel
+
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<h2>Request Details</h2>
+
+<hr />
+
+<div class="card">
+
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">Patient</dt>
+            <dd class="col-sm-8">@Model.PatientName</dd>
+
+            <dt class="col-sm-4">Address</dt>
+            <dd class="col-sm-8">@Model.Address</dd>
+
+            <dt class="col-sm-4">Required Hours</dt>
+            <dd class="col-sm-8">@Model.RequiredHours</dd>
+
+            <dt class="col-sm-4">Budget</dt>
+            <dd class="col-sm-8">
+                @Model.BudgetMin - @Model.BudgetMax
+            </dd>
+
+            <dt class="col-sm-4">Priority</dt>
+            <dd class="col-sm-8">@Model.RequestPriority</dd>
+
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8">@Model.RequestStatus</dd>
+
+            <dt class="col-sm-4">Matching Type</dt>
+            <dd class="col-sm-8">@Model.MatchingType</dd>
+
+            <dt class="col-sm-4">Preferred Nurse Gender</dt>
+            <dd class="col-sm-8">@Model.PreferredNurseGender</dd>
+
+            <dt class="col-sm-4">Blood Type</dt>
+            <dd class="col-sm-8">@Model.BloodType</dd>
+
+            <dt class="col-sm-4">Allergies</dt>
+            <dd class="col-sm-8">@Model.Allergies</dd>
+
+            <dt class="col-sm-4">Chronic Diseases</dt>
+            <dd class="col-sm-8">@Model.ChronicDiseases</dd>
+
+            <dt class="col-sm-4">Contagious</dt>
+            <dd class="col-sm-8">@Model.ContagiousStatus</dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+<a asp-action="MyRequests" class="btn btn-secondary mt-3">
+    Back
+</a>

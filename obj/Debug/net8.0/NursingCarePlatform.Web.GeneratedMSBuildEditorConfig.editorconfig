@@ -1,7 +1,5 @@
 is_global = true
 build_property.TargetFramework = net8.0
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v8.0
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
@@ -11,193 +9,209 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = NursingCarePlatform.Web
 build_property.RootNamespace = NursingCarePlatform.Web
-build_property.ProjectDir = D:\aa\رابعه حاسبات الترم التاني\NursingCarePlatform.Web\NursingCarePlatform.Web\
+build_property.ProjectDir = C:\Users\HKServices\Desktop\homeCare\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\aa\رابعه حاسبات الترم التاني\NursingCarePlatform.Web\NursingCarePlatform.Web
+build_property.MSBuildProjectDirectory = C:\Users\HKServices\Desktop\homeCare
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Account/AccessDenied.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Account/Login.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Account/Register.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Admin/Complaints.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Admin/Complaints.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ29tcGxhaW50cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Admin/Dashboard.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Admin/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Admin/Index.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Admin/Users.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Admin/Users.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Admin/VerifyNurses.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Admin/VerifyNurses.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmVyaWZ5TnVyc2VzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Home/Index.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/CareRequest/CreateCareRequest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZVJlcXVlc3RcQ3JlYXRlQ2FyZVJlcXVlc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HKServices/Desktop/homeCare/Views/CareRequest/EditCareRequest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZVJlcXVlc3RcRWRpdENhcmVSZXF1ZXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HKServices/Desktop/homeCare/Views/CareRequest/MyRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZVJlcXVlc3RcTXlSZXF1ZXN0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HKServices/Desktop/homeCare/Views/CareRequest/RequestDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZVJlcXVlc3RcUmVxdWVzdERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HKServices/Desktop/homeCare/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Home/Privacy.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Assignments.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Assignments.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcQXNzaWdubWVudHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Availability.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Availability.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcQXZhaWxhYmlsaXR5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/BrowseRequests.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/BrowseRequests.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcQnJvd3NlUmVxdWVzdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Dashboard.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Details.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Documents.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Documents.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcRG9jdW1lbnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Edit.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Index.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/MyOffers.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/MyOffers.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcTXlPZmZlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Profile.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcUHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/RequestDetails.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/RequestDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcUmVxdWVzdERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/SendOffer.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/SendOffer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcU2VuZE9mZmVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Nurse/Services.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Nurse/Services.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnVyc2VcU2VydmljZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/CreateCareRequest.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/CreateCareRequest.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxDcmVhdGVDYXJlUmVxdWVzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/Dashboard.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/Details.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/Edit.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/EditRequest.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/EditRequest.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxFZGl0UmVxdWVzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/Index.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/MyRequests.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/MyRequests.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxNeVJlcXVlc3RzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/Profile.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Patient/RequestDetails.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Patient/RequestDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF0aWVudFxSZXF1ZXN0RGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Payment/Index.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Payment/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Rating/Create.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Rating/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmF0aW5nXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/Error.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_DashboardLayout.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_DashboardLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9EYXNoYm9hcmRMYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_Footer.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_Footer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb290ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_Navbar.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_Navbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9OYXZiYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_Sidebar.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_Sidebar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TaWRlYmFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/_ViewImports.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/_ViewStart.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/aa/رابعه حاسبات الترم التاني/NursingCarePlatform.Web/NursingCarePlatform.Web/Views/Shared/_Layout.cshtml]
+[C:/Users/HKServices/Desktop/homeCare/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-al9j0wujsl
