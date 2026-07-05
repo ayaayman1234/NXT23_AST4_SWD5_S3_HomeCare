@@ -1,0 +1,42 @@
+﻿@model NursingCarePlatform.Web.ViewModels.PaymentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Payment #@Model.Id</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Care Request</dt>
+                <dd class="col-sm-8">#@Model.CareRequestId</dd>
+
+                <dt class="col-sm-4">Amount</dt>
+                <dd class="col-sm-8">@Model.Amount.ToString("C")</dd>
+
+                <dt class="col-sm-4">Platform Commission</dt>
+                <dd class="col-sm-8">@Model.CommissionAmount.ToString("C")</dd>
+
+                <dt class="col-sm-4">Net to Nurse</dt>
+                <dd class="col-sm-8">@Model.NetAmountToNurse.ToString("C")</dd>
+
+                <dt class="col-sm-4">Payment Method</dt>
+                <dd class="col-sm-8">@Model.PaymentMethod</dd>
+
+                <dt class="col-sm-4">Transaction Reference</dt>
+                <dd class="col-sm-8">@Model.TransactionReference</dd>
+
+                <dt class="col-sm-4">Payment Date</dt>
+                <dd class="col-sm-8">@Model.PaymentDate.ToString("g")</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-warning text-dark">@Model.PaymentStatus</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
