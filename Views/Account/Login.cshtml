@@ -1,5 +1,145 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model NursingCarePlatform.Web.ViewModels.Account.LoginViewModel
+
 @{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center align-items-center min-vh-100">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                <div class="row g-0">
+
+                    <!-- Left Side -->
+
+                    <div class="col-md-6 d-none d-md-block">
+
+                        <img src="~/images/nurse.jpg"
+                             class="img-fluid h-100 w-100"
+                             style="object-fit:cover;"
+                             alt="Nurse" />
+
+                    </div>
+
+                    <!-- Right Side -->
+
+                    <div class="col-md-6">
+
+                        <div class="p-5">
+
+                            <div class="text-center mb-4">
+
+                                <i class="bi bi-heart-pulse-fill text-primary"
+                                   style="font-size:60px;"></i>
+
+                                <h2 class="fw-bold mt-3">
+
+                                    Welcome Back
+
+                                </h2>
+
+                                <p class="text-muted">
+
+                                    Login to your HomeCare account
+
+                                </p>
+
+                            </div>
+
+                            <form asp-action="Login"
+                                  method="post">
+
+                                <div asp-validation-summary="ModelOnly"
+                                     class="text-danger mb-3">
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label asp-for="Email"
+                                           class="form-label">
+                                    </label>
+
+                                    <input asp-for="Email"
+                                           class="form-control form-control-lg" />
+
+                                    <span asp-validation-for="Email"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label asp-for="Password"
+                                           class="form-label">
+                                    </label>
+
+                                    <input asp-for="Password"
+                                           class="form-control form-control-lg" />
+
+                                    <span asp-validation-for="Password"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                                <div class="form-check mb-4">
+
+                                    <input asp-for="RememberMe"
+                                           class="form-check-input" />
+
+                                    <label asp-for="RememberMe"
+                                           class="form-check-label">
+                                    </label>
+
+                                </div>
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-lg w-100">
+
+                                    <i class="bi bi-box-arrow-in-right"></i>
+
+                                    Login
+
+                                </button>
+
+                            </form>
+
+                            <hr class="my-4" />
+
+                            <div class="text-center">
+
+                                Don't have an account?
+
+                                <a asp-action="Register"
+                                       class="fw-bold">
+
+                                    Register
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
 }

@@ -1,1 +1,313 @@
-﻿
+﻿@model NursingCarePlatform.Web.ViewModels.Nurse.NurseProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-circle"></i>
+                        My Profile
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Full Name
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.FirstName
+                            @Model.Nurse.User.LastName
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Email
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.Email
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Phone Number
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.PhoneNumber
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Address
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.Address
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            City
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.City
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Governorate
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.Governorate
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Gender
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.Gender
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Age
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.User.Age
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Years of Experience
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.YearsExperience Years
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-4 fw-bold">
+                            Specialization
+                        </div>
+
+                        <div class="col-md-8">
+                            @Model.Nurse.Specialization
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-4 fw-bold">
+                            Verification Status
+                        </div>
+
+                        <div class="col-md-8">
+
+                            @if (Model.Nurse.IsVerified)
+                            {
+                                <span class="badge bg-success">
+                                    Verified
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Pending Verification
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <h4 class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        Ratings
+                    </h4>
+
+                    <div class="mb-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="text-warning">
+
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Math.Round(Model.AverageRating))
+                                    {
+                                        <i class="bi bi-star-fill"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-star"></i>
+                                    }
+                                }
+
+                            </div>
+
+                            <span class="ms-2">
+
+                                @Model.AverageRating.ToString("0.0")
+                                (@Model.ReviewsCount Reviews)
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    @if (Model.Reviews.Any())
+                    {
+                        foreach (var review in Model.Reviews)
+                        {
+                            <div class="card mb-3">
+
+                                <div class="card-body">
+
+                                    <div class="text-warning mb-2">
+
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.RatingScore)
+                                            {
+                                                <i class="bi bi-star-fill"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-star"></i>
+                                            }
+                                        }
+
+                                    </div>
+
+                                    <p>
+
+                                        @(string.IsNullOrWhiteSpace(review.RatingComment)
+                                            ? "No Comment"
+                                            : review.RatingComment)
+
+                                    </p>
+
+                                    <small class="text-muted">
+
+                                        @review.CreatedAt.ToShortDateString()
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+
+                            No ratings yet.
+
+                        </div>
+                    }
+
+                    <a asp-action="EditProfile"
+                           class="btn btn-primary">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit Profile
+
+                    </a>
+
+                    <a asp-action="Dashboard"
+                           class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,1 +1,95 @@
-﻿
+﻿@model IEnumerable<NursingCarePlatform.Web.Models.Availability>
+
+@{
+    ViewData["Title"] = "My Availability";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+            <i class="bi bi-calendar-week"></i>
+            My Availability
+        </h2>
+
+        <a asp-action="AddAvailability" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Add Availability
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+
+            No availability has been added yet.
+
+        </div>
+    }
+    else
+    {
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Day</th>
+
+                    <th>Start Time</th>
+
+                    <th>End Time</th>
+
+                    <th width="180">Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.Day</td>
+
+                        <td>@item.StartTime</td>
+
+                        <td>@item.EndTime</td>
+
+                        <td>
+
+                            <a asp-action="DeleteAvailability"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete this availability?')">
+
+                                <i class="bi bi-trash"></i>
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    }
+
+</div>

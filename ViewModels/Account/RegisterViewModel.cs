@@ -50,10 +50,12 @@ namespace NursingCarePlatform.Web.ViewModels.Account
         // Patient
 
         public string? MedicalHistory { get; set; }
+        public string? BloodType { get; set; }
+
 
         // Nurse
 
-        public int YearsExperience { get; set; }
+        public int? YearsExperience { get; set; }
 
         public string? Specialization { get; set; }
     }

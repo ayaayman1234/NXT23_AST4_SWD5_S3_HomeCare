@@ -12,6 +12,7 @@
         public string Specialization { get; set; } = string.Empty;
 
         public bool IsVerified { get; set; }
+        public bool IsAvailable { get; set; } = true;
 
         public ApplicationUser User { get; set; } = null!;
 

@@ -18,5 +18,7 @@
         public CareRequest CareRequest { get; set; } = null!;
 
         public Nurse Nurse { get; set; } = null!;
+        public DateTime? CompletedAt { get; set; }
+        public NursingNote? NursingNote { get; set; }
     }
 }

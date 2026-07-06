@@ -22,6 +22,7 @@ namespace NursingCarePlatform.Web.Data
         public DbSet<Verification> Verifications { get; set; }
 
         public DbSet<NursingService> NursingServices { get; set; }
+        public DbSet<ServiceCategory> ServiceCategories { get; set; }
 
         public DbSet<NurseService> NurseServices { get; set; }
 
@@ -57,11 +58,17 @@ namespace NursingCarePlatform.Web.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // ==========================
             // Composite Key
+            // ==========================
+
             modelBuilder.Entity<NurseService>()
                 .HasKey(ns => new { ns.NurseId, ns.ServiceId });
 
+            // ==========================
             // Decimal Precision
+            // ==========================
+
             modelBuilder.Entity<NurseService>()
                 .Property(ns => ns.Price)
                 .HasPrecision(18, 2);
@@ -94,7 +101,32 @@ namespace NursingCarePlatform.Web.Data
                 .Property(n => n.Temperature)
                 .HasPrecision(18, 2);
 
+            // ==========================
+            // CareRequest Relations
+            // ==========================
+
+            modelBuilder.Entity<CareRequest>()
+                .HasOne(c => c.Patient)
+                .WithMany()
+                .HasForeignKey(c => c.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CareRequest>()
+                .HasOne(c => c.Service)
+                .WithMany(s => s.CareRequests)
+                .HasForeignKey(c => c.ServiceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CareRequest>()
+                .HasOne(c => c.Nurse)
+                .WithMany()
+                .HasForeignKey(c => c.NurseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // ==========================
             // Avoid Multiple Cascade Paths
+            // ==========================
+
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.Nurse)
                 .WithMany()
@@ -114,12 +146,15 @@ namespace NursingCarePlatform.Web.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<MyOffer>()
-                .HasOne(o => o.CareRequest)
-                .WithMany()
-                .HasForeignKey(o => o.CareRequestId)
-                .OnDelete(DeleteBehavior.NoAction);
+    .HasOne(o => o.CareRequest)
+    .WithMany(c => c.Offers)
+    .HasForeignKey(o => o.CareRequestId)
+    .OnDelete(DeleteBehavior.NoAction);
 
+            // ==========================
             // Identity Relations
+            // ==========================
+
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.User)
                 .WithMany()
@@ -137,17 +172,83 @@ namespace NursingCarePlatform.Web.Data
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Verification>()
-    .HasOne(v => v.Admin)
-    .WithMany()
-    .HasForeignKey(v => v.AdminId)
-    .OnDelete(DeleteBehavior.NoAction);
+                .HasOne(v => v.Admin)
+                .WithMany()
+                .HasForeignKey(v => v.AdminId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Verification>()
                 .HasOne(v => v.NurseDocument)
                 .WithMany()
                 .HasForeignKey(v => v.NurseDocumentId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // ==========================
+            // Complaint Relations
+            // ==========================
+
+            modelBuilder.Entity<Complaint>()
+                .HasOne(c => c.Patient)
+                .WithMany()
+                .HasForeignKey(c => c.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Complaint>()
+                .HasOne(c => c.Nurse)
+                .WithMany()
+                .HasForeignKey(c => c.NurseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ServiceCategory>()
+                .HasMany(c => c.Services)
+                .WithOne(s => s.Category)
+                .HasForeignKey(s => s.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+            // ==========================
+            // Work History Relations
+            // ==========================
+
+            modelBuilder.Entity<WorkHistory>()
+                .Property(w => w.TotalAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<WorkHistory>()
+                .HasOne(w => w.Nurse)
+                .WithMany()
+                .HasForeignKey(w => w.NurseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<WorkHistory>()
+                .HasOne(w => w.Patient)
+                .WithMany()
+                .HasForeignKey(w => w.PatientId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<WorkHistory>()
+                .HasOne(w => w.CareRequest)
+                .WithMany()
+                .HasForeignKey(w => w.CareRequestId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<WorkHistory>()
+                .HasOne(w => w.Service)
+                .WithMany()
+                .HasForeignKey(w => w.ServiceId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MedicalChecklist>()
+                .HasOne(m => m.CareRequest)
+                .WithOne(c => c.MedicalChecklist)
+                .HasForeignKey<MedicalChecklist>(m => m.CareRequestId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<NursingNote>()
+                .HasOne(n => n.Assignment)
+                .WithOne(a => a.NursingNote)
+                .HasForeignKey<NursingNote>(n => n.AssignmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
         }
+
     }
 }

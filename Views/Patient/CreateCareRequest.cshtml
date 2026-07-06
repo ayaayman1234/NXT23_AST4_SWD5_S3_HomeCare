@@ -1,1 +1,228 @@
-﻿
+﻿@model NursingCarePlatform.Web.ViewModels.CareRequest.CreateCareRequestViewModel
+
+@{
+    ViewData["Title"] = "Create Care Request";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-heart-pulse"></i>
+                        New Care Request
+                    </h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="CreateCareRequest" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="ServiceId" class="form-label"></label>
+
+                            <select asp-for="ServiceId"
+                                    asp-items="Model.Services"
+                                    class="form-select">
+
+                                <option value="">-- Select Service --</option>
+
+                            </select>
+
+                            <span asp-validation-for="ServiceId"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Address" class="form-label"></label>
+
+                            <input asp-for="Address"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Address"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Description"
+                                   class="form-label"></label>
+
+                            <textarea asp-for="Description"
+                                      rows="4"
+                                      class="form-control"></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PreferredDate"
+                                       class="form-label"></label>
+
+                                <input asp-for="PreferredDate"
+                                       type="datetime-local"
+                                       class="form-control" />
+
+                                <span asp-validation-for="PreferredDate"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="RequiredHours"
+                                       class="form-label"></label>
+
+                                <input asp-for="RequiredHours"
+                                       type="number"
+                                       min="1"
+                                       max="24"
+                                       class="form-control" />
+
+                                <span asp-validation-for="RequiredHours"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="BudgetMin"
+                                       class="form-label"></label>
+
+                                <input asp-for="BudgetMin"
+                                       type="number"
+                                       step="0.01"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="BudgetMax"
+                                       class="form-label"></label>
+
+                                <input asp-for="BudgetMax"
+                                       type="number"
+                                       step="0.01"
+                                       class="form-control" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="PreferredNurseGender"
+                                   class="form-label"></label>
+
+                            <select asp-for="PreferredNurseGender"
+                                    class="form-select">
+
+                                <option value="">No Preference</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <label asp-for="RequestPriority"
+                                       class="form-label"></label>
+
+                                <select asp-for="RequestPriority"
+                                        class="form-select">
+
+                                    <option>Low</option>
+                                    <option selected>Normal</option>
+                                    <option>High</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label asp-for="MatchingType"
+                                       class="form-label"></label>
+
+                                <select asp-for="MatchingType"
+                                        class="form-select">
+
+                                    <option selected>Automatic</option>
+                                    <option>Manual</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="form-check mb-2">
+
+                            <input asp-for="OvernightStay"
+                                   class="form-check-input" />
+
+                            <label asp-for="OvernightStay"
+                                   class="form-check-label"></label>
+
+                        </div>
+
+                        <div class="form-check mb-4">
+
+                            <input asp-for="AccommodationAvailable"
+                                   class="form-check-input" />
+
+                            <label asp-for="AccommodationAvailable"
+                                   class="form-check-label"></label>
+
+                        </div>
+
+                        <button class="btn btn-success w-100">
+                            <i class="bi bi-check-circle"></i>
+                            Create Request
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

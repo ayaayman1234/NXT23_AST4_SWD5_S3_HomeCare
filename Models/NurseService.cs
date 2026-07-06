@@ -11,5 +11,6 @@
         public Nurse Nurse { get; set; } = null!;
 
         public NursingService Service { get; set; } = null!;
+
     }
 }

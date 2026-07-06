@@ -6,13 +6,15 @@ namespace NursingCarePlatform.Web.ViewModels.Complaint
     {
         public int Id { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        [Display(Name = "Nurse")]
+        public int? NurseId { get; set; }
 
         [Required]
-        [StringLength(1000)]
+        [Display(Name = "Complaint Title")]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
-
-        public string ComplaintStatus { get; set; } = string.Empty;
     }
 }

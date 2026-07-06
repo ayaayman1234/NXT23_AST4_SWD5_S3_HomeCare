@@ -1,1 +1,236 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Nurse Dashboard";
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold text-primary">
+            Nurse Dashboard
+        </h2>
+
+        <p class="text-muted">
+            Welcome to your nursing dashboard.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Profile -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-person-circle display-4 text-primary"></i>
+
+                    <h4 class="mt-3">
+                        My Profile
+                    </h4>
+
+                    <p class="text-muted">
+                        View and update your personal information.
+                    </p>
+
+                    <a asp-action="Profile"
+                           class="btn btn-primary">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Availability -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-calendar-check display-4 text-success"></i>
+
+                    <h4 class="mt-3">
+                        Availability
+                    </h4>
+
+                    <p class="text-muted">
+                        Manage your working schedule.
+                    </p>
+
+                    <a asp-action="Availability"
+                           class="btn btn-success">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Documents -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-file-earmark-medical display-4 text-danger"></i>
+
+                    <h4 class="mt-3">
+                        Documents
+                    </h4>
+
+                    <p class="text-muted">
+                        Upload your certificates and documents.
+                    </p>
+
+                    <a asp-action="Documents"
+                           class="btn btn-danger">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Services -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-heart-pulse display-4 text-warning"></i>
+
+                    <h4 class="mt-3">
+                        My Services
+                    </h4>
+
+                    <p class="text-muted">
+                        Manage the services you provide.
+                    </p>
+
+                    <a asp-action="Services"
+                           class="btn btn-warning">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Available Requests -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-clipboard-heart display-4 text-info"></i>
+
+                    <h4 class="mt-3">
+                        Available Requests
+                    </h4>
+
+                    <p class="text-muted">
+                        Browse patient requests and send offers.
+                    </p>
+
+                    <a asp-action="AvailableRequests"
+                           class="btn btn-info text-white">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- My Assignments -->
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-briefcase-fill display-4 text-info"></i>
+
+                    <h4 class="mt-3">
+                        My Assignments
+                    </h4>
+
+                    <p class="text-muted">
+                        View your accepted care assignments.
+                    </p>
+
+                    <a asp-controller="Assignment"
+                           asp-action="MyAssignments"
+                           class="btn btn-info">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Work History -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-clock-history display-4 text-dark"></i>
+
+                    <h4 class="mt-3">
+                        Work History
+                    </h4>
+
+                    <p class="text-muted">
+                        View all completed care jobs.
+                    </p>
+
+                    <a asp-controller="WorkHistory"
+                           asp-action="Index"
+                           class="btn btn-dark">
+
+                        Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

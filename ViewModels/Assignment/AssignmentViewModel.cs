@@ -17,6 +17,7 @@ namespace NursingCarePlatform.Web.ViewModels.Assignment
 
         [Display(Name = "Shift End")]
         public DateTime ShiftEnd { get; set; }
+        public DateTime? CompletedAt { get; set; }
 
         public string AssignmentStatus { get; set; } = string.Empty;
     }

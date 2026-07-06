@@ -1,0 +1,144 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Nurse.NurseServiceViewModel
+
+@{
+    ViewData["Title"] = "Add Service";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Add Service</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="AddService" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="CategoryId" class="form-label">
+                                Category
+                            </label>
+
+                            <select asp-for="CategoryId"
+                                    id="categorySelect"
+                                    class="form-select">
+
+                                <option value="">Select Category</option>
+
+                                @foreach (var item in ViewBag.Categories)
+                                {
+                                    <option value="@item.Id">
+                                        @item.Name
+                                    </option>
+                                }
+
+                            </select>
+
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="ServiceId" class="form-label">
+                                Service
+                            </label>
+
+                            <select asp-for="ServiceId"
+                                    id="serviceSelect"
+                                    class="form-select">
+
+                                <option value="">Select Service</option>
+
+                            </select>
+
+                            <span asp-validation-for="ServiceId" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Price" class="form-label"></label>
+
+                            <input asp-for="Price"
+                                   type="number"
+                                   class="form-control"
+                                   min="0"
+                                   step="1" />
+
+                            <span asp-validation-for="Price" class="text-danger"></span>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+
+                            <i class="bi bi-plus-circle"></i>
+
+                            Add Service
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        $("#categorySelect").change(function () {
+
+            var categoryId = $(this).val();
+
+            $("#serviceSelect").empty();
+
+            $("#serviceSelect").append(
+                '<option value="">Select Service</option>'
+            );
+
+            if(categoryId=="")
+                return;
+
+            $.get("/Nurse/GetServicesByCategory",
+            {
+                categoryId: categoryId
+            },
+            function(data){
+
+                $.each(data,function(i,item){
+
+                    $("#serviceSelect").append(
+
+                        '<option value="' + item.id + '">' +
+                        item.name +
+                        '</option>'
+
+                    );
+
+                });
+
+            });
+
+        });
+
+    </script>
+}

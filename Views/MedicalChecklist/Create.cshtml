@@ -1,0 +1,146 @@
+﻿@model NursingCarePlatform.Web.ViewModels.MedicalChecklist.CreateMedicalChecklistViewModel
+
+@{
+    ViewData["Title"] = "Medical Checklist";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                <i class="bi bi-clipboard2-pulse"></i>
+                Medical Checklist
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <input asp-for="CareRequestId" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <!-- Request Information -->
+
+                <div class="row mb-4">
+
+                    <div class="col-md-6">
+
+                        <label class="fw-bold">
+                            Patient
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.PatientName"
+                               readonly />
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="fw-bold">
+                            Service
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.ServiceName"
+                               readonly />
+
+                    </div>
+
+                </div>
+
+                <!-- Blood Type -->
+
+                <div class="mb-3">
+
+                    <label asp-for="BloodType"
+                           class="form-label"></label>
+
+                    <input asp-for="BloodType"
+                           class="form-control" />
+
+                    <span asp-validation-for="BloodType"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- Allergies -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Allergies"
+                           class="form-label"></label>
+
+                    <textarea asp-for="Allergies"
+                              rows="3"
+                              class="form-control"></textarea>
+
+                    <span asp-validation-for="Allergies"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- Chronic Diseases -->
+
+                <div class="mb-3">
+
+                    <label asp-for="ChronicDiseases"
+                           class="form-label"></label>
+
+                    <textarea asp-for="ChronicDiseases"
+                              rows="3"
+                              class="form-control"></textarea>
+
+                    <span asp-validation-for="ChronicDiseases"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- Contagious -->
+
+                <div class="form-check mb-4">
+
+                    <input asp-for="ContagiousStatus"
+                           class="form-check-input" />
+
+                    <label asp-for="ContagiousStatus"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Checklist
+
+                </button>
+
+                <a asp-controller="Assignment"
+                       asp-action="MyAssignments"
+                       class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

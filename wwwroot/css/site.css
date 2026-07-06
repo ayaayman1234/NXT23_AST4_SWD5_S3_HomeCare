@@ -1,49 +1,103 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+@media (min-width:768px) {
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
-  margin-bottom: 60px;
-}
-.hero {
-    padding: 80px 0;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 60px;
+    font-family: "Segoe UI", sans-serif;
     background: #f8f9fa;
 }
+
+/* =======================
+        Navbar
+========================== */
+
+.navbar {
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: .3s;
+}
+
+    .nav-link:hover {
+        color: #0d6efd !important;
+    }
+
+/* =======================
+        Hero
+========================== */
+
+.hero {
+    padding: 80px 0;
+    background: linear-gradient(135deg,#f8f9fa,#eaf4ff);
+}
+
+    .hero h1 {
+        font-size: 55px;
+        font-weight: bold;
+        color: #222;
+    }
+
+    .hero p {
+        font-size: 20px;
+        color: #555;
+        line-height: 1.8;
+    }
 
 .hero-image {
     width: 100%;
     max-height: 550px;
     object-fit: cover;
     border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
 }
 
-.hero h1 {
+/* =======================
+        Buttons
+========================== */
+
+.btn-primary {
+    padding: 12px 30px;
+    border-radius: 30px;
     font-weight: bold;
+    transition: .3s;
 }
 
-.hero p {
-    color: #555;
-    font-size: 20px;
-}
+    .btn-primary:hover {
+        transform: translateY(-3px);
+    }
+
+/* =======================
+        Services
+========================== */
+
 .service-card {
     border: none;
-    transition: .3s;
+    border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    transition: .3s;
+    background: white;
 }
 
     .service-card:hover {
@@ -51,23 +105,180 @@ body {
     }
 
 .service-icon {
-    font-size: 55px;
+    font-size: 60px;
     color: #0d6efd;
 }
 
+/* =======================
+        Features
+========================== */
+
 .feature-icon {
-    font-size: 50px;
+    font-size: 55px;
     color: #0d6efd;
+    margin-bottom: 15px;
 }
+
+/* =======================
+      How it works
+========================== */
 
 .step-number {
     width: 70px;
     height: 70px;
+    line-height: 70px;
+    margin: auto;
     border-radius: 50%;
     background: #0d6efd;
     color: white;
     font-size: 28px;
-    margin: auto;
-    line-height: 70px;
     font-weight: bold;
+}
+
+/* =======================
+      Sections
+========================== */
+
+section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+    section h2 {
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+/* =======================
+      Cards
+========================== */
+
+.card {
+    border-radius: 20px;
+    border: none;
+    transition: all .3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 35px rgba(0,0,0,.12);
+    }
+
+/* =======================
+   Dashboard Cards
+========================== */
+
+.dashboard-card {
+    border-radius: 20px;
+    transition: all .35s ease;
+    cursor: pointer;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 40px rgba(0,0,0,.15);
+    }
+
+    .dashboard-card i {
+        font-size: 55px;
+        transition: .3s;
+    }
+
+    .dashboard-card:hover i {
+        transform: scale(1.15);
+    }
+
+    .dashboard-card h5 {
+        font-weight: 700;
+        color: #222;
+    }
+
+    .dashboard-card p {
+        color: #777;
+        margin-bottom: 0;
+    }
+
+/* =======================
+      Forms
+========================== */
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 12px;
+}
+
+    .form-control:focus,
+    .form-select:focus,
+    .form-check-input:focus,
+    .btn:focus,
+    .btn:active:focus,
+    .btn-link.nav-link:focus {
+        box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+    }
+
+/* =======================
+      Alerts
+========================== */
+
+.alert {
+    border-radius: 15px;
+}
+
+/* =======================
+      Tables
+========================== */
+
+.table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* =======================
+      Footer
+========================== */
+
+footer {
+    background: #0d6efd;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: 70px;
+}
+
+/* =======================
+      Responsive
+========================== */
+
+@media (max-width:991px) {
+
+    .hero {
+        text-align: center;
+    }
+
+        .hero h1 {
+            font-size: 38px;
+        }
+
+    .hero-image {
+        margin-top: 35px;
+    }
+}
+
+@media (max-width:768px) {
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .service-icon,
+    .feature-icon,
+    .dashboard-card i {
+        font-size: 45px;
+    }
 }

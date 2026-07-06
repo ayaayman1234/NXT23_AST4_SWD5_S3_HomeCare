@@ -1,1 +1,223 @@
-﻿
+﻿@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
+
+@{
+    ViewData["Title"] = "My Requests";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            <i class="bi bi-clipboard-heart"></i>
+            My Care Requests
+        </h2>
+
+        <a asp-action="CreateCareRequest"
+               class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Create Request
+
+        </a>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow border-0">
+
+                <div class="card-body">
+
+                    <i class="bi bi-clipboard-data display-5 text-primary"></i>
+
+                    <h3 class="mt-3">@ViewBag.TotalRequests</h3>
+
+                    <p class="text-muted mb-0">
+                        Total Requests
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow border-0">
+
+                <div class="card-body">
+
+                    <i class="bi bi-hourglass-split display-5 text-warning"></i>
+
+                    <h3 class="mt-3">@ViewBag.PendingRequests</h3>
+
+                    <p class="text-muted mb-0">
+                        Pending
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow border-0">
+
+                <div class="card-body">
+
+                    <i class="bi bi-check-circle-fill display-5 text-success"></i>
+
+                    <h3 class="mt-3">@ViewBag.CompletedRequests</h3>
+
+                    <p class="text-muted mb-0">
+                        Completed
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+
+            You don't have any requests yet.
+
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-primary">
+
+                <tr>
+
+                    <th>Service</th>
+
+                    <th>Date</th>
+
+                    <th>Status</th>
+
+                    <th>Budget</th>
+
+                    <th width="320">Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+
+                            @item.Service.Name
+
+                        </td>
+
+                        <td>
+
+                            @item.PreferredDate.ToString("dd/MM/yyyy")
+
+                        </td>
+
+                        <td>
+
+                            @if (item.RequestStatus == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+                            }
+                            else if (item.RequestStatus == "Accepted")
+                            {
+                                <span class="badge bg-success">
+                                    Accepted
+                                </span>
+                            }
+                            else if (item.RequestStatus == "Cancelled")
+                            {
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @item.RequestStatus
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+
+                            @item.BudgetMin.ToString("0")
+                            -
+                            @item.BudgetMax.ToString("0")
+                            EGP
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="RequestDetails"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-info btn-sm">
+
+                                Details
+
+                            </a>
+
+                            <a asp-action="EditRequest"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                Edit
+
+                            </a>
+
+                            <a asp-action="CancelRequest"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-secondary btn-sm"
+                                   onclick="return confirm('Cancel this request?');">
+
+                                Cancel
+
+                            </a>
+
+                            <a asp-action="DeleteRequest"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete this request permanently?');">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+
+</div>

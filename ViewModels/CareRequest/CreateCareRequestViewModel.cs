@@ -1,32 +1,47 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NursingCarePlatform.Web.ViewModels.CareRequest
 {
     public class CreateCareRequestViewModel
     {
-        [Required]
         public int PatientId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please select a service.")]
         [Display(Name = "Service")]
         public int ServiceId { get; set; }
 
         [Required]
-        [Display(Name = "Address")]
+        [StringLength(500)]
         public string Address { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Description")]
         [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
 
-        [Display(Name = "Preferred Date")]
-        public DateTime PreferredDate { get; set; }
+        [Required]
+        public DateTime PreferredDate { get; set; } = DateTime.Now.AddDays(1);
 
-        [Display(Name = "Budget Min")]
+        [Range(1, 24)]
+        public int RequiredHours { get; set; }
+
+        public bool OvernightStay { get; set; }
+
+        public bool AccommodationAvailable { get; set; }
+
+        [Range(0, 100000)]
         public decimal BudgetMin { get; set; }
 
-        [Display(Name = "Budget Max")]
+        [Range(0, 100000)]
         public decimal BudgetMax { get; set; }
+
+        public string? PreferredNurseGender { get; set; }
+
+        public string RequestPriority { get; set; } = "Normal";
+
+        public string MatchingType { get; set; } = "Automatic";
+
+        public IEnumerable<SelectListItem> Services { get; set; }
+            = new List<SelectListItem>();
     }
 }

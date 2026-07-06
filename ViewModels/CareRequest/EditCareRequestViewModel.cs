@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace NursingCarePlatform.Web.ViewModels.CareRequest
 {
@@ -25,5 +26,7 @@ namespace NursingCarePlatform.Web.ViewModels.CareRequest
         public decimal BudgetMin { get; set; }
 
         public decimal BudgetMax { get; set; }
+
+        public List<SelectListItem> Services { get; set; } = new();
     }
 }

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.WorkHistory.WorkHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Work History";
+}
+
+<div class="container py-4">
+
+    <h2 class="fw-bold mb-4">
+        <i class="bi bi-clock-history"></i>
+        Work History
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No completed assignments yet.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover shadow">
+
+            <thead class="table-primary">
+
+                <tr>
+
+                    <th>Patient</th>
+
+                    <th>Service</th>
+
+                    <th>Shift Start</th>
+
+                    <th>Shift End</th>
+
+                    <th>Completed At</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.PatientName</td>
+
+                        <td>@item.ServiceName</td>
+
+                        <td>@item.ShiftStart.ToString("dd/MM/yyyy hh:mm")</td>
+
+                        <td>@item.ShiftEnd.ToString("dd/MM/yyyy hh:mm")</td>
+
+                        <td>@item.CompletedAt?.ToString("dd/MM/yyyy hh:mm")</td>
+
+                        <td>
+                            <span class="badge bg-success">
+                                @item.Status
+                            </span>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+
+</div>

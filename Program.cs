@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
-using NursingCarePlatform.Web.Services.Interfaces;
 using NursingCarePlatform.Web.Services.Implementations;
+using NursingCarePlatform.Web.Services.Interfaces;
 
 namespace NursingCarePlatform.Web
 {
@@ -13,39 +13,69 @@ namespace NursingCarePlatform.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+            // ==============================
+            // Database
+            // ==============================
+
+            var connectionString = builder.Configuration
+                .GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            // Database
             builder.Services.AddDbContext<NursingDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            // ==============================
             // Identity
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            // ==============================
 
             builder.Services
-    .AddDefaultIdentity<ApplicationUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = false;
+                .AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
 
-        options.Password.RequireDigit = true;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 6;
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<NursingDbContext>();
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<NursingDbContext>();
+
+            // ==============================
+            // MVC
+            // ==============================
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+
+            // ==============================
+            // Dependency Injection
+            // ==============================
+
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<INurseService, NurseManagementService>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IComplaintService, ComplaintService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IOfferService, OfferService>();
+            builder.Services.AddScoped<IAssignmentService, AssignmentService>();
+            builder.Services.AddScoped<IWorkHistoryService, WorkHistoryService>();
+            builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
+            builder.Services.AddScoped<IMedicalChecklistService, MedicalChecklistService>();
+
+            // ==============================
+            // Database Error Page
+            // ==============================
+
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             var app = builder.Build();
+
+            // ==============================
+            // Configure Pipeline
+            // ==============================
 
             if (app.Environment.IsDevelopment())
             {
@@ -58,11 +88,13 @@ namespace NursingCarePlatform.Web
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(

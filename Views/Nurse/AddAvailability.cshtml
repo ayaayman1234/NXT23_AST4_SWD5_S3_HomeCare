@@ -1,0 +1,94 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Nurse.AvailabilityViewModel
+
+@{
+    ViewData["Title"] = "Add Availability";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-lg">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+                        <i class="bi bi-calendar-plus"></i>
+                        Add Availability
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="AddAvailability" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Day" class="form-label"></label>
+
+                            <select asp-for="Day" class="form-select">
+
+                                <option value="">Select Day</option>
+
+                                <option>Saturday</option>
+                                <option>Sunday</option>
+                                <option>Monday</option>
+                                <option>Tuesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+
+                            </select>
+
+                            <span asp-validation-for="Day" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="StartTime" class="form-label"></label>
+
+                            <input asp-for="StartTime" type="time" class="form-control" />
+
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="EndTime" class="form-label"></label>
+
+                            <input asp-for="EndTime" type="time" class="form-control" />
+
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Save Availability
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

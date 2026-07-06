@@ -1,1 +1,108 @@
-﻿
+﻿@model IEnumerable<NursingCarePlatform.Web.Models.NurseDocument>
+
+@{
+    ViewData["Title"] = "My Documents";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <h2>
+            <i class="bi bi-file-earmark-text"></i>
+            My Documents
+        </h2>
+
+        <a asp-action="UploadDocument"
+               class="btn btn-primary">
+
+            <i class="bi bi-upload"></i>
+
+            Upload Document
+
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+
+            No documents uploaded.
+
+        </div>
+    }
+    else
+    {
+
+        <table class="table table-bordered">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Type</th>
+
+                    <th>Date</th>
+
+                    <th>File</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.DocumentType</td>
+
+                        <td>@item.UploadDate.ToShortDateString()</td>
+
+                        <td>
+
+                            <a href="~/uploads/nurse-documents/@item.FilePath"
+                                   target="_blank">
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="DeleteDocument"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete this document?')">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    }
+
+</div>

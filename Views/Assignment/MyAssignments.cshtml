@@ -1,0 +1,113 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.Models.Assignment>
+
+@{
+    ViewData["Title"] = "My Assignments";
+}
+
+<div class="container py-4">
+
+    <h2 class="fw-bold mb-4">
+        <i class="bi bi-clipboard2-check"></i>
+        My Assignments
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No assignments yet.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6 mb-4">
+
+                    <div class="card shadow h-100">
+
+                        <div class="card-body">
+
+                            <h5 class="text-primary">
+                                @item.CareRequest.Service.Name
+                            </h5>
+
+                            <hr />
+
+                            <p>
+                                <strong>Patient</strong><br />
+                                @item.CareRequest.Patient.User.FirstName
+                                @item.CareRequest.Patient.User.LastName
+                            </p>
+
+                            <p>
+                                <strong>Address</strong><br />
+                                @item.CareRequest.Address
+                            </p>
+
+                            <p>
+                                <strong>Date</strong><br />
+                                @item.ShiftStart.ToString("dd/MM/yyyy hh:mm tt")
+                            </p>
+
+                            <p>
+                                <strong>Status</strong><br />
+                                @item.AssignmentStatus
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white d-flex flex-wrap gap-2">
+
+                            <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-primary">
+                                <i class="bi bi-eye"></i>
+                                Details
+                            </a>
+
+                            <a asp-controller="MedicalChecklist"
+                                   asp-action="Create"
+                                   asp-route-requestId="@item.CareRequest.Id"
+                                   class="btn btn-warning">
+                                <i class="bi bi-clipboard2-pulse"></i>
+                                Medical Checklist
+                            </a>
+
+                            @if (item.AssignmentStatus != "Completed")
+                            {
+                                <a asp-controller="NursingNote"
+                                       asp-action="Create"
+                                       asp-route-assignmentId="@item.Id"
+                                       class="btn btn-info text-white">
+                                    <i class="bi bi-journal-medical"></i>
+                                    Add Nursing Note
+                                </a>
+
+                                <a asp-action="Complete"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i>
+                                    Complete
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success fs-6">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    Completed
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

@@ -10,15 +10,37 @@ namespace NursingCarePlatform.Web.ViewModels.Nurse
         [Required]
         public string UserId { get; set; } = string.Empty;
 
+        // Identity
+
         [Required]
-        [Range(0, 50)]
-        [Display(Name = "Years Of Experience")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
+
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        public string? PhoneNumber { get; set; }
+
+        public string? Address { get; set; }
+
+        public string? City { get; set; }
+
+        public string? Governorate { get; set; }
+
+        public string? Gender { get; set; }
+
+        public int Age { get; set; }
+
+        // Nurse
+
+        [Display(Name = "Years of Experience")]
         public int YearsExperience { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Display(Name = "Specialization")]
         public string Specialization { get; set; } = string.Empty;
-
-        public bool IsVerified { get; set; }
     }
 }

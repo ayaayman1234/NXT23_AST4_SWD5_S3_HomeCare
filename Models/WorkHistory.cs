@@ -1,18 +1,52 @@
-﻿namespace NursingCarePlatform.Web.Models
-{
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace NursingCarePlatform.Web.Models
+{
     public class WorkHistory
     {
         public int Id { get; set; }
 
-        public int AssignmentId { get; set; }
+        // ==========================
+        // Nurse
+        // ==========================
 
-        public DateTime StartTime { get; set; }
+        public int NurseId { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public Nurse Nurse { get; set; } = null!;
 
-        public string JobStatus { get; set; } = string.Empty;
+        // ==========================
+        // Patient
+        // ==========================
 
-        public Assignment Assignment { get; set; } = null!;
+        public int PatientId { get; set; }
+
+        public Patient Patient { get; set; } = null!;
+
+        // ==========================
+        // Care Request
+        // ==========================
+
+        public int CareRequestId { get; set; }
+
+        public CareRequest CareRequest { get; set; } = null!;
+
+        // ==========================
+        // Service
+        // ==========================
+
+        public int ServiceId { get; set; }
+
+        public NursingService Service { get; set; } = null!;
+
+        // ==========================
+        // Job Details
+        // ==========================
+
+        public DateTime CompletedAt { get; set; }
+
+        public int RequiredHours { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TotalAmount { get; set; }
     }
 }

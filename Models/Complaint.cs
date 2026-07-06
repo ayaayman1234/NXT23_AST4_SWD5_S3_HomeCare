@@ -1,19 +1,29 @@
-﻿namespace NursingCarePlatform.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NursingCarePlatform.Web.Models
 {
     public class Complaint
     {
         public int Id { get; set; }
 
-        public int CreatedByUserId { get; set; }
+        public int PatientId { get; set; }
 
-        public int AgainstUserId { get; set; }
+        public int? NurseId { get; set; }
 
-        public int? CareRequestId { get; set; }
+        [Required]
+        [StringLength(150)]
+        public string Title { get; set; } = string.Empty;
 
-        public string Reason { get; set; } = string.Empty;
+        [Required]
+        [StringLength(1000)]
+        public string Description { get; set; } = string.Empty;
 
-        public string ComplaintStatus { get; set; } = string.Empty;
+        public string Status { get; set; } = "Open";
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public Patient Patient { get; set; } = null!;
+
+        public Nurse? Nurse { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿using NursingCarePlatform.Web.Models.Responses;
+﻿using NursingCarePlatform.Web.Models;
+using NursingCarePlatform.Web.Models.Responses;
 using NursingCarePlatform.Web.ViewModels.Account;
-using NursingCarePlatform.Web.Models;
 
 namespace NursingCarePlatform.Web.Services.Interfaces
 {
@@ -9,10 +9,11 @@ namespace NursingCarePlatform.Web.Services.Interfaces
         Task<ServiceResult> RegisterAsync(RegisterViewModel model);
 
         Task<ServiceResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
+
         Task<ApplicationUser?> GetUserByEmailAsync(string email);
 
         Task<bool> IsInRoleAsync(ApplicationUser user, string role);
-
-        Task LogoutAsync();
     }
 }

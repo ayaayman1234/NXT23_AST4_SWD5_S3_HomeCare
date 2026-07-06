@@ -4,141 +4,144 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-8">
+        <div class="col-lg-10">
 
-            <div class="card shadow-lg">
+            <div class="card shadow-lg border-0 rounded-4">
 
-                <div class="card-header bg-primary text-white">
+                <div class="card-body p-5">
 
-                    <h3 class="text-center">
+                    <h2 class="text-center fw-bold mb-4">
                         Create New Account
-                    </h3>
-
-                </div>
-
-                <div class="card-body">
+                    </h2>
 
                     <form asp-action="Register" method="post">
 
-                        <div asp-validation-summary="All"
-                             class="text-danger mb-3">
-                        </div>
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
 
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <label asp-for="FirstName"></label>
+                                <label asp-for="FirstName" class="form-label"></label>
 
-                                <input asp-for="FirstName"
-                                       class="form-control" />
+                                <input asp-for="FirstName" class="form-control" />
 
-                                <span asp-validation-for="FirstName"
-                                      class="text-danger"></span>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <label asp-for="LastName"></label>
+                                <label asp-for="LastName" class="form-label"></label>
 
-                                <input asp-for="LastName"
-                                       class="form-control" />
+                                <input asp-for="LastName" class="form-control" />
 
-                                <span asp-validation-for="LastName"
-                                      class="text-danger"></span>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
 
                             </div>
 
                         </div>
 
-                        <br />
-
-                        <label asp-for="Email"></label>
-
-                        <input asp-for="Email"
-                               class="form-control" />
-
-                        <span asp-validation-for="Email"
-                              class="text-danger"></span>
-
-                        <br />
-
-                        <label asp-for="Password"></label>
-
-                        <input asp-for="Password"
-                               class="form-control" />
-
-                        <span asp-validation-for="Password"
-                              class="text-danger"></span>
-
-                        <br />
-
-                        <label asp-for="ConfirmPassword"></label>
-
-                        <input asp-for="ConfirmPassword"
-                               class="form-control" />
-
-                        <span asp-validation-for="ConfirmPassword"
-                              class="text-danger"></span>
-
-                        <br />
-
-                        <label asp-for="PhoneNumber"></label>
-
-                        <input asp-for="PhoneNumber"
-                               class="form-control" />
-
-                        <span asp-validation-for="PhoneNumber"
-                              class="text-danger"></span>
-
-                        <br />
-
-                        <label asp-for="Address"></label>
-
-                        <input asp-for="Address"
-                               class="form-control" />
-
-                        <br />
-
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <label asp-for="City"></label>
+                                <label asp-for="Email" class="form-label"></label>
 
-                                <input asp-for="City"
-                                       class="form-control" />
+                                <input asp-for="Email" class="form-control" />
+
+                                <span asp-validation-for="Email" class="text-danger"></span>
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <label asp-for="Governorate"></label>
+                                <label asp-for="PhoneNumber" class="form-label"></label>
 
-                                <input asp-for="Governorate"
-                                       class="form-control" />
+                                <input asp-for="PhoneNumber" class="form-control" />
+
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
                             </div>
 
                         </div>
 
-                        <br />
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Password" class="form-label"></label>
+
+                                <input asp-for="Password" class="form-control" />
+
+                                <span asp-validation-for="Password" class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="ConfirmPassword" class="form-label"></label>
+
+                                <input asp-for="ConfirmPassword" class="form-control" />
+
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Address" class="form-label"></label>
+
+                            <input asp-for="Address" class="form-control" />
+
+                            <span asp-validation-for="Address" class="text-danger"></span>
+
+                        </div>
 
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-4 mb-3">
 
-                                <label asp-for="Gender"></label>
+                                <label asp-for="City" class="form-label"></label>
 
-                                <select asp-for="Gender"
-                                        class="form-select">
+                                <input asp-for="City" class="form-control" />
 
-                                    <option value="">Choose</option>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+
+                                <label asp-for="Governorate" class="form-label"></label>
+
+                                <input asp-for="Governorate" class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+
+                                <label asp-for="Age" class="form-label"></label>
+
+                                <input asp-for="Age" class="form-control" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Gender" class="form-label"></label>
+
+                                <select asp-for="Gender" class="form-select">
+
+                                    <option value="">Select Gender</option>
 
                                     <option>Male</option>
 
@@ -148,71 +151,109 @@
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <label asp-for="Age"></label>
+                                <label asp-for="Role" class="form-label"></label>
 
-                                <input asp-for="Age"
-                                       class="form-control" />
+                                <select asp-for="Role"
+                                        id="roleSelect"
+                                        class="form-select">
+
+                                    <option value="">Select Role</option>
+
+                                    <option value="Patient">Patient</option>
+
+                                    <option value="Nurse">Nurse</option>
+
+                                </select>
 
                             </div>
 
                         </div>
 
-                        <br />
-
-                        <label asp-for="Role"></label>
-
-                        <select asp-for="Role"
-                                class="form-select"
-                                id="roleSelect">
-
-                            <option value="">Choose Role</option>
-
-                            <option>Patient</option>
-
-                            <option>Nurse</option>
-
-                        </select>
-
-                        <br />
-
                         <div id="patientFields">
+                            <div class="mb-3">
 
-                            <label asp-for="MedicalHistory"></label>
+                                <label asp-for="BloodType" class="form-label"></label>
 
-                            <textarea asp-for="MedicalHistory"
-                                          class="form-control">
-                            </textarea>
+                                <select asp-for="BloodType" class="form-select">
 
-                            </div>
+                                    <option value="">Select Blood Type</option>
 
-                            <div id="nurseFields"
-                                 style="display:none">
+                                    <option>A+</option>
+                                    <option>A-</option>
+                                    <option>B+</option>
+                                    <option>B-</option>
+                                    <option>AB+</option>
+                                    <option>AB-</option>
+                                    <option>O+</option>
+                                    <option>O-</option>
 
-                                <label asp-for="YearsExperience"></label>
+                                </select>
 
-                                <input asp-for="YearsExperience"
-                                       class="form-control" />
-
-                                <br />
-
-                                <label asp-for="Specialization"></label>
-
-                                <input asp-for="Specialization"
-                                       class="form-control" />
+                                <span asp-validation-for="BloodType"
+                                      class="text-danger"></span>
 
                             </div>
 
-                            <br />
+                            <div class="mb-3">
 
-                            <button class="btn btn-success w-100">
+                                <label asp-for="MedicalHistory" class="form-label"></label>
 
-                                Register
+                                <textarea asp-for="MedicalHistory"
+                                          class="form-control"></textarea>
 
-                            </button>
+                            </div>
 
-                        </form>
+                        </div>
+
+                        <div id="nurseFields">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label asp-for="YearsExperience"
+                                           class="form-label"></label>
+
+                                    <input asp-for="YearsExperience"
+                                           class="form-control" />
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label asp-for="Specialization"
+                                           class="form-label"></label>
+
+                                    <input asp-for="Specialization"
+                                           class="form-control" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-primary btn-lg w-100">
+
+                            Register
+
+                        </button>
+
+                    </form>
+
+                    <hr />
+
+                    <div class="text-center">
+
+                        Already have an account?
+
+                        <a asp-action="Login">
+
+                            Login
+
+                        </a>
 
                     </div>
 
@@ -224,33 +265,31 @@
 
     </div>
 
-    @section Scripts {
+</div>
 
-        <partial name="_ValidationScriptsPartial" />
+@section Scripts {
 
-        <script>
+    <partial name="_ValidationScriptsPartial" />
 
-            const role=document.getElementById("roleSelect");
+    <script>
 
-            const patient=document.getElementById("patientFields");
+        function toggleFields() {
 
-            const nurse=document.getElementById("nurseFields");
+            var role = document.getElementById("roleSelect").value;
 
-            role.addEventListener("change",function(){
+            document.getElementById("patientFields").style.display =
+                role === "Patient" ? "block" : "none";
 
-            if(role.value==="Nurse")
-            {
-            patient.style.display="none";
-            nurse.style.display="block";
-            }
-            else
-            {
-            patient.style.display="block";
-            nurse.style.display="none";
-            }
+            document.getElementById("nurseFields").style.display =
+                role === "Nurse" ? "block" : "none";
+        }
 
-            });
+        toggleFields();
 
-        </script>
+        document
+            .getElementById("roleSelect")
+            .addEventListener("change", toggleFields);
 
-    }
+    </script>
+
+}

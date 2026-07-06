@@ -1,0 +1,104 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
+
+@{
+    ViewData["Title"] = "Available Requests";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            <i class="bi bi-heart-pulse"></i>
+            Available Care Requests
+        </h2>
+
+        <span class="badge bg-primary fs-6">
+            @Model.Count() Requests
+        </span>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+
+            No available requests at the moment.
+
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6 mb-4">
+
+                    <div class="card shadow h-100">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold text-primary">
+                                @item.Service.Name
+                            </h5>
+
+                            <hr />
+
+                            <p>
+                                <strong>Patient</strong><br />
+                                @item.Patient.User.FirstName
+                                @item.Patient.User.LastName
+                            </p>
+
+                            <p>
+                                <strong>Address</strong><br />
+                                @item.Address
+                            </p>
+
+                            <p>
+                                <strong>Date</strong><br />
+                                @item.PreferredDate.ToString("dd/MM/yyyy hh:mm tt")
+                            </p>
+
+                            <p>
+                                <strong>Required Hours</strong><br />
+                                @item.RequiredHours Hours
+                            </p>
+
+                            <p>
+                                <strong>Budget</strong><br />
+                                @item.BudgetMin -
+                                @item.BudgetMax EGP
+                            </p>
+
+                            <p>
+                                <strong>Description</strong><br />
+                                @item.Description
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white">
+
+                            <a asp-controller="Offer"
+                                   asp-action="SendOffer"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-success">
+
+                                <i class="bi bi-send"></i>
+
+                                Send Offer
+
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

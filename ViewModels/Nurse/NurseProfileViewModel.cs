@@ -2,20 +2,13 @@
 {
     public class NurseProfileViewModel
     {
-        public int Id { get; set; }
+        public NursingCarePlatform.Web.Models.Nurse Nurse { get; set; } = null!;
 
-        public int UserId { get; set; }
+        public double AverageRating { get; set; }
 
-        public string FullName { get; set; } = string.Empty;
+        public int ReviewsCount { get; set; }
 
-        public string Email { get; set; } = string.Empty;
-
-        public string PhoneNumber { get; set; } = string.Empty;
-
-        public int YearsExperience { get; set; }
-
-        public string Specialization { get; set; } = string.Empty;
-
-        public bool IsVerified { get; set; }
+        public List<NursingCarePlatform.Web.Models.Rating> Reviews { get; set; }
+            = new();
     }
 }

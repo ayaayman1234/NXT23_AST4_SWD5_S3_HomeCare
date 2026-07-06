@@ -73,6 +73,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
             }
 
+            
             if (!await _roleManager.RoleExistsAsync(model.Role))
             {
                 await _roleManager.CreateAsync(new IdentityRole(model.Role));
@@ -80,28 +81,42 @@ namespace NursingCarePlatform.Web.Services.Implementations
 
             await _userManager.AddToRoleAsync(user, model.Role);
 
+            // ===========================
+            // Patient
+            // ===========================
             if (model.Role == "Patient")
             {
                 var patient = new Patient
                 {
                     UserId = user.Id,
-                    MedicalHistory = model.MedicalHistory ?? ""
+
+                    BloodType = model.BloodType,
+
+                    MedicalHistory = model.MedicalHistory ?? string.Empty
                 };
 
                 _context.Patients.Add(patient);
             }
+
+            // ===========================
+            // Nurse
+            // ===========================
             else if (model.Role == "Nurse")
             {
                 var nurse = new Nurse
                 {
                     UserId = user.Id,
-                    YearsExperience = model.YearsExperience,
-                    Specialization = model.Specialization ?? "",
+                    YearsExperience = model.YearsExperience ?? 0,
+                    Specialization = model.Specialization ?? string.Empty,
                     IsVerified = false
                 };
 
                 _context.Nurses.Add(nurse);
             }
+
+            // ===========================
+            // Admin
+            // ===========================
             else if (model.Role == "Admin")
             {
                 var admin = new Admin
@@ -161,6 +176,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
         {
             await _signInManager.SignOutAsync();
         }
+
         public async Task<ApplicationUser?> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);

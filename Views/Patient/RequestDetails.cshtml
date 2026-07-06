@@ -1,1 +1,322 @@
-﻿
+﻿@model NursingCarePlatform.Web.Models.CareRequest
+
+@using NursingCarePlatform.Web.Models
+
+@{
+    ViewData["Title"] = "Request Details";
+
+    var offers = ViewBag.Offers as List<MyOffer>;
+}
+
+<div class="container py-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+                <i class="bi bi-file-earmark-text"></i>
+                Care Request Details
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+
+                    <strong>Service</strong>
+
+                    <p>@Model.Service.Name</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Status</strong>
+
+                    <p>
+
+                        @if (Model.RequestStatus == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        }
+                        else if (Model.RequestStatus == "Accepted")
+                        {
+                            <span class="badge bg-success">
+                                Accepted
+                            </span>
+                        }
+                        else if (Model.RequestStatus == "Cancelled")
+                        {
+                            <span class="badge bg-danger">
+                                Cancelled
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @Model.RequestStatus
+                            </span>
+                        }
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <strong>Address</strong>
+
+                <p>@Model.Address</p>
+
+            </div>
+
+            <div class="mb-3">
+
+                <strong>Description</strong>
+
+                <p>@Model.Description</p>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Preferred Date</strong>
+
+                    <p>@Model.PreferredDate.ToString("dd/MM/yyyy hh:mm tt")</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Required Hours</strong>
+
+                    <p>@Model.RequiredHours Hours</p>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Budget</strong>
+
+                    <p>
+
+                        @Model.BudgetMin -
+
+                        @Model.BudgetMax EGP
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Priority</strong>
+
+                    <p>@Model.RequestPriority</p>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Preferred Nurse Gender</strong>
+
+                    <p>
+
+                        @(string.IsNullOrEmpty(Model.PreferredNurseGender)
+                            ? "No Preference"
+                            : Model.PreferredNurseGender)
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Matching Type</strong>
+
+                    <p>@Model.MatchingType</p>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Overnight Stay</strong>
+
+                    <p>
+
+                        @(Model.OvernightStay ? "Yes" : "No")
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Accommodation Available</strong>
+
+                    <p>
+
+                        @(Model.AccommodationAvailable ? "Yes" : "No")
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4 class="mb-3">
+                <i class="bi bi-cash-stack"></i>
+                Received Offers
+            </h4>
+
+            @if (offers == null || !offers.Any())
+            {
+                <div class="alert alert-info">
+                    No offers received yet.
+                </div>
+            }
+            else
+            {
+                @foreach (var offer in offers)
+                {
+                    <div class="card mb-3 shadow-sm">
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+
+                                    <strong>Nurse</strong>
+
+                                    <p>
+                                        @offer.Nurse.User.FirstName
+                                        @offer.Nurse.User.LastName
+                                    </p>
+
+                                </div>
+
+                                <div class="col-md-3">
+
+                                    <strong>Price</strong>
+
+                                    <p>@offer.ProposedPrice EGP</p>
+
+                                </div>
+
+                                <div class="col-md-5">
+
+                                    <strong>Message</strong>
+
+                                    <p>@offer.Message</p>
+
+                                </div>
+
+                            </div>
+
+                            <a asp-controller="Offer"
+                                   asp-action="AcceptOffer"
+                                   asp-route-id="@offer.Id"
+                                   class="btn btn-success">
+
+                                <i class="bi bi-check-circle"></i>
+
+                                Accept
+
+                            </a>
+
+                            <a asp-controller="Offer"
+                                   asp-action="RejectOffer"
+                                   asp-route-id="@offer.Id"
+                                   class="btn btn-danger">
+
+                                <i class="bi bi-x-circle"></i>
+
+                                Reject
+
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+            <hr />
+
+            <a asp-action="EditRequest"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-warning">
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit
+
+            </a>
+
+            <a asp-action="CancelRequest"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-secondary"
+                   onclick="return confirm('Cancel this request?');">
+
+                Cancel
+
+            </a>
+
+            <a asp-action="DeleteRequest"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-danger"
+                   onclick="return confirm('Delete this request?');">
+
+                Delete
+
+            </a>
+
+            <a asp-action="MyRequests"
+                   class="btn btn-outline-primary">
+
+                Back
+
+            </a>
+
+            @if (Model.RequestStatus == "Completed")
+            {
+                <a asp-action="RateNurse"
+                       asp-route-requestId="@Model.Id"
+                       asp-route-nurseId="@Model.NurseId"
+                       class="btn btn-primary">
+
+                    ⭐ Rate Nurse
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+</div>

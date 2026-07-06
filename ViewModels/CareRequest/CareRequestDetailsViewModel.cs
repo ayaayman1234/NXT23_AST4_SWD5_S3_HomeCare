@@ -19,5 +19,10 @@
         public decimal BudgetMax { get; set; }
 
         public string Status { get; set; } = string.Empty;
+        public int RequiredHours { get; internal set; }
+        public bool OvernightStay { get; internal set; }
+        public bool AccommodationAvailable { get; internal set; }
+        public string? PreferredNurseGender { get; internal set; }
+        
     }
 }

@@ -1,0 +1,130 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.Notification.NotificationViewModel>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container py-4">
+
+    <h2 class="mb-4">
+        <i class="bi bi-bell-fill text-warning"></i>
+        Notifications
+    </h2>
+
+    <div class="mb-3">
+        <a asp-action="ReadAll" class="btn btn-primary">
+            <i class="bi bi-check2-all"></i>
+            Mark All As Read
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No notifications yet.
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            var icon = "bi-bell";
+            var color = "secondary";
+
+            switch (item.NotificationType)
+            {
+                case "CareRequest":
+                    icon = "bi-heart-pulse";
+                    color = "primary";
+                    break;
+
+                case "Offer":
+                    icon = "bi-cash-stack";
+                    color = "warning";
+                    break;
+
+                case "OfferAccepted":
+                    icon = "bi-check-circle-fill";
+                    color = "success";
+                    break;
+
+                case "OfferRejected":
+                    icon = "bi-x-circle-fill";
+                    color = "danger";
+                    break;
+
+                case "Account":
+                    icon = "bi-person-check-fill";
+                    color = "info";
+                    break;
+            }
+
+            <div class="card shadow-sm mb-3 @(item.IsRead ? "" : "border-" + color)">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5 class="mb-2">
+
+                                <i class="bi @icon text-@color"></i>
+
+                                @item.Title
+
+                            </h5>
+
+                            <p class="mb-1">
+                                @item.Message
+                            </p>
+
+                            <small class="text-muted">
+                                @item.CreatedAt.ToString("dd/MM/yyyy hh:mm tt")
+                            </small>
+
+                        </div>
+
+                        <div>
+
+                            @if (!item.IsRead)
+                            {
+                                <span class="badge bg-@color">
+                                    New
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Read
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    @if (!item.IsRead)
+                    {
+                        <div class="mt-3">
+
+                            <a asp-action="Read"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-outline-success btn-sm">
+
+                                <i class="bi bi-check2"></i>
+
+                                Mark as Read
+
+                            </a>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

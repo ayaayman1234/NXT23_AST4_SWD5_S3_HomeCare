@@ -1,0 +1,176 @@
+﻿@model NursingCarePlatform.Web.Models.Assignment
+
+@{
+    ViewData["Title"] = "Assignment Details";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-info text-white">
+
+            <h3>
+                Assignment Details
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <h4 class="text-primary">
+
+                @Model.CareRequest.Service.Name
+
+            </h4>
+
+            <hr />
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Patient</strong>
+
+                    <p>
+                        @Model.CareRequest.Patient.User.FirstName
+                        @Model.CareRequest.Patient.User.LastName
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Status</strong>
+
+                    <p>
+
+                        @Model.AssignmentStatus
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <strong>Address</strong>
+
+                <p>
+
+                    @Model.CareRequest.Address
+
+                </p>
+
+            </div>
+
+            <div class="mb-3">
+
+                <strong>Description</strong>
+
+                <p>
+
+                    @Model.CareRequest.Description
+
+                </p>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <strong>Shift Start</strong>
+
+                    <p>
+
+                        @Model.ShiftStart
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>Shift End</strong>
+
+                    <p>
+
+                        @Model.ShiftEnd
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4 class="text-primary">
+                Nursing Note
+            </h4>
+
+            @if (Model.NursingNote == null)
+            {
+                <div class="alert alert-warning">
+                    No nursing note has been added yet.
+                </div>
+            }
+            else
+            {
+                <table class="table table-bordered">
+
+                    <tr>
+                        <th>Blood Pressure</th>
+                        <td>@Model.NursingNote.BloodPressure</td>
+                    </tr>
+
+                    <tr>
+                        <th>Temperature</th>
+                        <td>@Model.NursingNote.Temperature °C</td>
+                    </tr>
+
+                    <tr>
+                        <th>Glucose Level</th>
+                        <td>@Model.NursingNote.GlucoseLevel</td>
+                    </tr>
+
+                    <tr>
+                        <th>Notes</th>
+                        <td>@Model.NursingNote.Notes</td>
+                    </tr>
+
+                    <tr>
+                        <th>Uploaded At</th>
+                        <td>@Model.NursingNote.UploadedAt.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    </tr>
+
+                </table>
+            }
+
+            <hr />
+
+            @if (Model.AssignmentStatus != "Completed")
+            {
+                <a asp-action="Complete"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-success">
+
+                    Complete Assignment
+
+                </a>
+            }
+
+            <a asp-action="MyAssignments"
+                   class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

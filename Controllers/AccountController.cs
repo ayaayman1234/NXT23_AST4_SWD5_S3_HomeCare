@@ -12,14 +12,16 @@ namespace NursingCarePlatform.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         public AccountController(
-    IAccountService accountService,
-    UserManager<ApplicationUser> userManager)
+            IAccountService accountService,
+            UserManager<ApplicationUser> userManager)
         {
             _accountService = accountService;
             _userManager = userManager;
         }
 
-        // ================= Register =================
+        // =========================
+        // Register
+        // =========================
 
         [HttpGet]
         public IActionResult Register()
@@ -28,10 +30,13 @@ namespace NursingCarePlatform.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                return BadRequest(ModelState);
+            }
 
             var result = await _accountService.RegisterAsync(model);
 
@@ -40,7 +45,9 @@ namespace NursingCarePlatform.Web.Controllers
                 if (result.Errors.Any())
                 {
                     foreach (var error in result.Errors)
+                    {
                         ModelState.AddModelError("", error);
+                    }
                 }
                 else
                 {
@@ -55,7 +62,9 @@ namespace NursingCarePlatform.Web.Controllers
             return RedirectToAction(nameof(Login));
         }
 
-        // ================= Login =================
+        // =========================
+        // Login
+        // =========================
 
         [HttpGet]
         public IActionResult Login()
@@ -83,18 +92,20 @@ namespace NursingCarePlatform.Web.Controllers
                 return RedirectToAction("Index", "Home");
 
             if (await _accountService.IsInRoleAsync(user, "Admin"))
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Dashboard", "Admin");
 
             if (await _accountService.IsInRoleAsync(user, "Nurse"))
-                return RedirectToAction("Index", "Nurse");
+                return RedirectToAction("Dashboard", "Nurse");
 
             if (await _accountService.IsInRoleAsync(user, "Patient"))
-                return RedirectToAction("Index", "Patient");
+                return RedirectToAction("Dashboard", "Patient");
 
             return RedirectToAction("Index", "Home");
         }
 
-        // ================= Logout =================
+        // =========================
+        // Logout
+        // =========================
 
         [HttpPost]
         public async Task<IActionResult> Logout()

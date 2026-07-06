@@ -1,1 +1,91 @@
-﻿
+﻿@model NursingCarePlatform.Web.ViewModels.Patient.EditPatientViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0 rounded-4">
+
+                <div class="card-header bg-success text-white text-center py-4">
+
+                    <h2 class="mb-0">
+
+                        Edit Patient Profile
+
+                    </h2>
+
+                </div>
+
+                <div class="card-body p-5">
+
+                    <form asp-action="Edit" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <input asp-for="Id" type="hidden" />
+
+                        <input asp-for="UserId" type="hidden" />
+
+                        <div class="mb-4">
+
+                            <label asp-for="MedicalHistory"
+                                   class="form-label fw-bold">
+                            </label>
+
+                            <textarea asp-for="MedicalHistory"
+                                      rows="8"
+                                      class="form-control"
+                                          placeholder="Write your medical history here...">
+                            </textarea>
+
+                                <span asp-validation-for="MedicalHistory"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="text-center">
+
+                                <button type="submit"
+                                        class="btn btn-success btn-lg me-2">
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                    Save Changes
+
+                                </button>
+
+                                <a asp-action="Details"
+                                       class="btn btn-secondary btn-lg">
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @section Scripts {
+
+        <partial name="_ValidationScriptsPartial" />
+
+    }
