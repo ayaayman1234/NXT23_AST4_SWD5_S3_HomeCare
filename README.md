@@ -66,12 +66,6 @@ A database backup file is included in the `Database/` folder so you can run the 
 
 ---
 
-## 👥 Team
-
-NXT23 - AST4 - SWD5 - S3
-
----
-
 ## 📝 License
 
 This project is for educational purposes.
