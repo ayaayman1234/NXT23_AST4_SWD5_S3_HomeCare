@@ -1,0 +1,110 @@
+﻿@model NursingCarePlatform.Web.ViewModels.CreateCareRequestViewModel
+
+@{
+    ViewData["Title"] = "Create Care Request";
+}
+
+<h2>Create Care Request</h2>
+
+<hr />
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RequiredHours"></label>
+        <input asp-for="RequiredHours" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BudgetMin"></label>
+        <input asp-for="BudgetMin" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BudgetMax"></label>
+        <input asp-for="BudgetMax" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PreferredNurseGender"></label>
+        <select asp-for="PreferredNurseGender" class="form-select">
+            <option value="">No Preference</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RequestPriority"></label>
+        <select asp-for="RequestPriority" class="form-select">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Emergency</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MatchingType"></label>
+        <select asp-for="MatchingType" class="form-select">
+            <option>Offer</option>
+            <option>Direct</option>
+            <option>Automatic</option>
+        </select>
+    </div>
+
+    <div class="form-check mb-2">
+        <input asp-for="OvernightStay" class="form-check-input" />
+        <label asp-for="OvernightStay" class="form-check-label"></label>
+    </div>
+
+    <div class="form-check mb-4">
+        <input asp-for="AccommodationAvailable" class="form-check-input" />
+        <label asp-for="AccommodationAvailable" class="form-check-label"></label>
+    </div>
+
+    <hr />
+
+    <h4>Medical Checklist</h4>
+
+    <div class="mb-3">
+        <label asp-for="BloodType"></label>
+        <input asp-for="BloodType" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Allergies"></label>
+        <input asp-for="Allergies" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ChronicDiseases"></label>
+        <textarea asp-for="ChronicDiseases" class="form-control"></textarea>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="ContagiousStatus" class="form-check-input" />
+        <label asp-for="ContagiousStatus" class="form-check-label"></label>
+    </div>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="MyRequests" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@section Scripts{
+<partial name="_ValidationScriptsPartial" />
+}

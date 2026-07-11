@@ -1,0 +1,38 @@
+﻿@model NursingCarePlatform.Web.ViewModels.AssignmentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Assignment Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Assignment #@Model.Id</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Patient</dt>
+                <dd class="col-sm-9">@Model.PatientName</dd>
+
+                <dt class="col-sm-3">Nurse</dt>
+                <dd class="col-sm-9">@Model.NurseName</dd>
+
+                <dt class="col-sm-3">Shift Start</dt>
+                <dd class="col-sm-9">@Model.ShiftStart.ToString("g")</dd>
+
+                <dt class="col-sm-3">Shift End</dt>
+                <dd class="col-sm-9">@Model.ShiftEnd.ToString("g")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-info text-dark">@Model.AssignmentStatus</span>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer text-end">
+            <a asp-controller="CareRequest" asp-action="Details" asp-route-id="@Model.CareRequestId" class="btn btn-outline-secondary">
+                Back to Care Request
+            </a>
+        </div>
+    </div>
+</div>
