@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Models;
 
@@ -54,6 +54,14 @@ namespace NursingCarePlatform.Web.Data
 
         public DbSet<Cancellation> Cancellations { get; set; }
 
+        // ==========================
+        // GAP 1 – Subscription Plans (nurse commission reduction)
+        // ==========================
+
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
+        public DbSet<NurseSubscription> NurseSubscriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -86,7 +94,21 @@ namespace NursingCarePlatform.Web.Data
                 .HasPrecision(18, 2);
 
             modelBuilder.Entity<Payment>()
+                .HasOne(p => p.CareRequest)
+                .WithOne(c => c.Payment)
+                .HasForeignKey<Payment>(p => p.CareRequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Payment>()
                 .Property(p => p.Amount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.CommissionAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.NetAmount)
                 .HasPrecision(18, 2);
 
             modelBuilder.Entity<Cancellation>()
@@ -146,10 +168,10 @@ namespace NursingCarePlatform.Web.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<MyOffer>()
-    .HasOne(o => o.CareRequest)
-    .WithMany(c => c.Offers)
-    .HasForeignKey(o => o.CareRequestId)
-    .OnDelete(DeleteBehavior.NoAction);
+                .HasOne(o => o.CareRequest)
+                .WithMany(c => c.Offers)
+                .HasForeignKey(o => o.CareRequestId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // ==========================
             // Identity Relations
@@ -246,7 +268,98 @@ namespace NursingCarePlatform.Web.Data
                 .WithOne(a => a.NursingNote)
                 .HasForeignKey<NursingNote>(n => n.AssignmentId)
                 .OnDelete(DeleteBehavior.Cascade);
+            // ==========================
+            // SOS Relations
+            // ==========================
 
+            modelBuilder.Entity<SOSEvent>()
+                .HasOne(s => s.CareRequest)
+                .WithMany()
+                .HasForeignKey(s => s.CareRequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SOSEvent>()
+                .HasOne(s => s.TriggeredByUser)
+                .WithMany()
+                .HasForeignKey(s => s.TriggeredByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ==========================
+            // GAP 1 – Subscription Plans
+            // ==========================
+
+            modelBuilder.Entity<SubscriptionPlan>()
+                .Property(sp => sp.MonthlyFee)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<SubscriptionPlan>()
+                .Property(sp => sp.CommissionRate)
+                .HasPrecision(5, 4);
+
+            modelBuilder.Entity<NurseSubscription>()
+                .HasOne(ns => ns.Nurse)
+                .WithMany()
+                .HasForeignKey(ns => ns.NurseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<NurseSubscription>()
+                .HasOne(ns => ns.Plan)
+                .WithMany(p => p.NurseSubscriptions)
+                .HasForeignKey(ns => ns.PlanId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ==========================
+            // GAP 2 – WorkHistory AssignmentId
+            // ==========================
+
+            modelBuilder.Entity<WorkHistory>()
+                .HasOne(w => w.Assignment)
+                .WithMany()
+                .HasForeignKey(w => w.AssignmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // ==========================
+            // GAP 4 – Rating ApplicationUser links
+            // ==========================
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.RaterUser)
+                .WithMany()
+                .HasForeignKey(r => r.RaterUserGuid)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.RatedUser)
+                .WithMany()
+                .HasForeignKey(r => r.RatedUserGuid)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+
+            // ==========================
+            // GAP 5 – Complaint generic user references
+            // ==========================
+
+            modelBuilder.Entity<Complaint>()
+                .HasOne(c => c.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(c => c.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Complaint>()
+                .HasOne(c => c.AgainstUser)
+                .WithMany()
+                .HasForeignKey(c => c.AgainstUserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Complaint>()
+                .HasOne(c => c.ComplaintCareRequest)
+                .WithMany()
+                .HasForeignKey(c => c.ComplaintCareRequestId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
 
         }
 

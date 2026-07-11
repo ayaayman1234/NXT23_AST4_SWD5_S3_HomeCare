@@ -1,0 +1,209 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminNurseViewModel>
+
+@{
+    ViewData["Title"] = "Nurse Management";
+    var filter = Context.Request.Query["filter"].ToString();
+    var search = Context.Request.Query["search"].ToString();
+
+    var filtered = Model.AsEnumerable();
+    if (!string.IsNullOrEmpty(search))
+        filtered = filtered.Where(n => n.FullName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                    || n.Email.Contains(search, StringComparison.OrdinalIgnoreCase));
+    if (filter == "verified") filtered = filtered.Where(n => n.IsVerified);
+    if (filter == "pending") filtered = filtered.Where(n => !n.IsVerified);
+    if (filter == "blocked") filtered = filtered.Where(n => n.IsBlocked);
+    if (filter == "active") filtered = filtered.Where(n => !n.IsBlocked);
+
+    var list = filtered.ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0"><i class="bi bi-person-badge-fill text-success me-2"></i>Nurse Management</h2>
+        <small class="text-muted">@list.Count of @Model.Count() nurses shown</small>
+    </div>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Dashboard
+    </a>
+</div>
+
+<!-- Search + Filter -->
+<form method="get" class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold small">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" value="@search"
+                           class="form-control" placeholder="Search by name or email..." />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Filter by Status</label>
+                <select name="filter" class="form-select">
+                    <option value="" selected="@(filter == "")">All Nurses</option>
+                    <option value="verified" selected="@(filter == "verified")">Verified Only</option>
+                    <option value="pending" selected="@(filter == "pending")">Pending Verification</option>
+                    <option value="active" selected="@(filter == "active")">Active Only</option>
+                    <option value="blocked" selected="@(filter == "blocked")">Blocked Only</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                <a asp-action="Nurses" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!list.Any())
+{
+    <div class="alert alert-info text-center py-4">
+        <i class="bi bi-person-badge fs-1 d-block mb-2"></i>
+        <h5>No nurses found matching your criteria.</h5>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="50">#</th>
+                            <th>Nurse</th>
+                            <th>Specialization</th>
+                            <th>Experience</th>
+                            <th>Verification</th>
+                            <th>Status</th>
+                            <th width="320" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nurse in list)
+                        {
+                            <tr>
+                                <td class="text-muted small">@nurse.Id</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                                             style="width:38px;height:38px;font-size:14px;flex-shrink:0;">
+                                            @(nurse.FullName.Length > 0 ? nurse.FullName[0].ToString().ToUpper() : "N")
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">@nurse.FullName</div>
+                                            <small class="text-muted">@nurse.Email</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@nurse.Specialization</td>
+                                <td>@nurse.YearsExperience yrs</td>
+                                <td>
+                                    @if (nurse.IsVerified)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Verified</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (nurse.IsBlocked)
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-slash-circle me-1"></i>Blocked</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-circle-fill me-1"></i>Active</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex gap-1 justify-content-center flex-wrap">
+                                        <a asp-action="NurseDetails" asp-route-id="@nurse.Id"
+                                           class="btn btn-sm btn-outline-info" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        @if (!nurse.IsVerified)
+                                        {
+                                            <button class="btn btn-sm btn-success"
+                                                    title="Approve"
+                                                    onclick="confirmAction('Approve nurse @nurse.FullName?', '/Admin/ApproveNurse/@nurse.Id')">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger"
+                                                    title="Reject"
+                                                    onclick="confirmAction('Reject and remove nurse @nurse.FullName?', '/Admin/RejectNurse/@nurse.Id')">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        }
+
+                                        @if (nurse.IsBlocked)
+                                        {
+                                            <button class="btn btn-sm btn-warning" title="Unblock"
+                                                    onclick="confirmAction('Unblock nurse @nurse.FullName?', '/Admin/UnBlockNurse/@nurse.Id')">
+                                                <i class="bi bi-unlock"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-sm btn-secondary" title="Block"
+                                                    onclick="confirmAction('Block nurse @nurse.FullName?', '/Admin/BlockNurse/@nurse.Id')">
+                                                <i class="bi bi-lock"></i>
+                                            </button>
+                                        }
+
+                                        <button class="btn btn-sm btn-outline-danger" title="Delete Nurse"
+                                                onclick="confirmAction('Delete nurse @nurse.FullName? This cannot be undone!', '/Admin/DeleteNurse/@nurse.Id')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small d-flex gap-3">
+            <span>Total: <strong>@Model.Count()</strong></span>
+            <span class="text-success">Verified: <strong>@Model.Count(n => n.IsVerified)</strong></span>
+            <span class="text-warning">Pending: <strong>@Model.Count(n => !n.IsVerified)</strong></span>
+            <span class="text-danger">Blocked: <strong>@Model.Count(n => n.IsBlocked)</strong></span>
+        </div>
+    </div>
+}
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Are you sure?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message, url) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}

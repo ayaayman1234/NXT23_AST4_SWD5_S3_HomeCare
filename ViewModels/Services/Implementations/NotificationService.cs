@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Services.Interfaces;
@@ -20,48 +20,12 @@ namespace NursingCarePlatform.Web.Services.Implementations
         // ==========================================
 
         public async Task CreateAsync(
-    string userId,
-    string title,
-    string message,
-    string notificationType)
+            int receiverId,
+            string receiverType,
+            string title,
+            string message,
+            string notificationType)
         {
-
-            var receiver = await _context.Users
-                .FirstOrDefaultAsync(x => x.Id == userId);
-
-            if (receiver == null)
-                return;
-
-            int receiverId = 0;
-            string receiverType = "";
-
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(x => x.UserId == userId);
-
-            if (patient != null)
-            {
-                receiverId = patient.Id;
-                receiverType = "Patient";
-            }
-
-            var nurse = await _context.Nurses
-                .FirstOrDefaultAsync(x => x.UserId == userId);
-
-            if (nurse != null)
-            {
-                receiverId = nurse.Id;
-                receiverType = "Nurse";
-            }
-
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(x => x.UserId == userId);
-
-            if (admin != null)
-            {
-                receiverId = admin.Id;
-                receiverType = "Admin";
-            }
-
             var notification = new Notification
             {
                 SenderId = 0,
@@ -75,7 +39,6 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 NotificationType = notificationType,
 
                 IsRead = false,
-
                 CreatedAt = DateTime.Now
             };
 
@@ -91,27 +54,41 @@ namespace NursingCarePlatform.Web.Services.Implementations
         public async Task<List<NotificationViewModel>> GetUserNotificationsAsync(string userId)
         {
             int receiverId = 0;
+            string receiverType = "";
 
             var patient = await _context.Patients
                 .FirstOrDefaultAsync(x => x.UserId == userId);
 
             if (patient != null)
+            {
                 receiverId = patient.Id;
+                receiverType = "Patient";
+            }
+            else
+            {
+                var nurse = await _context.Nurses
+                    .FirstOrDefaultAsync(x => x.UserId == userId);
 
-            var nurse = await _context.Nurses
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+                if (nurse != null)
+                {
+                    receiverId = nurse.Id;
+                    receiverType = "Nurse";
+                }
+                else
+                {
+                    var admin = await _context.Admins
+                        .FirstOrDefaultAsync(x => x.UserId == userId);
 
-            if (nurse != null)
-                receiverId = nurse.Id;
-
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(x => x.UserId == userId);
-
-            if (admin != null)
-                receiverId = admin.Id;
+                    if (admin != null)
+                    {
+                        receiverId = admin.Id;
+                        receiverType = "Admin";
+                    }
+                }
+            }
 
             return await _context.Notifications
-                .Where(x => x.ReceiverId == receiverId)
+                .Where(x => x.ReceiverId == receiverId && x.ReceiverType == receiverType)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new NotificationViewModel
                 {

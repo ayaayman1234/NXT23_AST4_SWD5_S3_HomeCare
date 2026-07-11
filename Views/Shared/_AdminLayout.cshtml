@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Admin Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            overflow-x: hidden;
+            background-color: #f4f6f9;
+        }
+        .admin-wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+        #sidebar {
+            min-width: 260px;
+            max-width: 260px;
+            background: #1e282c;
+            color: #fff;
+            transition: all 0.3s;
+            min-height: 100vh;
+            z-index: 1000;
+        }
+        #sidebar.active {
+            margin-left: -260px;
+        }
+        #sidebar .sidebar-header {
+            padding: 20px;
+            background: #1a2226;
+            border-bottom: 1px solid #2c3b41;
+        }
+        #sidebar ul.components {
+            padding: 15px 0;
+        }
+        #sidebar ul li a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            color: #b8c7ce;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        #sidebar ul li a i {
+            margin-right: 12px;
+            font-size: 1.15rem;
+        }
+        #sidebar ul li a:hover {
+            color: #fff;
+            background: #181f23;
+            border-left-color: #0d6efd;
+        }
+        #sidebar ul li.active > a {
+            color: #fff;
+            background: #1e282c;
+            border-left-color: #0d6efd;
+            font-weight: 600;
+        }
+        #content {
+            width: 100%;
+            padding: 25px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        .navbar-admin {
+            padding: 12px 20px;
+            background: #fff;
+            border: none;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            padding: 5px 8px;
+            border-radius: 20px;
+        }
+        @@media (max-width: 768px) {
+            #sidebar {
+                margin-left: -260px;
+            }
+            #sidebar.active {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    @using NursingCarePlatform.Web.Services.Interfaces
+    @using Microsoft.AspNetCore.Identity
+    @using NursingCarePlatform.Web.Models
+
+    @inject IAdminService AdminService
+    @inject UserManager<ApplicationUser> UserManager
+
+    @{
+        var stats = await AdminService.GetDashboardAsync();
+        var pendingSOSCount = stats.PendingSOS;
+        var pendingRequestsCount = stats.PendingRequests;
+        var openComplaintsCount = stats.OpenComplaints;
+        
+        var unreadNotificationsResult = await AdminService.GetAllNotificationsAsync();
+        var unreadCount = unreadNotificationsResult.Count(n => !n.IsRead);
+    }
+
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header d-flex align-items-center">
+                <i class="bi bi-heart-pulse-fill text-primary fs-3 me-2"></i>
+                <h4 class="mb-0 fw-bold text-white">HomeCare Admin</h4>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Dashboard">
+                        <i class="bi bi-speedometer2 text-primary"></i> Dashboard
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Patients" || ViewContext.RouteData.Values["action"]?.ToString() == "PatientDetails" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Patients">
+                        <i class="bi bi-people text-info"></i> Patients
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Nurses" || ViewContext.RouteData.Values["action"]?.ToString() == "NurseDetails" || ViewContext.RouteData.Values["action"]?.ToString() == "NurseDocuments" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Nurses">
+                        <i class="bi bi-person-badge text-success"></i> Nurses
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "CareRequests" || ViewContext.RouteData.Values["action"]?.ToString() == "CareRequestDetails" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="CareRequests">
+                        <i class="bi bi-clipboard2-pulse text-warning"></i> Care Requests
+                        @if (pendingRequestsCount > 0)
+                        {
+                            <span class="badge bg-warning text-dark sidebar-badge">@pendingRequestsCount</span>
+                        }
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Payments" || ViewContext.RouteData.Values["action"]?.ToString() == "PaymentDetails" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Payments">
+                        <i class="bi bi-cash-stack text-success"></i> Payments
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Complaints" || ViewContext.RouteData.Values["action"]?.ToString() == "ComplaintDetails" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Complaints">
+                        <i class="bi bi-chat-left-dots text-danger"></i> Complaints
+                        @if (openComplaintsCount > 0)
+                        {
+                            <span class="badge bg-danger sidebar-badge">@openComplaintsCount</span>
+                        }
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "SOS" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="SOS">
+                        <i class="bi bi-bell-fill text-danger"></i> SOS Alerts
+                        @if (pendingSOSCount > 0)
+                        {
+                            <span class="badge bg-danger sidebar-badge">@pendingSOSCount</span>
+                        }
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Cancellations" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Cancellations">
+                        <i class="bi bi-x-circle text-secondary"></i> Cancellations
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ratings" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Ratings">
+                        <i class="bi bi-star text-warning"></i> Ratings
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Reports" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Reports">
+                        <i class="bi bi-bar-chart text-info"></i> Reports
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() is "SubscriptionPlans" or "CreateSubscriptionPlan" or "EditSubscriptionPlan" or "NurseSubscriptions" or "AssignSubscription" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="SubscriptionPlans">
+                        <i class="bi bi-credit-card-2-front text-primary"></i> Subscriptions
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Notifications" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Notifications">
+                        <i class="bi bi-bell text-warning"></i> Notifications
+                        @if (unreadCount > 0)
+                        {
+                            <span class="badge bg-danger sidebar-badge">@unreadCount</span>
+                        }
+                    </a>
+                </li>
+                <hr class="text-secondary mx-3">
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Profile" || ViewContext.RouteData.Values["action"]?.ToString() == "ChangePassword" ? "active" : "")">
+                    <a asp-controller="Admin" asp-action="Profile">
+                        <i class="bi bi-person-circle text-light"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand-lg navbar-light navbar-admin">
+                <div class="container-fluid p-0">
+                    <button type="button" id="sidebarCollapse" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                        <i class="bi bi-justify fs-5 align-middle"></i> <span class="align-middle ms-1">Menu</span>
+                    </button>
+                    
+                    <div class="d-flex align-items-center ms-auto">
+                        <a class="nav-link position-relative me-3" asp-controller="Admin" asp-action="Notifications">
+                            <i class="bi bi-bell fs-5 text-dark"></i>
+                            @if (unreadCount > 0)
+                            {
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                                    @unreadCount
+                                </span>
+                            }
+                        </a>
+                        
+                        <div class="dropdown">
+                            <a class="dropdown-toggle text-dark text-decoration-none fw-semibold d-flex align-items-center" href="#" role="button" id="adminMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-fill-gear fs-5 me-1 text-primary"></i>
+                                Admin Portal
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="adminMenuLink">
+                                <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="Profile"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="ChangePassword"><i class="bi bi-key-fill me-2"></i>Change Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                        <button class="dropdown-item text-danger d-flex align-items-center w-100 py-2" type="submit">
+                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main>
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.Cancellation.CancellationHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Cancellation History";
+}
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">
+        <i class="bi bi-x-circle-fill text-danger"></i>
+        Cancellation History
+    </h3>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No cancellation requests found.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Request #</th>
+
+                    <th>Requested By</th>
+
+                    <th>Reason</th>
+
+                    <th>Cancellation Fee</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            #@item.CareRequestId
+                        </td>
+
+                        <td>
+                            @item.RequestedBy
+                        </td>
+
+                        <td>
+                            @item.Reason
+                        </td>
+
+                        <td>
+                            @item.Fee EGP
+                        </td>
+
+                        <td>
+
+                            @if (item.Status == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+                            }
+                            else if (item.Status == "Approved")
+                            {
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Rejected
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+                            @item.RequestedAt.ToString("dd/MM/yyyy hh:mm tt")
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+
+</div>

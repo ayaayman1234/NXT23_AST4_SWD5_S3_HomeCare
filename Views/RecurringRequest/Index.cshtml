@@ -1,0 +1,73 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.RecurringRequest.RecurringRequestHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Recurring Requests";
+}
+
+<h2>Recurring Requests</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No recurring requests found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <thead>
+
+            <tr>
+
+                <th>Request</th>
+
+                <th>Start</th>
+
+                <th>End</th>
+
+                <th>Repeat</th>
+
+                <th>Every</th>
+
+                <th></th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>#@item.CareRequestId</td>
+
+                    <td>@item.StartDate.ToShortDateString()</td>
+
+                    <td>@item.EndDate?.ToShortDateString()</td>
+
+                    <td>@item.RepetitionCount</td>
+
+                    <td>@item.FrequencyInterval Day(s)</td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-primary btn-sm">
+
+                            Details
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}

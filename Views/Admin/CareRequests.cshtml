@@ -1,0 +1,189 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminCareRequestViewModel>
+
+@{
+    ViewData["Title"] = "Care Requests";
+    var filter = Context.Request.Query["status"].ToString();
+    var search = Context.Request.Query["search"].ToString();
+
+    var filtered = Model.AsEnumerable();
+    if (!string.IsNullOrEmpty(search))
+        filtered = filtered.Where(r => r.PatientName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                    || r.NurseName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                    || r.ServiceName.Contains(search, StringComparison.OrdinalIgnoreCase));
+    if (!string.IsNullOrEmpty(filter))
+        filtered = filtered.Where(r => r.Status.Equals(filter, StringComparison.OrdinalIgnoreCase));
+
+    var list = filtered.ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0"><i class="bi bi-clipboard2-pulse text-warning me-2"></i>Care Requests</h2>
+        <small class="text-muted">@list.Count of @Model.Count() care requests shown</small>
+    </div>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Dashboard
+    </a>
+</div>
+
+<!-- Search + Filter -->
+<form method="get" class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold small">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" value="@search"
+                           class="form-control" placeholder="Search by patient, nurse, or service..." />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Filter by Status</label>
+                <select name="status" class="form-select">
+                    <option value="" selected="@(string.IsNullOrEmpty(filter))">All Statuses</option>
+                    <option value="Pending" selected="@(filter == "Pending")">Pending</option>
+                    <option value="Accepted" selected="@(filter == "Accepted")">Accepted</option>
+                    <option value="Completed" selected="@(filter == "Completed")">Completed</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                <a asp-action="CareRequests" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!list.Any())
+{
+    <div class="alert alert-info text-center py-4">
+        <i class="bi bi-clipboard-x fs-1 d-block mb-2"></i>
+        <h5>No care requests found.</h5>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="50">#</th>
+                            <th>Patient</th>
+                            <th>Nurse</th>
+                            <th>Service</th>
+                            <th>Preferred Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th width="180" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in list)
+                        {
+                            <tr>
+                                <td class="text-muted small">@item.Id</td>
+                                <td>
+                                    <i class="bi bi-person text-primary me-1"></i> @item.PatientName
+                                </td>
+                                <td>
+                                    @if (item.NurseName == "-")
+                                    {
+                                        <span class="text-muted fst-italic">Not assigned</span>
+                                    }
+                                    else
+                                    {
+                                        <span><i class="bi bi-person-badge text-success me-1"></i> @item.NurseName</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@item.ServiceName</span>
+                                </td>
+                                <td>@item.PreferredDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (item.RequestPriority == "High")
+                                    {
+                                        <span class="badge bg-danger">High</span>
+                                    }
+                                    else if (item.RequestPriority == "Medium")
+                                    {
+                                        <span class="badge bg-warning text-dark">Medium</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info text-dark">Low</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                    }
+                                    else if (item.Status == "Accepted")
+                                    {
+                                        <span class="badge bg-info text-dark"><i class="bi bi-person-check-fill me-1"></i>Accepted</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check2-all me-1"></i>Completed</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex gap-1 justify-content-center">
+                                        <a asp-action="CareRequestDetails" asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-info" title="View Details">
+                                            <i class="bi bi-eye"></i> Details
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                onclick="confirmAction('Delete Care Request #@item.Id? This action is permanent!', '/Admin/DeleteCareRequest/@item.Id')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small d-flex gap-3">
+            <span>Total: <strong>@Model.Count()</strong></span>
+            <span class="text-warning">Pending: <strong>@Model.Count(r => r.Status == "Pending")</strong></span>
+            <span class="text-info">Accepted: <strong>@Model.Count(r => r.Status == "Accepted")</strong></span>
+            <span class="text-success">Completed: <strong>@Model.Count(r => r.Status == "Completed")</strong></span>
+        </div>
+    </div>
+}
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Are you sure?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message, url) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}

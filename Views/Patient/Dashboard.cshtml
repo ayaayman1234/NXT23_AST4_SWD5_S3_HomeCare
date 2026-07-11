@@ -1,209 +1,222 @@
-﻿@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
+@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
 
 @{
     ViewData["Title"] = "Patient Dashboard";
+    var pendingCount = Model.Count(x => x.RequestStatus == "Pending");
+    var acceptedCount = Model.Count(x => x.RequestStatus == "Accepted");
+    var completedCount = Model.Count(x => x.RequestStatus == "Completed");
 }
 
-<div class="container py-5">
+<!-- 
+   Premium Offset Container
+   Adds top padding to avoid fixed navbar overlap
+-->
+<div class="container" style="padding-top: 30px; padding-bottom: 60px;">
 
-    <div class="mb-5">
-
-        <h2 class="fw-bold text-primary">
-            Welcome 👋
-        </h2>
-
-        <p class="text-muted">
-            Manage your care requests and account from one place.
-        </p>
-
+    <!-- Welcoming Header Banner -->
+    <div class="p-4 p-md-5 mb-4 text-body-emphasis shadow-sm border-0 position-relative overflow-hidden" 
+         style="background: linear-gradient(135deg, #ccfbf1 0%, #e0f2fe 100%); border-radius: 20px;">
+        <div class="col-lg-8 px-0 position-relative" style="z-index: 2;">
+            <h1 class="display-6 fw-extrabold text-primary mb-2">Welcome Back! 👋</h1>
+            <p class="lead my-3 text-secondary small">Manage your care requests, accept nurse offers, and track your ongoing medical services from one place.</p>
+            <a asp-action="CreateCareRequest" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm fw-bold">
+                <i class="bi bi-plus-lg me-1"></i> Request Nursing Care
+            </a>
+        </div>
+        <div class="position-absolute end-0 bottom-0 opacity-10 d-none d-lg-block" style="font-size: 160px; transform: translate(10px, 30px); z-index: 1; color: var(--primary);">
+            <i class="bi bi-heart-pulse-fill"></i>
+        </div>
     </div>
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success">
-            @TempData["Success"]
+        <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <!-- Dashboard Cards -->
-
-    <div class="row mb-5">
-
-        <div class="col-md-3 mb-3">
-
-            <a asp-action="MyRequests"
-                   class="text-decoration-none">
-
-                <div class="card dashboard-card shadow text-center h-100 border-0">
-
+    <!-- Dashboard Quick Stats Cards -->
+    <div class="row g-3 mb-5">
+        <!-- Total Requests -->
+        <div class="col-6 col-md-3">
+            <a asp-action="MyRequests" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 stat-hover-card" style="border-radius: 16px;">
                     <div class="card-body">
-
-                        <i class="bi bi-clipboard2-check display-5 text-primary"></i>
-
-                        <h5 class="mt-3">My Requests</h5>
-
-                        <p class="text-muted mb-0">
-                            @Model.Count() Requests
-                        </p>
-
+                        <div class="bg-primary-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-primary mb-2" style="width: 50px; height: 50px; font-size: 20px;">
+                            <i class="bi bi-clipboard2-check"></i>
+                        </div>
+                        <h6 class="text-muted text-uppercase small fw-bold" style="font-size: 0.72rem;">Total Requests</h6>
+                        <h3 class="fw-black mb-0 text-dark">@Model.Count()</h3>
                     </div>
-
                 </div>
-
             </a>
-
         </div>
-
-        <div class="col-md-3 mb-3">
-
-            <a asp-action="CreateCareRequest"
-                   class="text-decoration-none">
-
-                <div class="card dashboard-card shadow text-center h-100 border-0">
-
+        <!-- Pending Offers -->
+        <div class="col-6 col-md-3">
+            <a asp-action="MyRequests" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 stat-hover-card" style="border-radius: 16px;">
                     <div class="card-body">
-
-                        <i class="bi bi-plus-circle display-5 text-success"></i>
-
-                        <h5 class="mt-3">Create Request</h5>
-
-                        <p class="text-muted mb-0">
-                            Request Nursing Care
-                        </p>
-
+                        <div class="bg-warning-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-warning mb-2" style="width: 50px; height: 50px; font-size: 20px;">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <h6 class="text-muted text-uppercase small fw-bold" style="font-size: 0.72rem;">Pending Help</h6>
+                        <h3 class="fw-black mb-0 text-dark">@pendingCount</h3>
                     </div>
-
                 </div>
-
             </a>
-
         </div>
-
-        <div class="col-md-3 mb-3">
-
-            <a asp-action="Profile"
-                   class="text-decoration-none">
-
-                <div class="card dashboard-card shadow text-center h-100 border-0">
-
+        <!-- Ongoing Assignments -->
+        <div class="col-6 col-md-3">
+            <a asp-action="MyRequests" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 stat-hover-card" style="border-radius: 16px;">
                     <div class="card-body">
-
-                        <i class="bi bi-person-circle display-5 text-info"></i>
-
-                        <h5 class="mt-3">Profile</h5>
-
-                        <p class="text-muted mb-0">
-                            View & Edit Profile
-                        </p>
-
+                        <div class="bg-info-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-info mb-2" style="width: 50px; height: 50px; font-size: 20px;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h6 class="text-muted text-uppercase small fw-bold" style="font-size: 0.72rem;">Active Care</h6>
+                        <h3 class="fw-black mb-0 text-dark">@acceptedCount</h3>
                     </div>
-
                 </div>
-
             </a>
-
         </div>
-
-        
-
+        <!-- Quick Emergency SOS Link -->
+        <div class="col-6 col-md-3">
+            <a asp-controller="SOS" asp-action="Create" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 stat-hover-card bg-danger-subtle border-start border-danger border-4" style="border-radius: 16px;">
+                    <div class="card-body">
+                        <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-2 pulsing-sos-btn" style="width: 50px; height: 50px; font-size: 20px;">
+                            <i class="bi bi-broadcast"></i>
+                        </div>
+                        <h6 class="text-danger text-uppercase small fw-bold mb-1" style="font-size: 0.72rem;">Trigger SOS</h6>
+                        <span class="badge bg-danger text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;">Instant Help</span>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 
-    <!-- Recent Requests -->
-
-    <h3 class="fw-bold mb-4">
-        Recent Requests
-    </h3>
+    <!-- Recent Care Requests Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0 text-dark"><i class="bi bi-clock-history me-2 text-primary"></i>Recent Care Requests</h3>
+        <a asp-action="MyRequests" class="btn btn-link text-primary fw-semibold p-0 text-decoration-none small">View All Requests <i class="bi bi-chevron-right small"></i></a>
+    </div>
 
     @if (!Model.Any())
     {
-        <div class="card shadow-sm">
-
-            <div class="card-body text-center py-5">
-
-                <i class="bi bi-clipboard2-pulse display-3 text-secondary"></i>
-
-                <h4 class="mt-3">
-                    No Care Requests Yet
-                </h4>
-
-                <p class="text-muted">
-                    Create your first request to find a qualified nurse.
-                </p>
-
+        <div class="card border-0 shadow-sm py-5 text-center" style="border-radius: 18px;">
+            <div class="card-body">
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center text-muted mb-3" style="width: 80px; height: 80px; font-size: 36px;">
+                    <i class="bi bi-clipboard-x"></i>
+                </div>
+                <h4 class="fw-bold">No Care Requests Yet</h4>
+                <p class="text-muted mx-auto" style="max-width: 420px;">You haven't requested any nursing care services yet. Create your first request to match with professional nurses near you.</p>
+                <a asp-action="CreateCareRequest" class="btn btn-primary rounded-pill px-4 mt-2">
+                    <i class="bi bi-plus-lg me-1"></i> Request First Service
+                </a>
             </div>
-
         </div>
     }
     else
     {
-        <div class="row">
-
-            @foreach (var item in Model)
+        <div class="row g-4">
+            @foreach (var item in Model.Take(6))
             {
-                <div class="col-md-6 col-lg-4 mb-4">
-
-                    <div class="card shadow h-100">
-
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 hover-elevate" style="border-radius: 18px;">
                         <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge bg-light text-dark border"><i class="bi bi-hash"></i>@item.Id</span>
+                                @if (item.RequestStatus == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                }
+                                else if (item.RequestStatus == "Accepted")
+                                {
+                                    <span class="badge bg-info text-dark"><i class="bi bi-person-check-fill me-1"></i>Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>Completed</span>
+                                }
+                            </div>
 
-                            <h5 class="card-title">
-                                @item.Description
-                            </h5>
+                            <h5 class="fw-bold text-dark mb-3 text-truncate">@item.Service.Name</h5>
 
-                            <p>
-                                <strong>Address:</strong>
-                                @item.Address
-                            </p>
+                            <p class="mb-2 text-muted small"><i class="bi bi-geo-alt-fill text-danger me-1"></i> @item.Address</p>
+                            <p class="mb-2 text-muted small"><i class="bi bi-calendar-event me-1"></i> @item.PreferredDate.ToString("dd MMM yyyy")</p>
+                            <p class="mb-3 text-muted small"><i class="bi bi-wallet2 me-1"></i> <strong>Budget:</strong> @item.BudgetMin.ToString("N0") - @item.BudgetMax.ToString("N0") EGP</p>
 
-                            <p>
-                                <strong>Date:</strong>
-                                @item.PreferredDate.ToShortDateString()
-                            </p>
-
-                            <p>
-                                <strong>Status:</strong>
-
-                                <span class="badge bg-primary">
-                                    @item.RequestStatus
-                                </span>
-                            </p>
-
-                            <p>
-                                <strong>Budget:</strong>
-                                @item.BudgetMin -
-                                @item.BudgetMax EGP
-                            </p>
-
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <p class="text-muted small text-truncate-2 bg-light p-2 rounded mb-0" style="min-height: 48px;">
+                                    @item.Description
+                                </p>
+                            }
                         </div>
 
-                        <div class="card-footer bg-white">
-
-                            <a asp-action="RequestDetails"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-outline-primary btn-sm">
-                                Details
+                        <div class="card-footer bg-white border-0 pt-0 pb-3 d-flex gap-2">
+                            <a asp-action="RequestDetails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary flex-fill rounded-pill">
+                                <i class="bi bi-eye"></i> Details
                             </a>
-
-                            <a asp-action="EditRequest"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-warning btn-sm">
-                                Edit
-                            </a>
-
-                            <a asp-action="DeleteRequest"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-danger btn-sm">
-                                Delete
-                            </a>
-
+                            @if (item.RequestStatus == "Pending")
+                            {
+                                <a asp-action="EditRequest" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning rounded-circle" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="DeleteRequest" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-circle" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;"
+                                   onclick="return confirm('Cancel and delete this care request?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
                         </div>
-
                     </div>
-
                 </div>
             }
-
         </div>
     }
 
 </div>
+
+@section Scripts {
+    <style>
+        .fw-extrabold { font-weight: 800; }
+        .fw-black { font-weight: 900; }
+        .stat-hover-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .stat-hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(15,118,110,0.1) !important;
+        }
+        .hover-elevate {
+            transition: all 0.3s ease;
+        }
+        .hover-elevate:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(15,118,110,0.12) !important;
+        }
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+        .pulsing-sos-btn {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+            animation: pulse-sos-mini 1.8s infinite;
+        }
+        @@keyframes pulse-sos-mini {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+    </style>
+}

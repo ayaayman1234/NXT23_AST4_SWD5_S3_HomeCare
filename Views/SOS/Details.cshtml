@@ -1,0 +1,68 @@
+﻿@model NursingCarePlatform.Web.ViewModels.SOS.SOSDetailsViewModel
+
+@{
+    ViewData["Title"] = "SOS Details";
+}
+
+<h2 class="mb-4">SOS Details</h2>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-3">
+                Patient
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.TriggeredBy
+            </dd>
+
+            <dt class="col-sm-3">
+                Care Request
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.CareRequestId
+            </dd>
+
+            <dt class="col-sm-3">
+                Location
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.Location
+            </dd>
+
+            <dt class="col-sm-3">
+                Status
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.SOSStatus
+            </dd>
+
+            <dt class="col-sm-3">
+                Date
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.CreatedAt.ToString("f")
+            </dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Index"
+       class="btn btn-secondary">
+
+    Back
+
+</a>

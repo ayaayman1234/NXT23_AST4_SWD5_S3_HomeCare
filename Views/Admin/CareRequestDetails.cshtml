@@ -1,0 +1,161 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminCareRequestViewModel
+
+@{
+    ViewData["Title"] = "Care Request Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-clipboard2-pulse text-warning me-2"></i>Care Request Details</h2>
+    <a asp-action="CareRequests" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Care Requests
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark fw-bold">
+                <i class="bi bi-info-circle me-2"></i> Request Information
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        <tr>
+                            <th width="200" class="bg-light ps-3">Request ID</th>
+                            <td class="ps-3 fw-bold">#@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Patient</th>
+                            <td class="ps-3"><i class="bi bi-person text-primary me-1"></i> @Model.PatientName</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Nurse</th>
+                            <td class="ps-3">
+                                @if (Model.NurseName == "-")
+                                {
+                                    <span class="text-muted fst-italic">Not assigned</span>
+                                }
+                                else
+                                {
+                                    <span><i class="bi bi-person-badge text-success me-1"></i> @Model.NurseName</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Service</th>
+                            <td class="ps-3"><span class="badge bg-light text-dark border">@Model.ServiceName</span></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Address</th>
+                            <td class="ps-3">@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Preferred Date</th>
+                            <td class="ps-3">@Model.PreferredDate.ToString("dd MMMM yyyy, hh:mm tt")</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Required Hours</th>
+                            <td class="ps-3">@Model.RequiredHours hours</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Budget Range</th>
+                            <td class="ps-3 text-success fw-semibold">@Model.BudgetMin.ToString("C") - @Model.BudgetMax.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Description</th>
+                            <td class="ps-3">
+                                @if (string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <span class="text-muted fst-italic">No description provided.</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.Description</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status & Management Sidebar Card -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4 text-center">
+            <div class="card-header bg-dark text-white fw-bold">
+                Management Panel
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <h6 class="text-muted small">Status</h6>
+                    @if (Model.Status == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark fs-6 px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                    }
+                    else if (Model.Status == "Accepted")
+                    {
+                        <span class="badge bg-info text-dark fs-6 px-3 py-2"><i class="bi bi-person-check-fill me-1"></i>Accepted</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success fs-6 px-3 py-2"><i class="bi bi-check2-all me-1"></i>Completed</span>
+                    }
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted small">Priority</h6>
+                    @if (Model.RequestPriority == "High")
+                    {
+                        <span class="badge bg-danger fs-6 px-3 py-2">High</span>
+                    }
+                    else if (Model.RequestPriority == "Medium")
+                    {
+                        <span class="badge bg-warning text-dark fs-6 px-3 py-2">Medium</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info text-dark fs-6 px-3 py-2">Low</span>
+                    }
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-danger"
+                            onclick="confirmAction('Delete this Care Request #@Model.Id?', '/Admin/DeleteCareRequest/@Model.Id')">
+                        <i class="bi bi-trash me-1"></i> Delete Request
+                    </button>
+                    <a asp-action="CareRequests" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Are you sure?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message, url) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}

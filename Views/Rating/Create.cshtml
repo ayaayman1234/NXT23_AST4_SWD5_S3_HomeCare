@@ -1,110 +1,75 @@
-﻿@model NursingCarePlatform.Web.ViewModels.Rating.CreateRatingViewModel
+@model NursingCarePlatform.Web.ViewModels.Rating.CreateRatingViewModel
 
 @{
     ViewData["Title"] = "Rate Nurse";
 }
 
-<div class="container py-5">
-
+<!-- 
+   Premium Responsive Rating Form Layout
+   - Safe top offset (130px) for fixed navbar
+   - Modern clean cards
+-->
+<div class="container" style="padding-top: 40px; padding-bottom: 80px;">
     <div class="row justify-content-center">
-
-        <div class="col-lg-7">
-
-            <div class="card shadow-lg">
-
-                <div class="card-header bg-primary text-white">
-
-                    <h3 class="mb-0">
-                        <i class="bi bi-star-fill"></i>
-                        Rate Nurse
-                    </h3>
-
+        <div class="col-lg-6 col-md-8">
+            
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background: #ffffff;">
+                
+                <!-- Card Header -->
+                <div class="p-4 text-center bg-light border-bottom">
+                    <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-star-fill text-warning fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Rate Nurse Performance</h4>
+                    <p class="text-muted small mb-0">Help us maintain quality by sharing your home care experience</p>
                 </div>
 
-                <div class="card-body">
-
+                <div class="card-body p-4 p-sm-5">
                     <form asp-action="Create" method="post">
-
+                        @Html.AntiForgeryToken()
                         <input asp-for="CareRequestId" type="hidden" />
-
                         <input asp-for="NurseId" type="hidden" />
 
+                        <!-- Rating score selection -->
                         <div class="mb-4">
-
-                            <label asp-for="Stars"
-                                   class="form-label fw-bold">
-                                Rating
-                            </label>
-
-                            <select asp-for="Stars"
-                                    class="form-select">
-
-                                <option value="">Choose Rating</option>
-
-                                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
-
-                                <option value="4">⭐⭐⭐⭐ Very Good</option>
-
-                                <option value="3">⭐⭐⭐ Good</option>
-
-                                <option value="2">⭐⭐ Fair</option>
-
-                                <option value="1">⭐ Poor</option>
-
+                            <label asp-for="Stars" class="form-label fw-semibold small text-secondary">Rating Stars</label>
+                            <select asp-for="Stars" class="form-select text-dark fw-bold" required>
+                                <option value="">-- Choose Rating --</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Excellent (ممتاز)</option>
+                                <option value="4">⭐⭐⭐⭐ Very Good (جيد جداً)</option>
+                                <option value="3">⭐⭐⭐ Good (جيد)</option>
+                                <option value="2">⭐⭐ Fair (مقبول)</option>
+                                <option value="1">⭐ Poor (ضعيف)</option>
                             </select>
-
-                            <span asp-validation-for="Stars"
-                                  class="text-danger"></span>
-
+                            <span asp-validation-for="Stars" class="text-danger small"></span>
                         </div>
 
+                        <!-- Feedback comment -->
                         <div class="mb-4">
-
-                            <label asp-for="Comment"
-                                   class="form-label fw-bold">
-                                Comment
-                            </label>
-
-                            <textarea asp-for="Comment"
-                                      rows="5"
-                                      class="form-control"
-                                      placeholder="Write your feedback..."></textarea>
-
-                            <span asp-validation-for="Comment"
-                                  class="text-danger"></span>
-
+                            <label asp-for="Comment" class="form-label fw-semibold small text-secondary">Write your feedback</label>
+                            <textarea asp-for="Comment" rows="4" class="form-control" placeholder="Describe the nurse's punctuality, professionalism, and treatment..." required></textarea>
+                            <span asp-validation-for="Comment" class="text-danger small"></span>
                         </div>
 
-                        <button type="submit"
-                                class="btn btn-success">
-
-                            <i class="bi bi-star-fill"></i>
-
-                            Submit Rating
-
-                        </button>
-
-                        <a asp-controller="Patient"
-                               asp-action="MyRequests"
-                               class="btn btn-secondary">
-
-                            Cancel
-
-                        </a>
+                        <!-- Buttons actions -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="nc-btn-primary w-100 justify-content-center text-center py-3">
+                                Submit Rating <i class="bi bi-send-fill ms-2 fs-6"></i>
+                            </button>
+                            <a asp-controller="Patient" asp-action="MyRequests" class="btn btn-outline-secondary rounded-pill py-2 small">
+                                Cancel
+                            </a>
+                        </div>
 
                     </form>
-
                 </div>
 
             </div>
 
         </div>
-
     </div>
-
 </div>
 
-@section Scripts
-{
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

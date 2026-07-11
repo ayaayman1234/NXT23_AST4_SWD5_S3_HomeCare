@@ -13,5 +13,6 @@
         public DateTime UploadDate { get; set; }
 
         public Nurse Nurse { get; set; } = null!;
+        public bool IsApproved { get; set; }
     }
 }

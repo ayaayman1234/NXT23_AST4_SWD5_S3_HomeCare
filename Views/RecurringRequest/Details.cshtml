@@ -1,0 +1,84 @@
+﻿@model NursingCarePlatform.Web.ViewModels.RecurringRequest.RecurringRequestDetailsViewModel
+
+@{
+    ViewData["Title"] = "Recurring Request Details";
+}
+
+<h2>Recurring Request Details</h2>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                Care Request
+            </dt>
+
+            <dd class="col-sm-8">
+                #@Model.CareRequestId
+            </dd>
+
+            <dt class="col-sm-4">
+                Patient
+            </dt>
+
+            <dd class="col-sm-8">
+                @Model.PatientName
+            </dd>
+
+            <dt class="col-sm-4">
+                Service
+            </dt>
+
+            <dd class="col-sm-8">
+                @Model.ServiceName
+            </dd>
+
+            <dt class="col-sm-4">
+                Repetition Count
+            </dt>
+
+            <dd class="col-sm-8">
+                @Model.RepetitionCount
+            </dd>
+
+            <dt class="col-sm-4">
+                Frequency
+            </dt>
+
+            <dd class="col-sm-8">
+                Every @Model.FrequencyInterval day(s)
+            </dd>
+
+            <dt class="col-sm-4">
+                Start Date
+            </dt>
+
+            <dd class="col-sm-8">
+                @Model.StartDate.ToShortDateString()
+            </dd>
+
+            <dt class="col-sm-4">
+                End Date
+            </dt>
+
+            <dd class="col-sm-8">
+                @(Model.EndDate?.ToShortDateString() ?? "-")
+            </dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Index"
+       class="btn btn-secondary">
+
+    Back
+
+</a>

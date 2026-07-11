@@ -1,0 +1,61 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.Complaint.ComplaintHistoryViewModel>
+
+@{
+    ViewData["Title"] = "My Complaints";
+}
+
+<h2>My Complaints</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No complaints found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Against</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.Title</td>
+
+                    <td>@item.Against</td>
+
+                    <td>@item.Status</td>
+
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-primary btn-sm">
+
+                            Details
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}

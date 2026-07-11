@@ -1,0 +1,140 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminPaymentViewModel>
+
+@{
+    ViewData["Title"] = "Payments";
+    var filter = Context.Request.Query["status"].ToString();
+    var search = Context.Request.Query["search"].ToString();
+
+    var filtered = Model.AsEnumerable();
+    if (!string.IsNullOrEmpty(search))
+        filtered = filtered.Where(p => p.TransactionReference.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                    || p.CareRequestId.ToString().Contains(search));
+    if (!string.IsNullOrEmpty(filter))
+        filtered = filtered.Where(p => p.PaymentStatus.Equals(filter, StringComparison.OrdinalIgnoreCase));
+
+    var list = filtered.ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0"><i class="bi bi-cash-stack text-success me-2"></i>Payments & Transactions</h2>
+        <small class="text-muted">@list.Count of @Model.Count() transactions shown</small>
+    </div>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Dashboard
+    </a>
+</div>
+
+<!-- Search + Filter -->
+<form method="get" class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold small">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" value="@search"
+                           class="form-control" placeholder="Search by Txn Reference or Request ID..." />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Filter by Status</label>
+                <select name="status" class="form-select">
+                    <option value="" selected="@(string.IsNullOrEmpty(filter))">All Statuses</option>
+                    <option value="Paid" selected="@(filter == "Paid")">Paid</option>
+                    <option value="Pending" selected="@(filter == "Pending")">Pending</option>
+                    <option value="Failed" selected="@(filter == "Failed")">Failed</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                <a asp-action="Payments" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!list.Any())
+{
+    <div class="alert alert-info text-center py-4">
+        <i class="bi bi-cash-coin fs-1 d-block mb-2"></i>
+        <h5>No transactions found.</h5>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="50">#</th>
+                            <th>Care Request</th>
+                            <th>Txn Reference</th>
+                            <th>Total Amount</th>
+                            <th>Commission (Platform)</th>
+                            <th>Net to Nurse</th>
+                            <th>Payment Method</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th width="100" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in list)
+                        {
+                            <tr>
+                                <td class="text-muted small">@item.Id</td>
+                                <td>
+                                    <a asp-action="CareRequestDetails" asp-route-id="@item.CareRequestId" class="fw-bold">
+                                        #@item.CareRequestId
+                                    </a>
+                                </td>
+                                <td>
+                                    <code class="small">@(string.IsNullOrEmpty(item.TransactionReference) ? "N/A" : item.TransactionReference)</code>
+                                </td>
+                                <td class="fw-bold text-success">@item.Amount.ToString("C")</td>
+                                <td class="text-primary">@item.CommissionAmount.ToString("C")</td>
+                                <td class="text-dark">@item.NetAmount.ToString("C")</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@item.PaymentMethod</span>
+                                </td>
+                                <td class="small text-muted">@item.PaymentDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (item.PaymentStatus == "Paid")
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>Paid</span>
+                                    }
+                                    else if (item.PaymentStatus == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>Failed</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="PaymentDetails" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-outline-info" title="View Details">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small d-flex gap-3">
+            <span>Total: <strong>@Model.Count()</strong></span>
+            <span class="text-success">Total Amount: <strong>@Model.Sum(p => p.Amount).ToString("C")</strong></span>
+            <span class="text-primary">Platform Earnings: <strong>@Model.Sum(p => p.CommissionAmount).ToString("C")</strong></span>
+        </div>
+    </div>
+}

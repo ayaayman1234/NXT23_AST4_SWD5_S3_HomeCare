@@ -107,17 +107,19 @@ namespace NursingCarePlatform.Web.Services.Implementations
 
             await _context.SaveChangesAsync();
 
-       
-            var patientUserId = await _context.Patients
-                .Where(p => p.Id == assignment.CareRequest.PatientId)
-                .Select(p => p.UserId)
-                .FirstAsync();
 
-            await _notificationService.CreateAsync(
-                patientUserId,
-                "Care Completed",
-                "Your care has been completed. Please rate your nurse.",
-                "Patient");
+            var patient = await _context.Patients
+    .FirstOrDefaultAsync(p => p.Id == assignment.CareRequest.PatientId);
+
+            if (patient != null)
+            {
+                await _notificationService.CreateAsync(
+                    patient.Id,
+                    "Patient",
+                    "Care Completed",
+                    "Your care has been completed. Please rate your nurse.",
+                    "CareCompleted");
+            }
 
             return new ServiceResult
             {

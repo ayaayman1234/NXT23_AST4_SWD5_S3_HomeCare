@@ -1,0 +1,88 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminPaymentViewModel
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-receipt text-success me-2"></i>Payment Details</h2>
+    <a asp-action="Payments" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Payments
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-receipt me-2"></i>Transaction Receipt</span>
+                <span class="badge bg-secondary">Txn: @(string.IsNullOrEmpty(Model.TransactionReference) ? "N/A" : Model.TransactionReference)</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        <tr>
+                            <th width="200" class="bg-light ps-3">Payment ID</th>
+                            <td class="ps-3 fw-bold">#@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Care Request ID</th>
+                            <td class="ps-3">
+                                <a asp-action="CareRequestDetails" asp-route-id="@Model.CareRequestId" class="fw-bold">
+                                    #@Model.CareRequestId
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Payment Method</th>
+                            <td class="ps-3">
+                                <span class="badge bg-light text-dark border"><i class="bi bi-credit-card me-1"></i> @Model.PaymentMethod</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Payment Date</th>
+                            <td class="ps-3">@Model.PaymentDate.ToString("dd MMMM yyyy, hh:mm tt")</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Transaction Status</th>
+                            <td class="ps-3">
+                                @if (Model.PaymentStatus == "Paid")
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>Paid</span>
+                                }
+                                else if (Model.PaymentStatus == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>Failed</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Total Paid Amount</th>
+                            <td class="ps-3 fw-bold text-success fs-5">@Model.Amount.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Platform Commission (15%)</th>
+                            <td class="ps-3 text-primary fw-semibold">@Model.CommissionAmount.ToString("C")</td>
+                        </tr>
+                        <tr class="table-info">
+                            <th class="bg-light ps-3">Net payout to Nurse</th>
+                            <td class="ps-3 fw-bold">@Model.NetAmount.ToString("C")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex gap-2">
+                <a asp-action="Payments" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </a>
+                <button type="button" class="btn btn-primary" onclick="window.print();">
+                    <i class="bi bi-printer me-1"></i> Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

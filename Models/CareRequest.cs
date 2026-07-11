@@ -62,5 +62,6 @@ namespace NursingCarePlatform.Web.Models
 
         public ICollection<MyOffer> Offers { get; set; } = new List<MyOffer>();
         public MedicalChecklist? MedicalChecklist { get; set; }
+        public Payment? Payment { get; set; }
     }
 }

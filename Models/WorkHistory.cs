@@ -1,10 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingCarePlatform.Web.Models
 {
     public class WorkHistory
     {
         public int Id { get; set; }
+
+        // ==========================
+        // Assignment (GAP 2 – required by spec)
+        // ==========================
+
+        /// <summary>
+        /// Direct reference to the assignment that generated this work record.
+        /// Requirement: "Each work history record includes a unique identifier,
+        /// assignment reference, start time, end time, and job status."
+        /// </summary>
+        public int? AssignmentId { get; set; }
+
+        public Assignment? Assignment { get; set; }
 
         // ==========================
         // Nurse
@@ -41,6 +54,15 @@ namespace NursingCarePlatform.Web.Models
         // ==========================
         // Job Details
         // ==========================
+
+        /// <summary>
+        /// Job status for this work history record.
+        /// Requirement: "Each work history record includes ... and job status."
+        /// Values: Completed | Cancelled | InProgress
+        /// </summary>
+        public string JobStatus { get; set; } = "Completed";
+
+        public DateTime StartTime { get; set; }
 
         public DateTime CompletedAt { get; set; }
 

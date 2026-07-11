@@ -19,5 +19,6 @@
         public string FirstName { get; internal set; } = string.Empty;
 
         public string LastName { get; internal set; } = string.Empty;
+        public bool IsBlocked { get; set; } = false;
     }
 }

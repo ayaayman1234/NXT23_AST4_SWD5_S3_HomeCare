@@ -23,5 +23,6 @@ namespace NursingCarePlatform.Web.Models
         public string Gender { get; set; } = string.Empty;
 
         public int Age { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

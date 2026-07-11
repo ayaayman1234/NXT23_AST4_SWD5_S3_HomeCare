@@ -7,7 +7,7 @@ using NursingCarePlatform.Web.ViewModels.Complaint;
 
 namespace NursingCarePlatform.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Patient")]
     public class ComplaintController : Controller
     {
         private readonly IComplaintService _complaintService;
@@ -21,78 +21,67 @@ namespace NursingCarePlatform.Web.Controllers
             _userManager = userManager;
         }
 
-        // =====================================
-        // Create Complaint
-        // =====================================
+        //==============================
+        // Create
+        //==============================
 
-        [Authorize(Roles = "Patient")]
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(int? nurseId)
         {
-            return View(new ComplaintViewModel());
+            return View(new CreateComplaintViewModel
+            {
+                NurseId = nurseId
+            });
         }
 
-        [Authorize(Roles = "Patient")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ComplaintViewModel model)
+        public async Task<IActionResult> Create(CreateComplaintViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
             var user = await _userManager.GetUserAsync(User);
 
-            if (user == null)
-                return RedirectToAction("Login", "Account");
-
             var result = await _complaintService.CreateComplaintAsync(user.Id, model);
 
-            TempData[result.Success ? "Success" : "Error"] = result.Message;
-
             if (!result.Success)
+            {
+                ModelState.AddModelError("", result.Message);
                 return View(model);
+            }
 
-            return RedirectToAction(nameof(Create));
+            TempData["Success"] = result.Message;
+
+            return RedirectToAction(nameof(MyComplaints));
         }
 
-        // =====================================
-        // Admin - All Complaints
-        // =====================================
+        //==============================
+        // My Complaints
+        //==============================
 
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> MyComplaints()
         {
-            var complaints = await _complaintService.GetAllComplaintsAsync();
+            var user = await _userManager.GetUserAsync(User);
+
+            var complaints =
+                await _complaintService.GetPatientComplaintsAsync(user.Id);
 
             return View(complaints);
         }
 
-        // =====================================
-        // Resolve
-        // =====================================
+        //==============================
+        // Details
+        //==============================
 
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Resolve(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = await _complaintService.ResolveComplaintAsync(id);
+            var complaint =
+                await _complaintService.GetComplaintDetailsAsync(id);
 
-            TempData[result.Success ? "Success" : "Error"] = result.Message;
+            if (complaint == null)
+                return NotFound();
 
-            return RedirectToAction(nameof(Index));
-        }
-
-        // =====================================
-        // Close
-        // =====================================
-
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Close(int id)
-        {
-            var result = await _complaintService.CloseComplaintAsync(id);
-
-            TempData[result.Success ? "Success" : "Error"] = result.Message;
-
-            return RedirectToAction(nameof(Index));
+            return View(complaint);
         }
     }
 }

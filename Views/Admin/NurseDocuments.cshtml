@@ -1,0 +1,148 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminDocumentViewModel>
+@{
+    ViewData["Title"] = "Nurse Documents";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var expiredCount = Model.Count(d => d.IsExpired);
+    var expiringSoonCount = Model.Count(d => d.ExpiringsSoon);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">
+            <i class="bi bi-file-earmark-check text-primary me-2"></i>Nurse Documents
+        </h4>
+        <p class="text-muted mb-0 small">Review and verify uploaded nurse credentials and documents.</p>
+    </div>
+    <a asp-action="Nurses" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="bi bi-arrow-left me-2"></i>Back to Nurses
+    </a>
+</div>
+
+@* GAP 7 – Expiry Alerts *@
+@if (expiredCount > 0)
+{
+    <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-3">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>@expiredCount document(s) have expired</strong> and require renewal from the nurse.
+        Criminal record and license documents must be renewed periodically.
+    </div>
+}
+@if (expiringSoonCount > 0)
+{
+    <div class="alert alert-warning border-0 shadow-sm rounded-3 mb-3">
+        <i class="bi bi-clock-history me-2"></i>
+        <strong>@expiringSoonCount document(s) are expiring within 30 days.</strong>
+        Notify the nurse to upload renewed documents.
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3">Nurse</th>
+                        <th>Document Type</th>
+                        <th>Uploaded</th>
+                        <th>Expiry Date</th>
+                        <th>Approval</th>
+                        <th>Verification</th>
+                        <th class="px-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var rowClass = item.IsExpired ? "table-danger"
+                                     : item.ExpiringsSoon ? "table-warning"
+                                     : "";
+
+                        <tr class="@rowClass">
+                            <td class="px-4 fw-semibold">@item.NurseName</td>
+                            <td>
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-2">
+                                    <i class="bi bi-file-earmark me-1"></i>@item.DocumentType
+                                </span>
+                            </td>
+                            <td>@item.UploadedAt.ToString("dd MMM yyyy")</td>
+                            <td>
+                                @if (!item.ExpiryDate.HasValue)
+                                {
+                                    <span class="text-muted small">—</span>
+                                }
+                                else if (item.IsExpired)
+                                {
+                                    <span class="text-danger fw-semibold">
+                                        <i class="bi bi-x-circle me-1"></i>
+                                        @item.ExpiryDate.Value.ToString("dd MMM yyyy") (Expired)
+                                    </span>
+                                }
+                                else if (item.ExpiringsSoon)
+                                {
+                                    <span class="text-warning fw-semibold">
+                                        <i class="bi bi-clock-history me-1"></i>
+                                        @item.ExpiryDate.Value.ToString("dd MMM yyyy") (Expiring Soon)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-success small">@item.ExpiryDate.Value.ToString("dd MMM yyyy")</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.IsApproved)
+                                {
+                                    <span class="badge bg-success rounded-pill px-3">
+                                        <i class="bi bi-check-circle me-1"></i>Approved
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">
+                                        <i class="bi bi-hourglass me-1"></i>Pending
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.VerificationStatus))
+                                {
+                                    <span class="badge rounded-pill px-3
+                                        @(item.VerificationStatus == "Approved" ? "bg-success"
+                                          : item.VerificationStatus == "Rejected" ? "bg-danger"
+                                          : "bg-secondary")">
+                                        @item.VerificationStatus
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-4">
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="@item.FilePath" target="_blank"
+                                       class="btn btn-outline-primary btn-sm rounded-pill px-2">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="@item.FilePath" download
+                                       class="btn btn-outline-secondary btn-sm rounded-pill px-2">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                    @if (!item.IsApproved)
+                                    {
+                                        <a asp-action="ApproveDocument" asp-route-id="@item.Id"
+                                           class="btn btn-success btn-sm rounded-pill px-2">
+                                            <i class="bi bi-check-lg"></i>
+                                        </a>
+                                        <a asp-action="RejectDocument" asp-route-id="@item.Id"
+                                           class="btn btn-danger btn-sm rounded-pill px-2">
+                                            <i class="bi bi-x-lg"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

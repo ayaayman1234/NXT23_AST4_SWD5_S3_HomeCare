@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,6 +29,29 @@ namespace NursingCarePlatform.Web.Controllers
             _userManager = userManager;
             _context = context;
             _offerService = offerService;
+        }
+
+        public override async Task OnActionExecutionAsync(
+            Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context,
+            Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate next)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null && user.AccountStatus == "Blocked")
+            {
+                var action = context.RouteData.Values["action"]?.ToString();
+                if (action != "Blocked")
+                {
+                    context.Result = RedirectToAction("Blocked");
+                    return;
+                }
+            }
+            await base.OnActionExecutionAsync(context, next);
+        }
+
+        [AllowAnonymous]
+        public IActionResult Blocked()
+        {
+            return View();
         }
 
         // =====================================
@@ -185,6 +208,8 @@ namespace NursingCarePlatform.Web.Controllers
             }
 
             ViewBag.Offers = offers;
+            ViewBag.IsPaid = await _context.Payments
+    .AnyAsync(p => p.CareRequestId == id);
 
             return View(request);
         }

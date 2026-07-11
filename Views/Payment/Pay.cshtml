@@ -1,0 +1,68 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Payment.CreatePaymentViewModel
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<h2>Payment</h2>
+
+<form asp-action="Pay" method="post">
+
+    <input asp-for="CareRequestId" type="hidden" />
+
+    <div class="mb-3">
+        <label>Patient</label>
+        <input class="form-control"
+               value="@Model.PatientName"
+               readonly />
+    </div>
+
+    <div class="mb-3">
+        <label>Nurse</label>
+        <input class="form-control"
+               value="@Model.NurseName"
+               readonly />
+    </div>
+
+    <div class="mb-3">
+        <label>Service</label>
+        <input class="form-control"
+               value="@Model.ServiceName"
+               readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount"
+               class="form-control"
+               readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PaymentMethod"></label>
+
+        <select asp-for="PaymentMethod"
+                class="form-select">
+
+            <option value="">Select</option>
+            <option>Cash</option>
+            <option>Visa</option>
+            <option>MasterCard</option>
+            <option>Wallet</option>
+
+        </select>
+
+        <span asp-validation-for="PaymentMethod"
+              class="text-danger"></span>
+
+    </div>
+
+    <button class="btn btn-success">
+        Confirm Payment
+    </button>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

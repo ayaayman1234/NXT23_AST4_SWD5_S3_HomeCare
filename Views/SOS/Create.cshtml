@@ -1,0 +1,129 @@
+@model NursingCarePlatform.Web.ViewModels.SOS.CreateSOSViewModel
+
+@{
+    ViewData["Title"] = "Send SOS";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-0 text-center">
+            <div class="card-header bg-danger text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-exclamation-octagon-fill me-2"></i>Emergency SOS Center</h4>
+            </div>
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <!-- Glowing Emergency Icon -->
+                    <div class="emergency-pulse rounded-circle d-flex align-items-center justify-content-center text-white bg-danger mx-auto"
+                         style="width: 120px; height: 120px; font-size: 55px; cursor: pointer;" onclick="requestLocation()">
+                        <i class="bi bi-broadcast"></i>
+                    </div>
+                </div>
+
+                <h3 class="fw-bold text-danger mb-2">Need Immediate Assistance?</h3>
+                <p class="text-muted">Pressing the button below will trigger a system-wide emergency alert and notify the administrator immediately.</p>
+
+                <!-- Location status message -->
+                <div id="locationStatus" class="alert alert-info border-0 rounded-pill py-2 small mb-4">
+                    <i class="bi bi-geo-alt-fill me-1"></i> Detecting your current location coordinates...
+                </div>
+
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <input asp-for="CareRequestId" type="hidden" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+                    <!-- Hidden or readonly location input populated by GPS -->
+                    <div class="mb-4">
+                        <label asp-for="Location" class="form-label fw-semibold small text-muted">Current Location Coordinates</label>
+                        <input asp-for="Location" id="locationInput" class="form-control text-center bg-light font-monospace" 
+                               readonly placeholder="Latitude, Longitude" required />
+                        <span asp-validation-for="Location" class="text-danger small"></span>
+                        <div class="form-text text-muted small mt-1">We require location access to coordinate quick emergency responses.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" id="btnSubmitSOS" class="btn btn-danger btn-lg fw-bold py-3 rounded-pill shadow" disabled>
+                            🚨 SEND EMERGENCY SOS
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill py-2">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <style>
+        .emergency-pulse {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            animation: pulse-sos 1.5s infinite;
+        }
+        @@keyframes pulse-sos {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 25px rgba(220, 53, 69, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            requestLocation();
+        });
+
+        function requestLocation() {
+            const statusDiv = document.getElementById('locationStatus');
+            const inputField = document.getElementById('locationInput');
+            const submitBtn = document.getElementById('btnSubmitSOS');
+
+            if (!navigator.geolocation) {
+                statusDiv.className = "alert alert-warning border-0 rounded-pill py-2 small mb-4";
+                statusDiv.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-1"></i> Geolocation is not supported by your browser. Please type it in.`;
+                inputField.removeAttribute('readonly');
+                submitBtn.removeAttribute('disabled');
+                return;
+            }
+
+            statusDiv.className = "alert alert-info border-0 rounded-pill py-2 small mb-4";
+            statusDiv.innerHTML = `<i class="bi bi-arrow-repeat animate-spin me-1"></i> Accessing GPS coordinates...`;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    inputField.value = `${lat},${lng}`;
+                    
+                    statusDiv.className = "alert alert-success border-0 rounded-pill py-2 small mb-4";
+                    statusDiv.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Location coordinates resolved successfully!`;
+                    submitBtn.removeAttribute('disabled');
+                },
+                (error) => {
+                    console.log("GPS Location error: ", error);
+                    statusDiv.className = "alert alert-warning border-0 rounded-pill py-2 small mb-4";
+                    
+                    let errMsg = "Location permission denied. Please enter coordinates manually.";
+                    if (error.code === error.POSITION_UNAVAILABLE) errMsg = "Position unavailable. Please try typing manually.";
+                    if (error.code === error.TIMEOUT) errMsg = "Location request timed out. Please enter manually.";
+                    
+                    statusDiv.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-1"></i> ${errMsg}`;
+                    inputField.removeAttribute('readonly');
+                    inputField.placeholder = "e.g. 30.0444, 31.2357 or Cairo";
+                    submitBtn.removeAttribute('disabled');
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
+    </script>
+}

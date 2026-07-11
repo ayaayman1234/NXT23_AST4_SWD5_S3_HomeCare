@@ -13,6 +13,7 @@
 
         public bool IsVerified { get; set; }
         public bool IsAvailable { get; set; } = true;
+        public bool IsBlocked { get; set; } = false;
 
         public ApplicationUser User { get; set; } = null!;
 

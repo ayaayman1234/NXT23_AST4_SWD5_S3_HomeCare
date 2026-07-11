@@ -1,0 +1,45 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Complaint.ComplaintDetailsViewModel
+
+@{
+    ViewData["Title"] = "Complaint Details";
+}
+
+<h2>Complaint Details</h2>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <p>
+            <strong>Patient:</strong>
+            @Model.PatientName
+        </p>
+
+        <p>
+            <strong>Nurse:</strong>
+            @Model.NurseName
+        </p>
+
+        <p>
+            <strong>Title:</strong>
+            @Model.Title
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            @Model.Description
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            @Model.Status
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            @Model.CreatedAt.ToString("dd/MM/yyyy hh:mm tt")
+        </p>
+
+    </div>
+
+</div>

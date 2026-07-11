@@ -1,0 +1,147 @@
+@model NursingCarePlatform.Web.ViewModels.Payment.PaymentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Payment Receipt";
+}
+
+<div class="container py-5 d-print-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-receipt text-success me-2"></i>Payment Receipt</h2>
+        <a asp-action="History" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+            <i class="bi bi-arrow-left me-1"></i> Back to History
+        </a>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Professional Invoice Template -->
+            <div class="card shadow-lg border-0 rounded-3 overflow-hidden receipt-card">
+                <div class="card-header bg-dark text-white p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0 fw-bold"><i class="bi bi-heart-pulse-fill text-primary me-2"></i>HomeCare Platform</h4>
+                        <small class="text-muted">Premium Healthcare Services</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-success fs-6 px-3 py-2"><i class="bi bi-shield-check me-1"></i>@Model.PaymentStatus</span>
+                    </div>
+                </div>
+                
+                <div class="card-body p-5">
+                    <!-- Invoice Info Header -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted text-uppercase small">Issued To</h6>
+                            <h5 class="fw-bold">@Model.PatientName</h5>
+                            <p class="text-muted small mb-0">Patient Account</p>
+                        </div>
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <h6 class="text-muted text-uppercase small">Receipt Details</h6>
+                            <p class="mb-1"><strong>Date:</strong> @Model.PaymentDate.ToString("dd MMMM yyyy, hh:mm tt")</p>
+                            <p class="mb-0"><strong>Reference:</strong> <code class="small text-dark font-monospace">@Model.TransactionReference</code></p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-2 style-dashed" />
+
+                    <!-- Receipt Items Table -->
+                    <h6 class="text-muted text-uppercase small mb-3">Service Details</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Nurse Provider</th>
+                                    <th>Method</th>
+                                    <th class="text-end" width="150">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@Model.ServiceName</div>
+                                        <small class="text-muted">Home nursing care assistance service</small>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-person-badge text-success me-1"></i> @Model.NurseName
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border">@Model.PaymentMethod</span>
+                                    </td>
+                                    <td class="text-end fw-semibold">@Model.Amount.ToString("C")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="my-4 border-2 style-dashed" />
+
+                    <!-- Invoice Total Section -->
+                    <div class="row justify-content-end">
+                        <div class="col-md-5">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Subtotal:</span>
+                                <span class="fw-semibold">@Model.Amount.ToString("C")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Tax & Fees (0%):</span>
+                                <span class="fw-semibold">LE 0.00</span>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold">Total Paid:</h5>
+                                <h4 class="mb-0 fw-bold text-success">@Model.Amount.ToString("C")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light p-4 d-flex justify-content-between align-items-center d-print-none">
+                    <a asp-action="History" class="btn btn-outline-secondary rounded-pill px-4">
+                        <i class="bi bi-arrow-left me-1"></i> Return
+                    </a>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 shadow" onclick="window.print();">
+                        <i class="bi bi-printer me-1"></i> Print / Save PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .style-dashed {
+            border-top: 2px dashed #dee2e6 !important;
+            background: none;
+            opacity: 1;
+        }
+        
+        @@media print {
+            .d-print-none {
+                display: none !important;
+            }
+            body {
+                background-color: #fff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .card-header {
+                background-color: #212529 !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .receipt-card {
+                margin: 0 !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
+}

@@ -1,185 +1,135 @@
-﻿@model NursingCarePlatform.Web.ViewModels.Account.RegisterViewModel
+@model NursingCarePlatform.Web.ViewModels.Account.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
 }
 
-<div class="container py-5">
-
+<!-- 
+   Premium Responsive Register Layout
+   - Safe top padding (130px) for fixed navbar
+   - Clean dynamic panels for Patients & Nurses
+   - Beautiful inputs matching landing design
+-->
+<div class="container" style="padding-top: 40px; padding-bottom: 80px;">
     <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background: #ffffff;">
+                
+                <!-- Card Header Decoration -->
+                <div class="p-4 p-sm-5 text-center bg-light border-bottom">
+                    <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-person-plus-fill text-primary fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1">Create Account</h3>
+                    <p class="text-muted small mb-0">Join the homecare network as a Patient or professional Nurse</p>
+                </div>
 
-        <div class="col-lg-10">
-
-            <div class="card shadow-lg border-0 rounded-4">
-
-                <div class="card-body p-5">
-
-                    <h2 class="text-center fw-bold mb-4">
-                        Create New Account
-                    </h2>
-
+                <div class="card-body p-4 p-sm-5">
                     <form asp-action="Register" method="post">
+                        @Html.AntiForgeryToken()
 
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 px-3 small border-0 mb-4"></div>
 
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="FirstName" class="form-label"></label>
-
-                                <input asp-for="FirstName" class="form-control" />
-
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-
+                        <!-- Row 1: Name -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label fw-semibold small text-secondary">First Name</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="e.g. Ahmed" required />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="LastName" class="form-label"></label>
-
-                                <input asp-for="LastName" class="form-control" />
-
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label fw-semibold small text-secondary">Last Name</label>
+                                <input asp-for="LastName" class="form-control" placeholder="e.g. Mostafa" required />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
                             </div>
-
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="Email" class="form-label"></label>
-
-                                <input asp-for="Email" class="form-control" />
-
-                                <span asp-validation-for="Email" class="text-danger"></span>
-
+                        <!-- Row 2: Contact -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold small text-secondary">Email Address</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="name@domain.com" required />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="PhoneNumber" class="form-label"></label>
-
-                                <input asp-for="PhoneNumber" class="form-control" />
-
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label fw-semibold small text-secondary">Phone Number</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="01XXXXXXXXX" required />
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
                             </div>
-
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="Password" class="form-label"></label>
-
-                                <input asp-for="Password" class="form-control" />
-
-                                <span asp-validation-for="Password" class="text-danger"></span>
-
+                        <!-- Row 3: Security -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label fw-semibold small text-secondary">Password</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Minimum 6 characters" required />
+                                <span asp-validation-for="Password" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="ConfirmPassword" class="form-label"></label>
-
-                                <input asp-for="ConfirmPassword" class="form-control" />
-
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-
+                            <div class="col-md-6">
+                                <label asp-for="ConfirmPassword" class="form-label fw-semibold small text-secondary">Confirm Password</label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Repeat password" required />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
                             </div>
-
                         </div>
 
+                        <!-- Row 4: Address -->
                         <div class="mb-3">
-
-                            <label asp-for="Address" class="form-label"></label>
-
-                            <input asp-for="Address" class="form-control" />
-
-                            <span asp-validation-for="Address" class="text-danger"></span>
-
+                            <label asp-for="Address" class="form-label fw-semibold small text-secondary">Full Street Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="e.g. 15 Abbas El Akkad St." required />
+                            <span asp-validation-for="Address" class="text-danger small"></span>
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-4 mb-3">
-
-                                <label asp-for="City" class="form-label"></label>
-
-                                <input asp-for="City" class="form-control" />
-
+                        <!-- Row 5: Demographics -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label asp-for="City" class="form-label fw-semibold small text-secondary">City</label>
+                                <input asp-for="City" class="form-control" placeholder="e.g. Nasr City" required />
+                                <span asp-validation-for="City" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <label asp-for="Governorate" class="form-label"></label>
-
-                                <input asp-for="Governorate" class="form-control" />
-
+                            <div class="col-md-4">
+                                <label asp-for="Governorate" class="form-label fw-semibold small text-secondary">Governorate</label>
+                                <input asp-for="Governorate" class="form-control" placeholder="e.g. Cairo" required />
+                                <span asp-validation-for="Governorate" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <label asp-for="Age" class="form-label"></label>
-
-                                <input asp-for="Age" class="form-control" />
-
+                            <div class="col-md-4">
+                                <label asp-for="Age" class="form-label fw-semibold small text-secondary">Age</label>
+                                <input asp-for="Age" type="number" class="form-control" placeholder="Years" required />
+                                <span asp-validation-for="Age" class="text-danger small"></span>
                             </div>
-
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="Gender" class="form-label"></label>
-
-                                <select asp-for="Gender" class="form-select">
-
+                        <!-- Row 6: Profile & Role -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Gender" class="form-label fw-semibold small text-secondary">Gender</label>
+                                <select asp-for="Gender" class="form-select" required>
                                     <option value="">Select Gender</option>
-
                                     <option>Male</option>
-
                                     <option>Female</option>
-
                                 </select>
-
+                                <span asp-validation-for="Gender" class="text-danger small"></span>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label asp-for="Role" class="form-label"></label>
-
-                                <select asp-for="Role"
-                                        id="roleSelect"
-                                        class="form-select">
-
-                                    <option value="">Select Role</option>
-
-                                    <option value="Patient">Patient</option>
-
-                                    <option value="Nurse">Nurse</option>
-
+                            <div class="col-md-6">
+                                <label asp-for="Role" class="form-label fw-semibold small text-secondary">I want to Register as a...</label>
+                                <select asp-for="Role" id="roleSelect" class="form-select text-primary fw-bold" required>
+                                    <option value="">Choose Account Type</option>
+                                    <option value="Patient">Patient (Needs medical care)</option>
+                                    <option value="Nurse">Nurse (Offers medical care)</option>
                                 </select>
-
+                                <span asp-validation-for="Role" class="text-danger small"></span>
                             </div>
-
                         </div>
 
-                        <div id="patientFields">
+                        <!-- ══ DYNAMIC FIELDSETS (Teal Alert Boxes) ══ -->
+                        
+                        <!-- Patient Custom Fields -->
+                        <div id="patientFields" class="card border-0 bg-light p-4 mb-4 rounded-3" style="display:none;">
+                            <h5 class="fw-bold mb-3 text-primary"><i class="bi bi-heart-pulse-fill me-2"></i>Patient Clinical Record</h5>
                             <div class="mb-3">
-
-                                <label asp-for="BloodType" class="form-label"></label>
-
+                                <label asp-for="BloodType" class="form-label fw-semibold small text-secondary">Blood Group</label>
                                 <select asp-for="BloodType" class="form-select">
-
-                                    <option value="">Select Blood Type</option>
-
+                                    <option value="">Choose Blood Type</option>
                                     <option>A+</option>
                                     <option>A-</option>
                                     <option>B+</option>
@@ -188,73 +138,41 @@
                                     <option>AB-</option>
                                     <option>O+</option>
                                     <option>O-</option>
-
                                 </select>
-
-                                <span asp-validation-for="BloodType"
-                                      class="text-danger"></span>
-
                             </div>
-
-                            <div class="mb-3">
-
-                                <label asp-for="MedicalHistory" class="form-label"></label>
-
-                                <textarea asp-for="MedicalHistory"
-                                          class="form-control"></textarea>
-
+                            <div class="mb-0">
+                                <label asp-for="MedicalHistory" class="form-label fw-semibold small text-secondary">Medical History / Chronic Conditions</label>
+                                <textarea asp-for="MedicalHistory" class="form-control" rows="3" placeholder="Describe any allergies, medical conditions, surgeries, or ongoing prescriptions..."></textarea>
                             </div>
-
                         </div>
 
-                        <div id="nurseFields">
-
-                            <div class="row">
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label asp-for="YearsExperience"
-                                           class="form-label"></label>
-
-                                    <input asp-for="YearsExperience"
-                                           class="form-control" />
-
+                        <!-- Nurse Custom Fields -->
+                        <div id="nurseFields" class="card border-0 bg-light p-4 mb-4 rounded-3" style="display:none;">
+                            <h5 class="fw-bold mb-3 text-primary"><i class="bi bi-clipboard-pulse me-2"></i>Nurse Experience & Credentials</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="YearsExperience" class="form-label fw-semibold small text-secondary">Years of Experience</label>
+                                    <input asp-for="YearsExperience" type="number" class="form-control" placeholder="e.g. 5" />
                                 </div>
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label asp-for="Specialization"
-                                           class="form-label"></label>
-
-                                    <input asp-for="Specialization"
-                                           class="form-control" />
-
+                                <div class="col-md-6">
+                                    <label asp-for="Specialization" class="form-label fw-semibold small text-secondary">Nursing Specialization</label>
+                                    <input asp-for="Specialization" class="form-control" placeholder="e.g. Intensive Care (ICU) / Pediatrics" />
                                 </div>
-
                             </div>
-
                         </div>
 
-                        <button class="btn btn-primary btn-lg w-100">
-
-                            Register
-
+                        <!-- Submit Button -->
+                        <button type="submit" class="nc-btn-primary w-100 justify-content-center py-3 mb-3">
+                            Create Free Account <i class="bi bi-arrow-right-short ms-2 fs-5"></i>
                         </button>
 
                     </form>
 
-                    <hr />
+                    <hr class="my-4 text-muted opacity-25" />
 
                     <div class="text-center">
-
-                        Already have an account?
-
-                        <a asp-action="Login">
-
-                            Login
-
-                        </a>
-
+                        <span class="text-muted small">Already have a profile registered?</span>
+                        <a asp-action="Login" class="fw-bold text-primary text-decoration-none small ms-1">Login here</a>
                     </div>
 
                 </div>
@@ -262,34 +180,34 @@
             </div>
 
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
-
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-
         function toggleFields() {
+            const role = document.getElementById("roleSelect").value;
+            const patientPanel = document.getElementById("patientFields");
+            const nursePanel = document.getElementById("nurseFields");
 
-            var role = document.getElementById("roleSelect").value;
-
-            document.getElementById("patientFields").style.display =
-                role === "Patient" ? "block" : "none";
-
-            document.getElementById("nurseFields").style.display =
-                role === "Nurse" ? "block" : "none";
+            if (role === "Patient") {
+                patientPanel.style.display = "block";
+                nursePanel.style.display = "none";
+            } else if (role === "Nurse") {
+                patientPanel.style.display = "none";
+                nursePanel.style.display = "block";
+            } else {
+                patientPanel.style.display = "none";
+                nursePanel.style.display = "none";
+            }
         }
 
-        toggleFields();
-
-        document
-            .getElementById("roleSelect")
-            .addEventListener("change", toggleFields);
-
+        // Initialize toggle on load & bind onChange event
+        document.addEventListener("DOMContentLoaded", () => {
+            toggleFields();
+            document.getElementById("roleSelect").addEventListener("change", toggleFields);
+        });
     </script>
-
 }

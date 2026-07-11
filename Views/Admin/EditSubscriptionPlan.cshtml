@@ -1,0 +1,84 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.CreateSubscriptionPlanViewModel
+@{
+    ViewData["Title"] = "Edit Subscription Plan";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int planId = (int)ViewBag.PlanId;
+}
+
+<div class="d-flex align-items-center mb-4">
+    <a asp-action="SubscriptionPlans" class="btn btn-outline-secondary btn-sm rounded-pill me-3 px-3">
+        <i class="bi bi-arrow-left me-1"></i>Back
+    </a>
+    <div>
+        <h4 class="fw-bold mb-1">
+            <i class="bi bi-pencil text-primary me-2"></i>Edit Subscription Plan
+        </h4>
+        <p class="text-muted mb-0 small">Update plan details. Changes apply to future periods only.</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="EditSubscriptionPlan" asp-route-id="@planId" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="MonthlyFee" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">EGP</span>
+                                <input asp-for="MonthlyFee" type="number" step="0.01" min="0"
+                                       class="form-control" />
+                            </div>
+                            <span asp-validation-for="MonthlyFee" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="CommissionRate" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <input asp-for="CommissionRate" type="number" step="0.01" min="0" max="1"
+                                       class="form-control" />
+                                <span class="input-group-text">rate</span>
+                            </div>
+                            <div class="form-text">0.05 = 5%, 0 = no commission</div>
+                            <span asp-validation-for="CommissionRate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label fw-semibold">Active</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">
+                            <i class="bi bi-check-lg me-2"></i>Save Changes
+                        </button>
+                        <a asp-action="SubscriptionPlans" class="btn btn-outline-secondary rounded-pill px-4">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

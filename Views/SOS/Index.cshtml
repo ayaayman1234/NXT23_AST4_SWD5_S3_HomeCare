@@ -1,0 +1,65 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.SOS.SOSHistoryViewModel>
+
+@{
+    ViewData["Title"] = "SOS History";
+}
+
+<h2 class="mb-4">SOS History</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No SOS events found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <thead>
+
+            <tr>
+
+                <th>Patient</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th></th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.TriggeredBy</td>
+
+                    <td>@item.Location</td>
+
+                    <td>@item.SOSStatus</td>
+
+                    <td>@item.CreatedAt.ToString("g")</td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-primary btn-sm">
+
+                            Details
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}

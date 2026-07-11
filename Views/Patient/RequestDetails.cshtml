@@ -6,6 +6,7 @@
     ViewData["Title"] = "Request Details";
 
     var offers = ViewBag.Offers as List<MyOffer>;
+    var isPaid = ViewBag.IsPaid as bool? ?? false;
 }
 
 <div class="container py-4">
@@ -268,51 +269,75 @@
 
             <hr />
 
-            <a asp-action="EditRequest"
-                   asp-route-id="@Model.Id"
-                   class="btn btn-warning">
+            @if (Model.RequestStatus != "Completed")
+            {
+                <a asp-action="EditRequest"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i>
+                    Edit
+                </a>
 
-                <i class="bi bi-pencil-square"></i>
+                <a asp-action="CancelRequest"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-secondary"
+                       onclick="return confirm('Cancel this request?');">
+                    Cancel
+                </a>
 
-                Edit
+                <a asp-action="DeleteRequest"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this request?');">
+                    Delete
+                </a>
+            }
 
-            </a>
+            @if (Model.RequestStatus == "Accepted" || Model.RequestStatus == "Completed")
+            {
+                <a asp-controller="RecurringRequest"
+                       asp-action="Create"
+                       asp-route-careRequestId="@Model.Id"
+                       class="btn btn-info">
 
-            <a asp-action="CancelRequest"
-                   asp-route-id="@Model.Id"
-                   class="btn btn-secondary"
-                   onclick="return confirm('Cancel this request?');">
+                    <i class="bi bi-arrow-repeat"></i>
+                    Create Recurring Request
 
-                Cancel
-
-            </a>
-
-            <a asp-action="DeleteRequest"
-                   asp-route-id="@Model.Id"
-                   class="btn btn-danger"
-                   onclick="return confirm('Delete this request?');">
-
-                Delete
-
-            </a>
+                </a>
+            }
 
             <a asp-action="MyRequests"
                    class="btn btn-outline-primary">
-
                 Back
-
             </a>
 
             @if (Model.RequestStatus == "Completed")
             {
-                <a asp-action="RateNurse"
-                       asp-route-requestId="@Model.Id"
-                       asp-route-nurseId="@Model.NurseId"
-                       class="btn btn-primary">
+                @if (!isPaid)
+                {
+                    <a asp-controller="Payment"
+                           asp-action="Pay"
+                           asp-route-careRequestId="@Model.Id"
+                           class="btn btn-success">
+                        💳 Pay Now
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-success" disabled>
+                        ✔ Payment Completed
+                    </button>
+                }
 
-                    ⭐ Rate Nurse
-
-                </a>
+                @if (!Model.IsRated)
+                {
+                    <a asp-action="RateNurse"
+                           asp-route-requestId="@Model.Id"
+                           asp-route-nurseId="@Model.NurseId"
+                           class="btn btn-primary">
+                        ⭐ Rate Nurse
+                    </a>
+                }
             }
 
         </div>

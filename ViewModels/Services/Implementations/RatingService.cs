@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -30,7 +30,33 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
             }
 
-            
+            // ==========================
+            // GAP 6 – Enforce rating only after completion
+            // Requirement: "The system ensures that ratings are only allowed
+            // after the completion of a care request."
+            // ==========================
+
+            var careRequest = await _context.CareRequests
+                .FirstOrDefaultAsync(x => x.Id == model.CareRequestId);
+
+            if (careRequest == null)
+            {
+                return new ServiceResult
+                {
+                    Success = false,
+                    Message = "Care request not found."
+                };
+            }
+
+            if (careRequest.RequestStatus != "Completed")
+            {
+                return new ServiceResult
+                {
+                    Success = false,
+                    Message = "Ratings can only be submitted after the care request has been completed."
+                };
+            }
+
             var alreadyRated = await _context.Ratings.AnyAsync(r =>
                 r.CareRequestId == model.CareRequestId &&
                 r.RaterUserId == patient.Id);
@@ -49,6 +75,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 CareRequestId = model.CareRequestId,
                 RaterUserId = patient.Id,
                 RatedUserId = model.NurseId,
+                RaterUserGuid = userId,                 // store ApplicationUser GUID
                 RatingScore = model.Stars,
                 RatingComment = model.Comment,
                 CreatedAt = DateTime.Now

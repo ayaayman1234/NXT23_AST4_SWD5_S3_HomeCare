@@ -1,0 +1,66 @@
+﻿@model NursingCarePlatform.Web.ViewModels.Cancellation.CreateCancellationViewModel
+
+@{
+    ViewData["Title"] = "Cancel Care Request";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-danger text-white">
+            <h4>
+                <i class="bi bi-x-circle"></i>
+                Cancel Care Request
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <input asp-for="CareRequestId" type="hidden" />
+
+                <div class="mb-3">
+
+                    <label asp-for="Reason" class="form-label"></label>
+
+                    <textarea asp-for="Reason"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                    <span asp-validation-for="Reason"
+                          class="text-danger"></span>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Confirm Cancellation
+
+                </button>
+
+                <a asp-controller="CareRequest"
+                       asp-action="MyRequests"
+                       class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

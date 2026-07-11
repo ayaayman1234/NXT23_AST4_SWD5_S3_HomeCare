@@ -1,0 +1,229 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-speedometer2 text-primary me-2"></i>Admin Dashboard</h2>
+    <div class="d-flex gap-2">
+        <a asp-action="Reports" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-bar-chart me-1"></i>Reports
+        </a>
+        <a asp-action="Profile" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-person me-1"></i>Profile
+        </a>
+    </div>
+</div>
+
+<!-- Stats Row 1 -->
+<div class="row g-3 mb-3">
+    <div class="col-md-3">
+        <a asp-action="Patients" class="text-decoration-none text-white">
+            <div class="card bg-primary text-white shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Total Patients</h6>
+                            <h2 class="mt-1 mb-0 fw-bold">@Model.TotalPatients</h2>
+                        </div>
+                        <i class="bi bi-people-fill fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Nurses" class="text-decoration-none text-white">
+            <div class="card bg-success text-white shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Total Nurses</h6>
+                            <h2 class="mt-1 mb-0 fw-bold">@Model.TotalNurses</h2>
+                        </div>
+                        <i class="bi bi-person-badge-fill fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="CareRequests" class="text-decoration-none text-dark">
+            <div class="card bg-warning text-dark shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Care Requests</h6>
+                            <h2 class="mt-1 mb-0 fw-bold">@Model.TotalCareRequests</h2>
+                        </div>
+                        <i class="bi bi-clipboard2-pulse-fill fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Complaints" class="text-decoration-none text-white">
+            <div class="card bg-danger text-white shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Complaints</h6>
+                            <h2 class="mt-1 mb-0 fw-bold">@Model.TotalComplaints</h2>
+                        </div>
+                        <i class="bi bi-chat-left-dots-fill fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Stats Row 2 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <a asp-action="CareRequests" asp-route-status="Pending" class="text-decoration-none text-dark">
+            <div class="card border-warning shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-hourglass-split text-warning fs-3"></i>
+                    <h6 class="mt-1 text-muted">Pending Requests</h6>
+                    <h3 class="fw-bold text-warning">@Model.PendingRequests</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="CareRequests" asp-route-status="Completed" class="text-decoration-none text-dark">
+            <div class="card border-success shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle-fill text-success fs-3"></i>
+                    <h6 class="mt-1 text-muted">Completed Requests</h6>
+                    <h3 class="fw-bold text-success">@Model.CompletedRequests</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="SOS" class="text-decoration-none text-dark">
+            <div class="card border-danger shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-bell-fill text-danger fs-3"></i>
+                    <h6 class="mt-1 text-muted">SOS Events</h6>
+                    <h3 class="fw-bold text-danger">@Model.TotalSOS</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Cancellations" class="text-decoration-none text-dark">
+            <div class="card border-secondary shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-x-circle-fill text-secondary fs-3"></i>
+                    <h6 class="mt-1 text-muted">Cancellations</h6>
+                    <h3 class="fw-bold">@Model.TotalCancellations</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold bg-light">
+                <i class="bi bi-pie-chart-fill text-primary me-2"></i>📈 Care Requests Status
+            </div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <canvas id="careRequestsChart" style="max-height:260px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold bg-light">
+                <i class="bi bi-bar-chart-fill text-success me-2"></i>📊 Platform Overview
+            </div>
+            <div class="card-body">
+                <canvas id="overviewChart" style="max-height:260px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Revenue & Rating Row -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <a asp-action="Payments" class="text-decoration-none text-dark">
+            <div class="card shadow-sm h-100">
+                <div class="card-header fw-bold bg-dark text-white">
+                    <i class="bi bi-cash-coin me-2"></i>Total Revenue
+                </div>
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-cash-stack text-success fs-1"></i>
+                    <h2 class="fw-bold text-success mt-2">@Model.TotalRevenue.ToString("C")</h2>
+                    <p class="text-muted mb-0">Total Platform Revenue</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a asp-action="Ratings" class="text-decoration-none text-dark">
+            <div class="card shadow-sm h-100">
+                <div class="card-header fw-bold bg-warning text-dark">
+                    <i class="bi bi-star-fill me-2"></i>Average Rating
+                </div>
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-star-fill text-warning fs-1"></i>
+                    <h2 class="fw-bold text-warning mt-2">@Model.AverageRating.ToString("0.0") ⭐</h2>
+                    <p class="text-muted mb-0">Overall Nurse Rating</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx1 = document.getElementById('careRequestsChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Accepted', 'Completed'],
+                datasets: [{
+                    data: [@Model.PendingRequests, @Model.AcceptedRequests, @Model.CompletedRequests],
+                    backgroundColor: ['#ffc107', '#0dcaf0', '#198754'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        const ctx2 = document.getElementById('overviewChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Patients', 'Nurses', 'Requests', 'Complaints', 'SOS', 'Cancellations'],
+                datasets: [{
+                    label: 'Count',
+                    data: [@Model.TotalPatients, @Model.TotalNurses, @Model.TotalCareRequests, @Model.TotalComplaints, @Model.TotalSOS, @Model.TotalCancellations],
+                    backgroundColor: [
+                        'rgba(13,110,253,0.7)', 'rgba(25,135,84,0.7)', 'rgba(255,193,7,0.7)',
+                        'rgba(220,53,69,0.7)', 'rgba(214,51,132,0.7)', 'rgba(108,117,125,0.7)'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    </script>
+}

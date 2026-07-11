@@ -1,236 +1,151 @@
-﻿@{
+@{
     ViewData["Title"] = "Nurse Dashboard";
 }
 
-<div class="container py-5">
+<!-- 
+   Premium Offset Container
+   Adds top padding to avoid fixed navbar overlap
+-->
+<div class="container" style="padding-top: 30px; padding-bottom: 60px;">
 
-    <div class="text-center mb-5">
-
-        <h2 class="fw-bold text-primary">
-            Nurse Dashboard
-        </h2>
-
-        <p class="text-muted">
-            Welcome to your nursing dashboard.
-        </p>
-
+    <!-- Welcoming Header Banner -->
+    <div class="p-4 p-md-5 mb-4 text-body-emphasis shadow-sm border-0 position-relative overflow-hidden" 
+         style="background: linear-gradient(135deg, #dcfce7 0%, #ccfbf1 100%); border-radius: 20px;">
+        <div class="col-lg-8 px-0 position-relative" style="z-index: 2;">
+            <h1 class="display-6 fw-extrabold text-primary mb-2">Welcome Back! 🩺</h1>
+            <p class="lead my-3 text-secondary small">Manage your nursing credentials, schedule availability slots, set prices for your services, and submit proposals to patient requests.</p>
+            <a asp-action="AvailableRequests" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-bold">
+                <i class="bi bi-search me-1"></i> Browse Available Requests
+            </a>
+        </div>
+        <div class="position-absolute end-0 bottom-0 opacity-10 d-none d-lg-block" style="font-size: 160px; transform: translate(10px, 30px); z-index: 1; color: var(--primary);">
+            <i class="bi bi-person-badge-fill"></i>
+        </div>
     </div>
 
-    <div class="row g-4">
-
-        <!-- Profile -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-person-circle display-4 text-primary"></i>
-
-                    <h4 class="mt-3">
-                        My Profile
-                    </h4>
-
-                    <p class="text-muted">
-                        View and update your personal information.
-                    </p>
-
-                    <a asp-action="Profile"
-                           class="btn btn-primary">
-
-                        Open
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Availability -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-calendar-check display-4 text-success"></i>
-
-                    <h4 class="mt-3">
-                        Availability
-                    </h4>
-
-                    <p class="text-muted">
-                        Manage your working schedule.
-                    </p>
-
-                    <a asp-action="Availability"
-                           class="btn btn-success">
-
-                        Open
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Documents -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-file-earmark-medical display-4 text-danger"></i>
-
-                    <h4 class="mt-3">
-                        Documents
-                    </h4>
-
-                    <p class="text-muted">
-                        Upload your certificates and documents.
-                    </p>
-
-                    <a asp-action="Documents"
-                           class="btn btn-danger">
-
-                        Open
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Services -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-heart-pulse display-4 text-warning"></i>
-
-                    <h4 class="mt-3">
-                        My Services
-                    </h4>
-
-                    <p class="text-muted">
-                        Manage the services you provide.
-                    </p>
-
-                    <a asp-action="Services"
-                           class="btn btn-warning">
-
-                        Open
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <!-- Dashboard Quick Menu Cards -->
+    <div class="row g-4 mb-5">
         <!-- Available Requests -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-clipboard-heart display-4 text-info"></i>
-
-                    <h4 class="mt-3">
-                        Available Requests
-                    </h4>
-
-                    <p class="text-muted">
-                        Browse patient requests and send offers.
-                    </p>
-
-                    <a asp-action="AvailableRequests"
-                           class="btn btn-info text-white">
-
-                        Open
-
-                    </a>
-
+        <div class="col-md-6 col-lg-4">
+            <a asp-action="AvailableRequests" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-4 nurse-hover-card" style="border-radius: 18px;">
+                    <div class="card-body">
+                        <div class="bg-primary-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-primary mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                            <i class="bi bi-clipboard-heart"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">Available Requests</h4>
+                        <p class="text-muted small">Browse matching patient requests and submit price proposals.</p>
+                        <span class="btn btn-sm btn-outline-primary rounded-pill px-3 mt-2">Open Portal</span>
+                    </div>
                 </div>
-
-            </div>
-
+            </a>
         </div>
 
-        <!-- My Assignments -->
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-briefcase-fill display-4 text-info"></i>
-
-                    <h4 class="mt-3">
-                        My Assignments
-                    </h4>
-
-                    <p class="text-muted">
-                        View your accepted care assignments.
-                    </p>
-
-                    <a asp-controller="Assignment"
-                           asp-action="MyAssignments"
-                           class="btn btn-info">
-
-                        Open
-
-                    </a>
-
+        <!-- Assignments -->
+        <div class="col-md-6 col-lg-4">
+            <a asp-controller="Assignment" asp-action="MyAssignments" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-4 nurse-hover-card" style="border-radius: 18px;">
+                    <div class="card-body">
+                        <div class="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-success mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                            <i class="bi bi-briefcase-fill"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">My Assignments</h4>
+                        <p class="text-muted small">View your active shifts, contract details, and schedule checklists.</p>
+                        <span class="btn btn-sm btn-outline-success rounded-pill px-3 mt-2">View Shifts</span>
+                    </div>
                 </div>
-
-            </div>
-
+            </a>
         </div>
 
         <!-- Work History -->
-
-        <div class="col-lg-4">
-
-            <div class="card shadow h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-clock-history display-4 text-dark"></i>
-
-                    <h4 class="mt-3">
-                        Work History
-                    </h4>
-
-                    <p class="text-muted">
-                        View all completed care jobs.
-                    </p>
-
-                    <a asp-controller="WorkHistory"
-                           asp-action="Index"
-                           class="btn btn-dark">
-
-                        Open
-
-                    </a>
-
+        <div class="col-md-6 col-lg-4">
+            <a asp-controller="WorkHistory" asp-action="Index" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-4 nurse-hover-card" style="border-radius: 18px;">
+                    <div class="card-body">
+                        <div class="bg-dark-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-dark mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">Work History</h4>
+                        <p class="text-muted small">Access summary statements and completed job reports.</p>
+                        <span class="btn btn-sm btn-outline-dark rounded-pill px-3 mt-2">View History</span>
+                    </div>
                 </div>
-
-            </div>
-
+            </a>
         </div>
 
+        <!-- Availability Scheduler -->
+        <div class="col-md-6 col-lg-3 col-6">
+            <a asp-action="Availability" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 nurse-hover-card" style="border-radius: 16px;">
+                    <div class="card-body">
+                        <div class="bg-warning-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-warning mb-2" style="width: 50px; height: 50px; font-size: 22px;">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">My Schedule</h5>
+                        <p class="text-muted small mb-0" style="font-size: 0.72rem;">Manage working days & shifts.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Credentials Verification Documents -->
+        <div class="col-md-6 col-lg-3 col-6">
+            <a asp-action="Documents" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 nurse-hover-card" style="border-radius: 16px;">
+                    <div class="card-body">
+                        <div class="bg-danger-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-danger mb-2" style="width: 50px; height: 50px; font-size: 22px;">
+                            <i class="bi bi-file-earmark-medical"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">Certificates</h5>
+                        <p class="text-muted small mb-0" style="font-size: 0.72rem;">Upload verification documents.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Services Prices Management -->
+        <div class="col-md-6 col-lg-3 col-6">
+            <a asp-action="Services" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 nurse-hover-card" style="border-radius: 16px;">
+                    <div class="card-body">
+                        <div class="bg-info-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-info mb-2" style="width: 50px; height: 50px; font-size: 22px;">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">My Services</h5>
+                        <p class="text-muted small mb-0" style="font-size: 0.72rem;">Add services and pricing list.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Nurse Profile Settings -->
+        <div class="col-md-6 col-lg-3 col-6">
+            <a asp-action="Profile" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center h-100 py-3 nurse-hover-card" style="border-radius: 16px;">
+                    <div class="card-body">
+                        <div class="bg-secondary-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-secondary mb-2" style="width: 50px; height: 50px; font-size: 22px;">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">Account Info</h5>
+                        <p class="text-muted small mb-0" style="font-size: 0.72rem;">View profile credentials.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 
 </div>
+
+@section Scripts {
+    <style>
+        .fw-extrabold { font-weight: 800; }
+        .nurse-hover-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nurse-hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(15,118,110,0.12) !important;
+        }
+    </style>
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<NursingCarePlatform.Web.ViewModels.Payment.PaymentHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Payment History";
+}
+
+<h2>Payment History</h2>
+
+<table class="table table-bordered table-striped">
+
+    <thead>
+
+        <tr>
+
+            <th>Request</th>
+
+            <th>Patient</th>
+
+            <th>Amount</th>
+
+            <th>Status</th>
+
+            <th>Date</th>
+
+            <th></th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.CareRequestId</td>
+
+                <td>@item.PatientName</td>
+
+                <td>@item.Amount</td>
+
+                <td>@item.PaymentStatus</td>
+
+                <td>@item.PaymentDate.ToShortDateString()</td>
+
+                <td>
+
+                    <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           class="btn btn-primary btn-sm">
+                        Details
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

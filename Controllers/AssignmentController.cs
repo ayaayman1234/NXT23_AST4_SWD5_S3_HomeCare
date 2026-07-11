@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NursingCarePlatform.Web.Models;
@@ -78,9 +78,29 @@ namespace NursingCarePlatform.Web.Controllers
         {
             var result = await _assignmentService.CompleteAssignmentAsync(id);
 
-            TempData[result.Success ? "Success" : "Error"] = result.Message;
+            if (!result.Success)
+            {
+                TempData["Error"] = result.Message;
+                return RedirectToAction(nameof(MyAssignments));
+            }
 
-            return RedirectToAction(nameof(MyAssignments));
+            var assignment = await _assignmentService.GetAssignmentAsync(id);
+
+            if (assignment == null)
+            {
+                TempData["Error"] = "Assignment not found.";
+                return RedirectToAction(nameof(MyAssignments));
+            }
+
+            TempData["Success"] = result.Message;
+
+            return RedirectToAction(
+                "Pay",
+                "Payment",
+                new
+                {
+                    careRequestId = assignment.CareRequestId
+                });
         }
 
     }

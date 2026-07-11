@@ -14,5 +14,6 @@ namespace NursingCarePlatform.Web.ViewModels.Nurse
         [Required]
         [Display(Name = "Upload File")]
         public IFormFile File { get; set; } = null!;
+        public bool IsApproved { get; set; }
     }
 }

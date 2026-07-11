@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NursingCarePlatform.Web.Models;
@@ -19,6 +19,29 @@ namespace NursingCarePlatform.Web.Controllers
         {
             _nurseService = nurseService;
             _userManager = userManager;
+        }
+
+        public override async Task OnActionExecutionAsync(
+            Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context,
+            Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate next)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null && user.AccountStatus == "Blocked")
+            {
+                var action = context.RouteData.Values["action"]?.ToString();
+                if (action != "Blocked")
+                {
+                    context.Result = RedirectToAction("Blocked");
+                    return;
+                }
+            }
+            await base.OnActionExecutionAsync(context, next);
+        }
+
+        [AllowAnonymous]
+        public IActionResult Blocked()
+        {
+            return View();
         }
 
         // =====================================
@@ -336,6 +359,9 @@ namespace NursingCarePlatform.Web.Controllers
 
             if (user == null)
                 return RedirectToAction("Login", "Account");
+
+            var nurse = await _nurseService.GetNurseByUserIdAsync(user.Id);
+            ViewBag.IsVerified = nurse?.IsVerified ?? false;
 
             var requests = await _nurseService.GetAvailableRequestsAsync(user.Id);
 

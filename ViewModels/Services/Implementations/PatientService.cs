@@ -129,8 +129,8 @@ namespace NursingCarePlatform.Web.Services.Implementations
         // ==========================================
 
         public async Task<ServiceResult> CreateRequestAsync(
-            string userId,
-            CreateCareRequestViewModel model)
+    string userId,
+    CreateCareRequestViewModel model)
         {
             var patient = await _context.Patients
                 .FirstOrDefaultAsync(p => p.UserId == userId);
@@ -178,12 +178,17 @@ namespace NursingCarePlatform.Web.Services.Implementations
             _context.CareRequests.Add(request);
 
             await _context.SaveChangesAsync();
+
+            // ==========================
+            // Notification
+            // ==========================
+
             await _notificationService.CreateAsync(
-    userId,
-    "Care Request",
-    "Your care request has been created successfully.",
-    "CareRequestCreated"
-);
+                patient.Id,
+                "Patient",
+                "Care Request",
+                "Your care request has been created successfully.",
+                "CareRequestCreated");
 
             return new ServiceResult
             {

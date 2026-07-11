@@ -1,0 +1,386 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminSOSViewModel>
+
+@{
+    ViewData["Title"] = "SOS Alerts";
+    var filter = Context.Request.Query["status"].ToString();
+
+    var filtered = Model.AsEnumerable();
+    if (!string.IsNullOrEmpty(filter))
+        filtered = filtered.Where(s => s.Status.Equals(filter, StringComparison.OrdinalIgnoreCase));
+
+    var list = filtered.ToList();
+    var hasPending = Model.Any(s => s.Status == "Pending");
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-danger mb-0">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Emergency SOS Center
+        </h2>
+        <small class="text-muted">Live emergency response dashboard</small>
+    </div>
+    <div class="d-flex gap-2">
+        @if (hasPending)
+        {
+            <button id="btnMute" class="btn btn-danger btn-sm rounded-pill px-3 animate-pulse" onclick="toggleMute()">
+                <i id="muteIcon" class="bi bi-volume-up-fill me-1"></i> Mute Alarm
+            </button>
+        }
+        <a asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Live Alert Header -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body py-2 px-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex gap-2">
+            <a asp-action="SOS" class="btn btn-sm @(string.IsNullOrEmpty(filter) ? "btn-dark" : "btn-outline-dark")">
+                All Alerts (@Model.Count())
+            </a>
+            <a asp-action="SOS" asp-route-status="Pending" class="btn btn-sm @(filter == "Pending" ? "btn-danger" : "btn-outline-danger")">
+                Pending (@Model.Count(s => s.Status == "Pending"))
+            </a>
+            <a asp-action="SOS" asp-route-status="Resolved" class="btn btn-sm @(filter == "Resolved" ? "btn-success" : "btn-outline-success")">
+                Resolved (@Model.Count(s => s.Status == "Resolved"))
+            </a>
+        </div>
+        <span class="text-danger small fw-bold"><i class="bi bi-broadcast text-danger animate-pulse"></i> Live Monitoring Active</span>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- SOS Table -->
+    <div class="col-lg-7">
+        @if (!list.Any())
+        {
+            <div class="alert alert-success text-center py-5 border-0 shadow-sm">
+                <i class="bi bi-check-circle fs-1 d-block mb-3 text-success"></i>
+                <h5>No emergency SOS alerts found.</h5>
+                <p class="text-muted mb-0">All clear. Platform operations are running smoothly.</p>
+            </div>
+        }
+        else
+        {
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th width="50">#</th>
+                                    <th>Patient</th>
+                                    <th>Location</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th width="120" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in list)
+                                {
+                                    <tr class="@(item.Status == "Pending" ? "table-danger-light" : "")" 
+                                        style="cursor: pointer;" 
+                                        onclick="focusAlert('@item.Id', '@item.PatientName', '@item.Location', '@item.Status')">
+                                        <td class="text-muted small">@item.Id</td>
+                                        <td>
+                                            <span class="fw-semibold text-danger">
+                                                <i class="bi bi-person-fill me-1"></i> @item.PatientName
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-geo-alt-fill text-danger me-1"></i> 
+                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="@item.Location">@item.Location</span>
+                                        </td>
+                                        <td class="small">
+                                            @item.CreatedAt.ToString("hh:mm tt")
+                                        </td>
+                                        <td>
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span class="badge bg-danger animate-pulse">Pending Help</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Resolved</span>
+                                            }
+                                        </td>
+                                        <td class="text-center" onclick="event.stopPropagation();">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success px-3"
+                                                        onclick="confirmAction('Mark Emergency SOS Alert #@item.Id as Resolved?', '/Admin/ResolveSOS/@item.Id')">
+                                                    Resolve
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success small"><i class="bi bi-check-all"></i> Closed</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Live Map Container -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0 sticky-top" style="top: 100px; z-index: 1;">
+            <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-map-fill me-2 text-primary"></i>Live Incident Map</span>
+                <button class="btn btn-sm btn-outline-light py-0" onclick="resetMapBounds()">Center Map</button>
+            </div>
+            <div class="card-body p-0">
+                <div id="map" style="height: 480px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Resolve SOS Alert</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Confirm that emergency response or help was dispatched and resolve the alert?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-success">Confirm Resolve</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        .table-danger-light {
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+        .animate-pulse {
+            animation: pulse-animation 1.5s infinite;
+        }
+        @@keyframes pulse-animation {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .pulsing-marker {
+            background: #dc3545;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 1);
+            animation: pulse-marker 1.2s infinite;
+        }
+        @@keyframes pulse-marker {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(220, 53, 69, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+    </style>
+    <script>
+        let map;
+        let markers = {};
+        let audioContext = null;
+        let oscillator = null;
+        let sirenInterval = null;
+        let isMuted = false;
+
+        // Initialize Map
+        document.addEventListener("DOMContentLoaded", function () {
+            map = L.map('map').setView([30.0444, 31.2357], 6); // Default Center: Egypt
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Parse alerts and plot markers
+            const alerts = [
+                @foreach (var item in list)
+                {
+                    <text>{ id: '@item.Id', name: '@item.PatientName', locationStr: '@item.Location', status: '@item.Status' },</text>
+                }
+            ];
+
+            let bounds = [];
+
+            alerts.forEach(alert => {
+                const coords = parseLocation(alert.locationStr);
+                if (coords) {
+                    bounds.push(coords);
+
+                    // Marker custom styles based on status
+                    const isPending = alert.status === "Pending";
+                    let markerOptions = {};
+                    if (isPending) {
+                        const pulseIcon = L.divIcon({
+                            className: 'pulsing-marker',
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        });
+                        markerOptions = { icon: pulseIcon };
+                    }
+
+                    const marker = L.marker(coords, markerOptions).addTo(map);
+                    marker.bindPopup(`
+                        <div class="p-1">
+                            <h6 class="fw-bold mb-1 text-danger"><i class="bi bi-exclamation-octagon-fill"></i> SOS Alert #${alert.id}</h6>
+                            <p class="mb-1 small"><strong>Patient:</strong> ${alert.name}</p>
+                            <p class="mb-1 small"><strong>Status:</strong> ${alert.status}</p>
+                            <a href="https://maps.google.com/?q=${coords[0]},${coords[1]}" target="_blank" class="btn btn-sm btn-danger text-white py-1 px-2 mt-1" style="font-size:11px;">Google Maps</a>
+                        </div>
+                    `);
+
+                    markers[alert.id] = { marker, coords };
+                }
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+
+            // Start Audio Alarm if there is pending help
+            if (@(hasPending ? "true" : "false")) {
+                startAudioSiren();
+            }
+        });
+
+        // Parse coordinates helper
+        function parseLocation(locationStr) {
+            if (!locationStr) return null;
+            const parts = locationStr.split(',');
+            if (parts.length === 2) {
+                const lat = parseFloat(parts[0].trim());
+                const lng = parseFloat(parts[1].trim());
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    return [lat, lng];
+                }
+            }
+            // Central Cairo coordinates fallback for textual addresses
+            return null; 
+        }
+
+        // Focus and Fly to alert location
+        function focusAlert(id, name, locationStr, status) {
+            const data = markers[id];
+            if (data) {
+                map.flyTo(data.coords, 14, { duration: 1.5 });
+                data.marker.openPopup();
+            } else {
+                // If it was text, alert the location
+                alert(`Patient Location details: ${locationStr}`);
+            }
+        }
+
+        // Reset map bounds to show all markers
+        function resetMapBounds() {
+            let bounds = Object.values(markers).map(d => d.coords);
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        // Web Audio API Siren
+        function startAudioSiren() {
+            if (isMuted) return;
+
+            try {
+                // Initialize audio context on first click/interaction if needed
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContextClass();
+                
+                oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 500; // Starting frequency
+                
+                gainNode.gain.setValueAtTime(0.08, audioContext.currentTime); // Keep volume reasonable
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.start();
+
+                // Siren frequency modulation sweep
+                let up = true;
+                sirenInterval = setInterval(() => {
+                    if (!audioContext || audioContext.state === 'suspended') return;
+                    if (up) {
+                        oscillator.frequency.linearRampToValueAtTime(750, audioContext.currentTime + 0.45);
+                    } else {
+                        oscillator.frequency.linearRampToValueAtTime(450, audioContext.currentTime + 0.45);
+                    }
+                    up = !up;
+                }, 500);
+
+            } catch (e) {
+                console.log("Audio siren failed to initialize: " + e);
+            }
+        }
+
+        function stopAudioSiren() {
+            if (sirenInterval) {
+                clearInterval(sirenInterval);
+                sirenInterval = null;
+            }
+            if (oscillator) {
+                try {
+                    oscillator.stop();
+                } catch(e){}
+                oscillator = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btnMute');
+            const icon = document.getElementById('muteIcon');
+            
+            if (isMuted) {
+                stopAudioSiren();
+                btn.className = "btn btn-outline-danger btn-sm rounded-pill px-3";
+                icon.className = "bi bi-volume-mute-fill me-1";
+                btn.innerHTML = `<i class="bi bi-volume-mute-fill me-1"></i> Unmute Alarm`;
+            } else {
+                btn.className = "btn btn-danger btn-sm rounded-pill px-3 animate-pulse";
+                btn.innerHTML = `<i class="bi bi-volume-up-fill me-1"></i> Mute Alarm`;
+                startAudioSiren();
+            }
+        }
+
+        // Action confirmation helper
+        function confirmAction(message, url) {
+            // Also resume audio context if browser blocked it
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}

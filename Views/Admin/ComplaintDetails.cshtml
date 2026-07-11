@@ -1,0 +1,142 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminComplaintViewModel
+
+@{
+    ViewData["Title"] = "Complaint Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-chat-left-dots text-danger me-2"></i>Complaint Details</h2>
+    <a asp-action="Complaints" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Complaints
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Complaint Details Column -->
+    <div class="col-md-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white fw-bold">
+                <i class="bi bi-info-circle me-2"></i> Complaint Information
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        <tr>
+                            <th width="150" class="bg-light ps-3">Complaint ID</th>
+                            <td class="ps-3 fw-bold">#@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Patient</th>
+                            <td class="ps-3"><i class="bi bi-person text-primary me-1"></i> @Model.PatientName</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Nurse</th>
+                            <td class="ps-3">
+                                @if (Model.NurseName == "-")
+                                {
+                                    <span class="text-muted fst-italic">Not specified</span>
+                                }
+                                else
+                                {
+                                    <span><i class="bi bi-person-badge text-success me-1"></i> @Model.NurseName</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Title</th>
+                            <td class="ps-3 fw-semibold text-danger">@Model.Title</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Description</th>
+                            <td class="ps-3">@Model.Description</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Created At</th>
+                            <td class="ps-3">@Model.CreatedAt.ToString("dd MMMM yyyy, hh:mm tt")</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Current Status</th>
+                            <td class="ps-3">
+                                @if (Model.Status == "Open")
+                                {
+                                    <span class="badge bg-danger"><i class="bi bi-exclamation-circle me-1"></i>Open</span>
+                                }
+                                else if (Model.Status == "Resolved")
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Resolved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary"><i class="bi bi-slash-circle me-1"></i>Rejected</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Column -->
+    <div class="col-md-5">
+        @if (Model.Status == "Open")
+        {
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="bi bi-shield-slash me-2"></i> Resolve or Reject
+                </div>
+                <div class="card-body p-4">
+                    <!-- Resolve Form -->
+                    <form asp-action="ResolveComplaint" method="post" class="mb-4">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <h6 class="fw-semibold text-success"><i class="bi bi-check-circle me-1"></i> Resolve Complaint</h6>
+                        <div class="mb-3">
+                            <textarea class="form-control" name="adminNotes" rows="3" placeholder="Write resolution details or admin notes..."></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check2"></i> Mark as Resolved
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- Reject Form -->
+                    <form asp-action="RejectComplaint" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <h6 class="fw-semibold text-danger"><i class="bi bi-x-circle me-1"></i> Reject Complaint</h6>
+                        <div class="mb-3">
+                            <textarea class="form-control" name="adminNotes" rows="3" placeholder="Explain reason for rejection..."></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-lg"></i> Mark as Rejected
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white fw-bold">
+                    <i class="bi bi-journal-text me-2"></i> Admin Action Log
+                </div>
+                <div class="card-body p-4">
+                    <div class="p-3 bg-light rounded border">
+                        <h6 class="fw-bold mb-2">
+                            @(Model.Status == "Resolved" ? "Resolution Notes" : "Rejection Reason")
+                        </h6>
+                        <p class="mb-0 text-muted fst-italic">
+                            @(string.IsNullOrEmpty(Model.AdminNotes) ? "No additional notes were written by the administrator." : Model.AdminNotes)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,353 +1,449 @@
-﻿@{
-    ViewData["Title"] = "Home";
+@{
+    ViewData["Title"] = "HomeCare - Professional Home Nursing Platform";
 }
 
-<!-- Hero Section -->
-
-<section class="hero">
-
-    <div class="container">
-
-        <div class="row align-items-center">
-
-            <div class="col-lg-6">
-
-                <h1 class="display-4 mb-4">
-
-                    Professional Nursing Care
-                    <br />
+<!-- ═══════════════════════════════════════════
+     HERO SECTION
+     - Glassmorphism overlays
+     - Interactive floating cards
+     - Dual CTA buttons
+     - Live statistics
+═══════════════════════════════════════════ -->
+<section class="nc-hero">
+    <div class="container-xl">
+        <div class="row align-items-center gy-5">
+            
+            <!-- Hero Content -->
+            <div class="col-lg-6 text-start reveal-left visible">
+                <div class="nc-hero-badge">
+                    <i class="bi bi-shield-fill-check me-1"></i> 100% Certified Healthcare
+                </div>
+                <h1>
+                    Professional <br />
+                    <span class="highlight">Nursing Care</span> <br />
                     At Your Home
-
                 </h1>
-
-                <p class="mb-4">
-
-                    HomeCare connects patients with trusted and qualified nurses
-                    to receive professional healthcare services from the comfort
-                    of their homes.
-
+                <p>
+                    NursingCare connects patients with trusted, verified, and highly qualified nurses
+                    to deliver specialized medical treatment, personal assistance, and senior care in comfort.
                 </p>
-
-                <a asp-controller="Account"
-                       asp-action="Register"
-                       class="btn btn-primary btn-lg">
-
-                    Get Started
-
-                </a>
-
+                <div class="nc-hero-actions">
+                    <a asp-controller="Account" asp-action="Register" class="nc-btn-primary">
+                        Find a Nurse <i class="bi bi-arrow-right-short fs-5"></i>
+                    </a>
+                    <a href="#services" class="nc-btn-outline">
+                        Explore Services
+                    </a>
+                </div>
+                
+                <!-- Counter & Quick Stats (Interactive) -->
+                <div class="nc-hero-stats mt-4">
+                    <div class="nc-hero-stat">
+                        <span class="stat-number" data-count="1250" data-suffix="+">0</span>
+                        <span class="stat-label">Happy Patients</span>
+                    </div>
+                    <div class="nc-hero-stat">
+                        <span class="stat-number" data-count="380" data-suffix="+">0</span>
+                        <span class="stat-label">Verified Nurses</span>
+                    </div>
+                    <div class="nc-hero-stat">
+                        <span class="stat-number" data-count="15" data-suffix="k">0</span>
+                        <span class="stat-label">Care Hours Provided</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-lg-6 text-center">
+            <!-- Hero Graphic (Premium Illustration / Photo Mockup) -->
+            <div class="col-lg-6 text-center reveal-right visible">
+                <div class="nc-hero-visual px-3">
+                    <div class="nc-hero-img-wrap">
+                        <img src="~/images/premium_nurse.png" alt="Professional Home Nurse smiling with tablet" />
+                        
+                        <!-- Floating Card 1: Live Status -->
+                        <div class="nc-float-card card-1">
+                            <div class="fc-icon teal">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div class="fc-text">
+                                <strong>Fast Matching</strong>
+                                <span>Find care in < 15 mins</span>
+                            </div>
+                        </div>
 
-                <img src="~/images/nurse.jpg"
-                     class="hero-image"
-                     alt="Nurse" />
-
+                        <!-- Floating Card 2: Rating Status -->
+                        <div class="nc-float-card card-2">
+                            <div class="fc-icon blue">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <div class="fc-text">
+                                <strong>Top Rated Staff</strong>
+                                <span>4.9/5 Avg Rating Score</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-<!-- About -->
-
-<section class="py-5">
-
-    <div class="container text-center">
-
-        <h2 class="fw-bold mb-4">
-
-            About HomeCare
-
-        </h2>
-
-        <p class="lead">
-
-            HomeCare is an online healthcare platform that allows patients
-            to easily find experienced nurses for home visits, long-term care,
-            emergency assistance, and professional nursing services.
-
-        </p>
-
+<!-- ═══════════════════════════════════════════
+     TRUST BAR / CREDENTIALS
+═══════════════════════════════════════════ -->
+<div class="nc-trust">
+    <div class="container-xl">
+        <div class="nc-trust-inner">
+            <div class="nc-trust-item">
+                <i class="bi bi-patch-check-fill"></i>
+                <span>Ministry of Health Standards</span>
+            </div>
+            <div class="nc-trust-item">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>GDPR Compliant Patient Records</span>
+            </div>
+            <div class="nc-trust-item">
+                <i class="bi bi-telephone-outbound-fill"></i>
+                <span>24/7 SOS Emergency Support</span>
+            </div>
+            <div class="nc-trust-item">
+                <i class="bi bi-credit-card-2-back-fill"></i>
+                <span>100% Secure Digital Payments</span>
+            </div>
+        </div>
     </div>
+</div>
 
+<!-- ═══════════════════════════════════════════
+     ABOUT & WHY CHOOSE US
+═══════════════════════════════════════════ -->
+<section class="nc-section" id="why-us">
+    <div class="container-xl">
+        <div class="row align-items-center gy-5">
+            
+            <div class="col-lg-6 reveal">
+                <span class="nc-label">Why Choose NursingCare</span>
+                <h2 class="nc-section-title">Redefining Home Healthcare Excellence</h2>
+                <p class="nc-section-sub mb-4">
+                    Our platform is built to solve the difficulty of finding certified, reliable care
+                    when your family needs it most. We bridge the gap with absolute transparency.
+                </p>
+                
+                <ul class="nc-feature-list">
+                    <li>
+                        <div class="feat-icon">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                        <div class="feat-text">
+                            <strong>Strict Verification & Background Checks</strong>
+                            <span>We manually inspect criminal record documents, national ID cards, and university certificates before approving any nurse.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feat-icon">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                        <div class="feat-text">
+                            <strong>Instant SOS Emergency Support</strong>
+                            <span>Integrated emergency buttons let nurses signal coordinates and trigger medical support immediately when a crisis occurs.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feat-icon">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <div class="feat-text">
+                            <strong>Flexible Subscription Plans</strong>
+                            <span>Nurses pay lower or zero platform commission through simple subscription packages to increase their take-home earnings.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Stats Highlight Banner (Glassmorphism card) -->
+            <div class="col-lg-6 reveal">
+                <div class="nc-feature-panel">
+                    <h3 class="text-white fw-bold mb-3">Quality & Reliability Guaranteed</h3>
+                    <p class="text-white-50 small mb-4">
+                        Every patient gets personalized care, structured schedules, and automated invoicing.
+                        No hidden fees. No complicated agreements.
+                    </p>
+                    
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="num">99.8%</div>
+                            <div class="lbl">Match Accuracy</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="num">24/7</div>
+                            <div class="lbl">Admin Monitoring</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="num">0%</div>
+                            <div class="lbl">Hidden Surcharges</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="num">15 Min</div>
+                            <div class="lbl">Avg Response Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 
-<!-- Services -->
-
-<section class="py-5 bg-light">
-
-    <div class="container">
-
-        <h2 class="text-center fw-bold mb-5">
-
-            Our Services
-
-        </h2>
+<!-- ═══════════════════════════════════════════
+     SERVICES OVERVIEW
+═══════════════════════════════════════════ -->
+<section class="nc-section nc-section-alt" id="services">
+    <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+            <span class="nc-label">Tailored Services</span>
+            <h2 class="nc-section-title">Specialized Clinical Care & Support</h2>
+            <p class="nc-section-sub mx-auto">
+                Explore range of skilled home medical services delivered by certified professional caregivers.
+            </p>
+        </div>
 
         <div class="row g-4">
-
-            <div class="col-md-4">
-
-                <div class="card service-card p-4 text-center h-100">
-
-                    <i class="bi bi-heart-pulse service-icon"></i>
-
-                    <h4 class="mt-3">
-
-                        Home Nursing
-
-                    </h4>
-
-                    <p>
-
-                        Professional nurses for daily healthcare.
-
-                    </p>
-
+            
+            <!-- Service 1 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <h4>Post-Surgical Rehabilitation</h4>
+                    <p>Wound dressing, medication monitoring, pain management, and mobility support for patient recovery after surgeries.</p>
                 </div>
-
             </div>
 
-            <div class="col-md-4">
-
-                <div class="card service-card p-4 text-center h-100">
-
-                    <i class="bi bi-hospital service-icon"></i>
-
-                    <h4 class="mt-3">
-
-                        Medical Follow-up
-
-                    </h4>
-
-                    <p>
-
-                        Continuous monitoring of patient conditions.
-
-                    </p>
-
+            <!-- Service 2 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-prescription2"></i>
+                    </div>
+                    <h4>Geriatric & Elderly Care</h4>
+                    <p>Gentle assistance with daily activities, blood pressure tracking, diabetes control, and routine healthcare checkups.</p>
                 </div>
-
             </div>
 
-            <div class="col-md-4">
-
-                <div class="card service-card p-4 text-center h-100">
-
-                    <i class="bi bi-capsule-pill service-icon"></i>
-
-                    <h4 class="mt-3">
-
-                        Medication Support
-
-                    </h4>
-
-                    <p>
-
-                        Safe medication administration and follow-up.
-
-                    </p>
-
+            <!-- Service 3 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-capsule-pill"></i>
+                    </div>
+                    <h4>Chronic Illness Care</h4>
+                    <p>Specialized management of conditions like cardiovascular disease, respiratory illness, and cancer treatment recovery.</p>
                 </div>
+            </div>
 
+            <!-- Service 4 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+                    <h4>Pediatric Care Services</h4>
+                    <p>Expert neonatal support, infant weight tracking, pediatric immunization reminders, and warm children's home nursing.</p>
+                </div>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-hospital"></i>
+                    </div>
+                    <h4>Wound & Dressing Therapy</h4>
+                    <p>Infection prevention, professional wound vacuum checks, ulcer treatment, and sanitary bandages renewal.</p>
+                </div>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-service-card">
+                    <div class="nc-service-icon">
+                        <i class="bi bi-alarm"></i>
+                    </div>
+                    <h4>Urgent Hourly Coverage</h4>
+                    <p>Book emergency short-term care visits or medication administration checkups instantly within the platform.</p>
+                </div>
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-<!-- Why Choose Us -->
-
-<section class="py-5">
-
-    <div class="container">
-
-        <h2 class="text-center fw-bold mb-5">
-
-            Why Choose Us?
-
-        </h2>
-
-        <div class="row text-center">
-
-            <div class="col-md-4">
-
-                <i class="bi bi-person-check feature-icon"></i>
-
-                <h4 class="mt-3">
-
-                    Verified Nurses
-
-                </h4>
-
-                <p>
-
-                    Every nurse is verified before joining.
-
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS (Interactive Process)
+═══════════════════════════════════════════ -->
+<section class="nc-section" id="how-it-works">
+    <div class="container-xl">
+        <div class="row align-items-center gy-5">
+            
+            <div class="col-lg-5 reveal-left">
+                <span class="nc-label">Process flow</span>
+                <h2 class="nc-section-title">How To Request Home Nursing</h2>
+                <p class="nc-section-sub">
+                    Our platform streamlines care matching in three simple steps. Rest easy knowing that the process is completely secure.
                 </p>
-
+                <div class="mt-4">
+                    <a asp-controller="Account" asp-action="Register" class="nc-btn-primary">
+                        Find a Nurse Now
+                    </a>
+                </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-lg-7 reveal-right">
+                <div class="nc-steps-wrap d-flex flex-column gap-4">
+                    
+                    <!-- Step 1 -->
+                    <div class="nc-step">
+                        <div class="nc-step-number">1</div>
+                        <div class="nc-step-body">
+                            <h5>Post a Care Request</h5>
+                            <p>Specify the required medical specialization, starting date, hours, patient location, and hourly budget range.</p>
+                        </div>
+                    </div>
 
-                <i class="bi bi-clock-history feature-icon"></i>
+                    <!-- Step 2 -->
+                    <div class="nc-step">
+                        <div class="nc-step-number">2</div>
+                        <div class="nc-step-body">
+                            <h5>Receive & Compare Offers</h5>
+                            <p>Verified professional nurses nearby bid on your request. You can check their qualifications, ratings, and experience before accepting.</p>
+                        </div>
+                    </div>
 
-                <h4 class="mt-3">
+                    <!-- Step 3 -->
+                    <div class="nc-step">
+                        <div class="nc-step-number">3</div>
+                        <div class="nc-step-body">
+                            <h5>Secure Booking & Care</h5>
+                            <p>Fund the deposit securely. The nurse carries out the service at your home, and funds are only released after successful completion.</p>
+                        </div>
+                    </div>
 
-                    24/7 Support
-
-                </h4>
-
-                <p>
-
-                    Available whenever you need help.
-
-                </p>
-
-            </div>
-
-            <div class="col-md-4">
-
-                <i class="bi bi-shield-check feature-icon"></i>
-
-                <h4 class="mt-3">
-
-                    Safe & Secure
-
-                </h4>
-
-                <p>
-
-                    Secure communication and trusted healthcare.
-
-                </p>
-
+                </div>
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-<!-- How It Works -->
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS SECTION
+═══════════════════════════════════════════ -->
+<section class="nc-section nc-section-alt" id="testimonials">
+    <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+            <span class="nc-label">Real Feedback</span>
+            <h2 class="nc-section-title">Trusted By Hundreds of Families</h2>
+            <p class="nc-section-sub mx-auto">
+                Read direct reviews from patients and family members who booked home nurses through our system.
+            </p>
+        </div>
 
-<section class="py-5 bg-light">
-
-    <div class="container">
-
-        <h2 class="text-center fw-bold mb-5">
-
-            How It Works
-
-        </h2>
-
-        <div class="row text-center">
-
-            <div class="col-md-4">
-
-                <div class="step-number">
-
-                    1
-
+        <div class="row g-4">
+            
+            <!-- Testimonial 1 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-testimonial">
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <blockquote>
+                        "Finding a nurse for my father after his cardiac surgery was stress-free. The nurse was polite, incredibly professional, and tracked his vitals daily. Best service!"
+                    </blockquote>
+                    <div class="author">
+                        <div class="author-avatar">AM</div>
+                        <div class="author-info">
+                            <strong>Ahmed Mostafa</strong>
+                            <span>Patient's Son, Cairo</span>
+                        </div>
+                    </div>
                 </div>
-
-                <h5 class="mt-3">
-
-                    Register
-
-                </h5>
-
-                <p>
-
-                    Create your account.
-
-                </p>
-
             </div>
 
-            <div class="col-md-4">
-
-                <div class="step-number">
-
-                    2
-
+            <!-- Testimonial 2 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-testimonial">
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <blockquote>
+                        "As a professional nurse, this platform allows me to find local patients, organize my schedule, and receive prompt digital payouts without middlemen delays."
+                    </blockquote>
+                    <div class="author">
+                        <div class="author-avatar">SK</div>
+                        <div class="author-info">
+                            <strong>Sarah Kamel</strong>
+                            <span>Registered Nurse, Giza</span>
+                        </div>
+                    </div>
                 </div>
-
-                <h5 class="mt-3">
-
-                    Choose Nurse
-
-                </h5>
-
-                <p>
-
-                    Find the best qualified nurse.
-
-                </p>
-
             </div>
 
-            <div class="col-md-4">
-
-                <div class="step-number">
-
-                    3
-
+            <!-- Testimonial 3 -->
+            <div class="col-md-6 col-lg-4 reveal">
+                <div class="nc-testimonial">
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <blockquote>
+                        "The verification process gave me peace of mind. Knowing that the admin reviews licenses and criminal reports before letting nurses onto the platform is fantastic."
+                    </blockquote>
+                    <div class="author">
+                        <div class="author-avatar">MH</div>
+                        <div class="author-info">
+                            <strong>Mariam Hassan</strong>
+                            <span>Patient's Daughter, Alexandria</span>
+                        </div>
+                    </div>
                 </div>
-
-                <h5 class="mt-3">
-
-                    Receive Care
-
-                </h5>
-
-                <p>
-
-                    Get professional healthcare at home.
-
-                </p>
-
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-<!-- Contact -->
-
-<section class="py-5">
-
-    <div class="container text-center">
-
-        <h2 class="fw-bold mb-4">
-
-            Contact Us
-
-        </h2>
-
-        <p>
-
-            Email:
-            support@homecare.com
-
-        </p>
-
-        <p>
-
-            Phone:
-            +20 100 000 0000
-
-        </p>
-
+<!-- ═══════════════════════════════════════════
+     CALL TO ACTION (High Impact CTA)
+═══════════════════════════════════════════ -->
+<section class="nc-cta text-center reveal">
+    <div class="container-xl">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2>Join the Future of Home Healthcare</h2>
+                <p class="mx-auto">
+                    Sign up as a patient to request skilled care, or register as a professional nurse to grow your private home practice.
+                </p>
+                <div class="nc-cta-actions justify-content-center mt-4">
+                    <a asp-controller="Account" asp-action="Register" class="nc-btn-white">
+                        <i class="bi bi-person-plus me-1"></i> Register Account
+                    </a>
+                    <a asp-controller="Account" asp-action="Login" class="nc-btn-outline-white">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-
 </section>

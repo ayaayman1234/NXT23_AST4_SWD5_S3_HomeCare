@@ -1,0 +1,230 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminReportViewModel
+
+@{
+    ViewData["Title"] = "System Reports";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+    <div>
+        <h2 class="fw-bold mb-0"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>System Executive Reports</h2>
+        <small class="text-muted">Generate formal system overview and financial statements</small>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary rounded-pill px-4 shadow" onclick="window.print();">
+            <i class="bi bi-file-earmark-pdf-fill me-1"></i> Export PDF Report
+        </button>
+        <a asp-action="Dashboard" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+</div>
+
+<!-- Printed Header (Only visible on paper / PDF) -->
+<div class="d-none d-print-block mb-5 text-center pb-3 border-bottom border-3">
+    <h1 class="fw-bold text-dark mb-1"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>HomeCare Platform</h1>
+    <h3 class="text-muted">Executive Financial & Operations Report</h3>
+    <p class="mb-0 text-muted">Generated on: @DateTime.Now.ToString("dd MMMM yyyy, hh:mm tt") | System Administrator</p>
+</div>
+
+<div class="row g-4">
+
+    <!-- Users Section -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white fw-bold py-3">
+                <i class="bi bi-people-fill me-2"></i>Registered Users Directory
+            </div>
+            <div class="card-body">
+                <div class="row text-center g-3">
+                    <div class="col-md-4">
+                        <div class="border rounded p-3 bg-light">
+                            <i class="bi bi-person-circle fs-2 text-primary"></i>
+                            <h3 class="mt-2 fw-bold text-dark">@Model.TotalPatients</h3>
+                            <p class="text-muted mb-0 fw-semibold text-uppercase small">Total Patients</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="border rounded p-3 bg-light">
+                            <i class="bi bi-person-badge fs-2 text-success"></i>
+                            <h3 class="mt-2 fw-bold text-dark">@Model.TotalNurses</h3>
+                            <p class="text-muted mb-0 fw-semibold text-uppercase small">Total Nurses</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="border rounded p-3 bg-light">
+                            <i class="bi bi-shield-fill fs-2 text-danger"></i>
+                            <h3 class="mt-2 fw-bold text-dark">@Model.TotalAdmins</h3>
+                            <p class="text-muted mb-0 fw-semibold text-uppercase small">Total Admins</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Care Requests Section -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-success text-white fw-bold py-3">
+                <i class="bi bi-clipboard2-pulse-fill me-2"></i>Care Requests Statistics
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <tbody>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-secondary me-2 small"></i>Total Requests</td>
+                            <td class="fw-bold text-end pe-3">@Model.TotalCareRequests</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-warning me-2 small"></i>Pending Matches</td>
+                            <td class="fw-bold text-end text-warning pe-3">@Model.PendingRequests</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-info me-2 small"></i>Ongoing Care Shifts</td>
+                            <td class="fw-bold text-end text-info pe-3">@Model.AcceptedRequests</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-success me-2 small"></i>Completed Services</td>
+                            <td class="fw-bold text-end text-success pe-3">@Model.CompletedRequests</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finance Section -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-dark text-white fw-bold py-3">
+                <i class="bi bi-cash-coin me-2"></i>Financial & Revenue Statement
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <tbody>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-receipt me-2 small"></i>Total Transactions</td>
+                            <td class="fw-bold text-end pe-3">@Model.TotalPayments</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-cash-stack me-2 text-success small"></i>Gross Platform Value</td>
+                            <td class="fw-bold text-end text-success pe-3">@Model.TotalRevenue.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-percent me-2 text-info small"></i>Platform Net Profit (Commission)</td>
+                            <td class="fw-bold text-end text-info pe-3">@Model.TotalCommission.ToString("C")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ratings Section -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-warning text-dark fw-bold py-3">
+                <i class="bi bi-star-fill me-2"></i>Customer Satisfaction Index
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <tbody>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-chat-square-heart me-2 small"></i>Total Reviews Submitted</td>
+                            <td class="fw-bold text-end pe-3">@Model.TotalRatings</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-star-half me-2 text-warning small"></i>Average Platform Rating</td>
+                            <td class="fw-bold text-end text-warning pe-3">@Model.AverageRating.ToString("0.0") / 5.0 ⭐</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issues Section -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-danger text-white fw-bold py-3">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>Incident & Quality Reports
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <tbody>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-chat-left-dots-fill me-2 text-danger small"></i>Total Complaints Filed</td>
+                            <td class="fw-bold text-end pe-3">@Model.TotalComplaints</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-danger me-2 small"></i>Active Unresolved Complaints</td>
+                            <td class="fw-bold text-end text-danger pe-3">@Model.OpenComplaints</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-success me-2 small"></i>Resolved Complaints</td>
+                            <td class="fw-bold text-end text-success pe-3">@Model.ResolvedComplaints</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-bell-fill text-danger me-2 small"></i>Total SOS Panic Alerts Triggered</td>
+                            <td class="fw-bold text-end text-danger pe-3">@Model.TotalSOS</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-circle-fill text-warning me-2 small"></i>Pending SOS Alerts</td>
+                            <td class="fw-bold text-end text-warning pe-3">@Model.PendingSOS</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-3"><i class="bi bi-x-circle-fill me-2 text-secondary small"></i>Contract Cancellations</td>
+                            <td class="fw-bold text-end text-secondary pe-3">@Model.TotalCancellations</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <style>
+        @@media print {
+            .d-print-none {
+                display: none !important;
+            }
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 1.5cm !important;
+            }
+            .card {
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            .card-header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                border-bottom: 2px solid #dee2e6 !important;
+            }
+            .bg-primary {
+                background-color: #0d6efd !important;
+                color: #ffffff !important;
+            }
+            .bg-success {
+                background-color: #198754 !important;
+                color: #ffffff !important;
+            }
+            .bg-dark {
+                background-color: #212529 !important;
+                color: #ffffff !important;
+            }
+            .bg-warning {
+                background-color: #ffc107 !important;
+                color: #000000 !important;
+            }
+            .bg-danger {
+                background-color: #dc3545 !important;
+                color: #ffffff !important;
+            }
+        }
+    </style>
+}

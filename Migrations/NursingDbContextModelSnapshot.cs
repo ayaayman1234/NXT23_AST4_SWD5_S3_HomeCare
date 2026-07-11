@@ -231,6 +231,9 @@ namespace NursingCarePlatform.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -357,8 +360,8 @@ namespace NursingCarePlatform.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CancelledAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("AdminNotes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CareRequestId")
                         .HasColumnType("int");
@@ -368,6 +371,20 @@ namespace NursingCarePlatform.Web.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RequestedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestedByType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -465,8 +482,20 @@ namespace NursingCarePlatform.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AgainstUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ComplaintCareRequestId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -489,6 +518,12 @@ namespace NursingCarePlatform.Web.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AgainstUserId");
+
+                    b.HasIndex("ComplaintCareRequestId");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("NurseId");
 
@@ -525,7 +560,8 @@ namespace NursingCarePlatform.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CareRequestId");
+                    b.HasIndex("CareRequestId")
+                        .IsUnique();
 
                     b.ToTable("MedicalChecklists");
                 });
@@ -624,6 +660,9 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
@@ -661,6 +700,9 @@ namespace NursingCarePlatform.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<int>("NurseId")
                         .HasColumnType("int");
 
@@ -691,6 +733,43 @@ namespace NursingCarePlatform.Web.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("NurseServices");
+                });
+
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.NurseSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NurseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NurseId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("NurseSubscriptions");
                 });
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.NursingNote", b =>
@@ -724,7 +803,8 @@ namespace NursingCarePlatform.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignmentId");
+                    b.HasIndex("AssignmentId")
+                        .IsUnique();
 
                     b.ToTable("NursingNotes");
                 });
@@ -770,6 +850,9 @@ namespace NursingCarePlatform.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -804,24 +887,36 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Property<int>("CareRequestId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("CommissionAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("TransactionReference")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CareRequestId");
+                    b.HasIndex("CareRequestId")
+                        .IsUnique();
 
                     b.ToTable("Payments");
                 });
@@ -840,8 +935,14 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RatedUserGuid")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RatedUserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RaterUserGuid")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RaterUserId")
                         .HasColumnType("int");
@@ -856,6 +957,10 @@ namespace NursingCarePlatform.Web.Migrations
 
                     b.HasIndex("CareRequestId");
 
+                    b.HasIndex("RatedUserGuid");
+
+                    b.HasIndex("RaterUserGuid");
+
                     b.ToTable("Ratings");
                 });
 
@@ -868,6 +973,9 @@ namespace NursingCarePlatform.Web.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CareRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Duration")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("EndDate")
@@ -897,6 +1005,9 @@ namespace NursingCarePlatform.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminNotes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CareRequestId")
                         .HasColumnType("int");
 
@@ -915,6 +1026,10 @@ namespace NursingCarePlatform.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CareRequestId");
+
+                    b.HasIndex("TriggeredByUserId");
 
                     b.ToTable("SOSEvents");
                 });
@@ -935,6 +1050,43 @@ namespace NursingCarePlatform.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ServiceCategories");
+                });
+
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.SubscriptionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("CommissionRate")
+                        .HasPrecision(5, 4)
+                        .HasColumnType("decimal(5,4)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MonthlyFee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.Verification", b =>
@@ -981,11 +1133,18 @@ namespace NursingCarePlatform.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AssignmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CareRequestId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CompletedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("JobStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NurseId")
                         .HasColumnType("int");
@@ -999,11 +1158,16 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("TotalAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("CareRequestId");
 
@@ -1147,6 +1311,21 @@ namespace NursingCarePlatform.Web.Migrations
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.Complaint", b =>
                 {
+                    b.HasOne("NursingCarePlatform.Web.Models.ApplicationUser", "AgainstUser")
+                        .WithMany()
+                        .HasForeignKey("AgainstUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NursingCarePlatform.Web.Models.CareRequest", "ComplaintCareRequest")
+                        .WithMany()
+                        .HasForeignKey("ComplaintCareRequestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NursingCarePlatform.Web.Models.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("NursingCarePlatform.Web.Models.Nurse", "Nurse")
                         .WithMany()
                         .HasForeignKey("NurseId")
@@ -1158,6 +1337,12 @@ namespace NursingCarePlatform.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AgainstUser");
+
+                    b.Navigation("ComplaintCareRequest");
+
+                    b.Navigation("CreatedByUser");
+
                     b.Navigation("Nurse");
 
                     b.Navigation("Patient");
@@ -1166,8 +1351,8 @@ namespace NursingCarePlatform.Web.Migrations
             modelBuilder.Entity("NursingCarePlatform.Web.Models.MedicalChecklist", b =>
                 {
                     b.HasOne("NursingCarePlatform.Web.Models.CareRequest", "CareRequest")
-                        .WithMany()
-                        .HasForeignKey("CareRequestId")
+                        .WithOne("MedicalChecklist")
+                        .HasForeignKey("NursingCarePlatform.Web.Models.MedicalChecklist", "CareRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1234,11 +1419,30 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.NurseSubscription", b =>
+                {
+                    b.HasOne("NursingCarePlatform.Web.Models.Nurse", "Nurse")
+                        .WithMany()
+                        .HasForeignKey("NurseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("NursingCarePlatform.Web.Models.SubscriptionPlan", "Plan")
+                        .WithMany("NurseSubscriptions")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Nurse");
+
+                    b.Navigation("Plan");
+                });
+
             modelBuilder.Entity("NursingCarePlatform.Web.Models.NursingNote", b =>
                 {
                     b.HasOne("NursingCarePlatform.Web.Models.Assignment", "Assignment")
-                        .WithMany()
-                        .HasForeignKey("AssignmentId")
+                        .WithOne("NursingNote")
+                        .HasForeignKey("NursingCarePlatform.Web.Models.NursingNote", "AssignmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1270,9 +1474,9 @@ namespace NursingCarePlatform.Web.Migrations
             modelBuilder.Entity("NursingCarePlatform.Web.Models.Payment", b =>
                 {
                     b.HasOne("NursingCarePlatform.Web.Models.CareRequest", "CareRequest")
-                        .WithMany()
-                        .HasForeignKey("CareRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("Payment")
+                        .HasForeignKey("NursingCarePlatform.Web.Models.Payment", "CareRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CareRequest");
@@ -1286,7 +1490,21 @@ namespace NursingCarePlatform.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NursingCarePlatform.Web.Models.ApplicationUser", "RatedUser")
+                        .WithMany()
+                        .HasForeignKey("RatedUserGuid")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NursingCarePlatform.Web.Models.ApplicationUser", "RaterUser")
+                        .WithMany()
+                        .HasForeignKey("RaterUserGuid")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("CareRequest");
+
+                    b.Navigation("RatedUser");
+
+                    b.Navigation("RaterUser");
                 });
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.RecurringRequest", b =>
@@ -1298,6 +1516,24 @@ namespace NursingCarePlatform.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("CareRequest");
+                });
+
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.SOSEvent", b =>
+                {
+                    b.HasOne("NursingCarePlatform.Web.Models.CareRequest", "CareRequest")
+                        .WithMany()
+                        .HasForeignKey("CareRequestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NursingCarePlatform.Web.Models.Patient", "TriggeredByUser")
+                        .WithMany()
+                        .HasForeignKey("TriggeredByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CareRequest");
+
+                    b.Navigation("TriggeredByUser");
                 });
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.Verification", b =>
@@ -1321,6 +1557,11 @@ namespace NursingCarePlatform.Web.Migrations
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.WorkHistory", b =>
                 {
+                    b.HasOne("NursingCarePlatform.Web.Models.Assignment", "Assignment")
+                        .WithMany()
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("NursingCarePlatform.Web.Models.CareRequest", "CareRequest")
                         .WithMany()
                         .HasForeignKey("CareRequestId")
@@ -1345,6 +1586,8 @@ namespace NursingCarePlatform.Web.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.Navigation("Assignment");
+
                     b.Navigation("CareRequest");
 
                     b.Navigation("Nurse");
@@ -1354,9 +1597,18 @@ namespace NursingCarePlatform.Web.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.Assignment", b =>
+                {
+                    b.Navigation("NursingNote");
+                });
+
             modelBuilder.Entity("NursingCarePlatform.Web.Models.CareRequest", b =>
                 {
+                    b.Navigation("MedicalChecklist");
+
                     b.Navigation("Offers");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("NursingCarePlatform.Web.Models.Nurse", b =>
@@ -1378,6 +1630,11 @@ namespace NursingCarePlatform.Web.Migrations
             modelBuilder.Entity("NursingCarePlatform.Web.Models.ServiceCategory", b =>
                 {
                     b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("NursingCarePlatform.Web.Models.SubscriptionPlan", b =>
+                {
+                    b.Navigation("NurseSubscriptions");
                 });
 #pragma warning restore 612, 618
         }

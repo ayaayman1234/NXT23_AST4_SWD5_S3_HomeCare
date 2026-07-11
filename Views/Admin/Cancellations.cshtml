@@ -1,0 +1,162 @@
+@model IEnumerable<NursingCarePlatform.Web.ViewModels.Admin.AdminCancellationViewModel>
+
+@{
+    ViewData["Title"] = "Cancellation Requests";
+    var filter = Context.Request.Query["status"].ToString();
+
+    var filtered = Model.AsEnumerable();
+    if (!string.IsNullOrEmpty(filter))
+        filtered = filtered.Where(c => c.Status.Equals(filter, StringComparison.OrdinalIgnoreCase));
+
+    var list = filtered.ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0"><i class="bi bi-x-circle text-secondary me-2"></i>Cancellation Requests</h2>
+        <small class="text-muted">@list.Count of @Model.Count() cancellation requests shown</small>
+    </div>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Dashboard
+    </a>
+</div>
+
+<!-- Tabs/Filter Bar -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body py-2 px-3">
+        <div class="d-flex gap-2">
+            <a asp-action="Cancellations" class="btn btn-sm @(string.IsNullOrEmpty(filter) ? "btn-dark" : "btn-outline-dark")">
+                All Requests (@Model.Count())
+            </a>
+            <a asp-action="Cancellations" asp-route-status="Pending" class="btn btn-sm @(filter == "Pending" ? "btn-warning text-dark" : "btn-outline-warning text-dark")">
+                Pending (@Model.Count(c => c.Status == "Pending"))
+            </a>
+            <a asp-action="Cancellations" asp-route-status="Approved" class="btn btn-sm @(filter == "Approved" ? "btn-success" : "btn-outline-success")">
+                Approved (@Model.Count(c => c.Status == "Approved"))
+            </a>
+            <a asp-action="Cancellations" asp-route-status="Rejected" class="btn btn-sm @(filter == "Rejected" ? "btn-danger" : "btn-outline-danger")">
+                Rejected (@Model.Count(c => c.Status == "Rejected"))
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (!list.Any())
+{
+    <div class="alert alert-info text-center py-4">
+        <i class="bi bi-x-circle fs-1 d-block mb-2"></i>
+        <h5>No cancellation requests found.</h5>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="50">#</th>
+                            <th>Care Request</th>
+                            <th>Reason</th>
+                            <th>Requested By</th>
+                            <th>Type</th>
+                            <th>Fee</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th width="200" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in list)
+                        {
+                            <tr>
+                                <td class="text-muted small">@item.Id</td>
+                                <td>
+                                    <a asp-action="CareRequestDetails" asp-route-id="@item.CareRequestId" class="fw-bold">
+                                        #@item.CareRequestId
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@item.Reason">
+                                        @item.Reason
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="small"><i class="bi bi-person-circle"></i> ID: @item.RequestedBy</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@item.RequestedByType</span>
+                                </td>
+                                <td class="text-danger fw-semibold">
+                                    @item.Fee.ToString("C")
+                                </td>
+                                <td class="small text-muted">@item.RequestedAt.ToString("dd MMM yyyy, HH:mm")</td>
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                    }
+                                    else if (item.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                    onclick="confirmAction('Approve this cancellation request?', '/Admin/ApproveCancellation/@item.Id')">
+                                                Approve
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                    onclick="confirmAction('Reject this cancellation request?', '/Admin/RejectCancellation/@item.Id')">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">No action required</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Are you sure?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message, url) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}

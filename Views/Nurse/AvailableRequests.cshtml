@@ -1,104 +1,136 @@
-﻿@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
+@model IEnumerable<NursingCarePlatform.Web.Models.CareRequest>
 
 @{
     ViewData["Title"] = "Available Requests";
+    bool isVerified = ViewBag.IsVerified ?? false;
 }
 
 <div class="container py-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <h2 class="fw-bold">
-            <i class="bi bi-heart-pulse"></i>
+            <i class="bi bi-heart-pulse text-primary"></i>
             Available Care Requests
         </h2>
-
-        <span class="badge bg-primary fs-6">
-            @Model.Count() Requests
-        </span>
-
+        @if (isVerified)
+        {
+            <span class="badge bg-primary fs-6">
+                @Model.Count() Requests
+            </span>
+        }
     </div>
 
-    @if (!Model.Any())
+    @if (!isVerified)
     {
-        <div class="alert alert-info">
+        <!-- Unverified Nurse Blocker Card -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow border-0 py-5 px-4 rounded-3 text-center border-top border-5 border-warning">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="bg-warning-subtle rounded-circle d-inline-flex align-items-center justify-content-center text-warning mx-auto"
+                                 style="width: 100px; height: 100px; font-size: 50px;">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="fw-bold text-dark mb-3">Verification Required</h3>
+                        <p class="text-muted fs-6 mb-4">
+                            Your nurse account is currently pending verification. You will be able to browse available care requests and submit price offers to patients once the administrator approves your uploaded documents.
+                        </p>
+                        
+                        <div class="alert alert-info text-start border-0 py-3 mb-4">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Please ensure you have uploaded all necessary credentials (e.g. ID, national license, specialization certificates) to accelerate the verification process.
+                        </div>
 
-            No available requests at the moment.
-
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="Documents" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow">
+                                <i class="bi bi-file-earmark-arrow-up me-1"></i> Upload Documents
+                            </a>
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold">
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     }
     else
     {
-        <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info text-center py-4">
+                <i class="bi bi-info-circle fs-2 d-block mb-2"></i>
+                <h5>No available care requests at the moment.</h5>
+                <p class="text-muted mb-0">Check back later or adjust your availability.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow border-0 h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="fw-bold text-primary">
+                                        @item.Service.Name
+                                    </h5>
+                                    @if (item.RequestPriority == "High")
+                                    {
+                                        <span class="badge bg-danger">High Priority</span>
+                                    }
+                                </div>
+                                <hr />
 
-            @foreach (var item in Model)
-            {
-                <div class="col-lg-6 mb-4">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Patient</small>
+                                        <span class="fw-semibold"><i class="bi bi-person"></i> @item.Patient.User.FirstName @item.Patient.User.LastName</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Preferred Date</small>
+                                        <span class="small"><i class="bi bi-calendar"></i> @item.PreferredDate.ToString("dd/MM/yyyy")</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Duration</small>
+                                        <span><i class="bi bi-clock"></i> @item.RequiredHours Hours</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Budget Range</small>
+                                        <span class="text-success fw-semibold">@item.BudgetMin.ToString("C") - @item.BudgetMax.ToString("C")</span>
+                                    </div>
+                                </div>
 
-                    <div class="card shadow h-100">
+                                <p class="mb-0">
+                                    <strong>Address</strong><br />
+                                    <span class="small text-muted"><i class="bi bi-geo-alt"></i> @item.Address</span>
+                                </p>
 
-                        <div class="card-body">
+                                @if (!string.IsNullOrEmpty(item.Description))
+                                {
+                                    <p class="mt-2 mb-0 small text-muted">
+                                        <strong>Description:</strong><br />
+                                        @item.Description
+                                    </p>
+                                }
+                            </div>
 
-                            <h5 class="fw-bold text-primary">
-                                @item.Service.Name
-                            </h5>
-
-                            <hr />
-
-                            <p>
-                                <strong>Patient</strong><br />
-                                @item.Patient.User.FirstName
-                                @item.Patient.User.LastName
-                            </p>
-
-                            <p>
-                                <strong>Address</strong><br />
-                                @item.Address
-                            </p>
-
-                            <p>
-                                <strong>Date</strong><br />
-                                @item.PreferredDate.ToString("dd/MM/yyyy hh:mm tt")
-                            </p>
-
-                            <p>
-                                <strong>Required Hours</strong><br />
-                                @item.RequiredHours Hours
-                            </p>
-
-                            <p>
-                                <strong>Budget</strong><br />
-                                @item.BudgetMin -
-                                @item.BudgetMax EGP
-                            </p>
-
-                            <p>
-                                <strong>Description</strong><br />
-                                @item.Description
-                            </p>
-
-                        </div>
-
-                        <div class="card-footer bg-white">
-
-                            <a asp-controller="Offer"
+                            <div class="card-footer bg-white border-0 py-3">
+                                <a asp-controller="Offer"
                                    asp-action="SendOffer"
                                    asp-route-id="@item.Id"
-                                   class="btn btn-success">
-
-                                <i class="bi bi-send"></i>
-
-                                Send Offer
-
-                            </a>
+                                   class="btn btn-success w-100 shadow-sm fw-semibold">
+                                    <i class="bi bi-send me-1"></i> Send Offer
+                                </a>
+                            </div>
                         </div>
-
                     </div>
-
-                </div>
-            }
-
-        </div>
+                }
+            </div>
+        }
     }
-
 </div>

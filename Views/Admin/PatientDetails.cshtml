@@ -1,0 +1,157 @@
+@model NursingCarePlatform.Web.ViewModels.Admin.AdminPatientViewModel
+
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-people-fill text-primary me-2"></i>Patient Details</h2>
+    <a asp-action="Patients" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Patients
+    </a>
+</div>
+
+<div class="row g-4">
+
+    <!-- Profile Summary Card -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 text-center">
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mx-auto"
+                         style="width:110px;height:110px;font-size:40px;">
+                        @(Model.FullName.Length > 0 ? Model.FullName[0].ToString().ToUpper() : "P")
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-1">@Model.FullName</h5>
+                <p class="text-muted small mb-2">@Model.Email</p>
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    @if (Model.IsBlocked)
+                    {
+                        <span class="badge bg-danger"><i class="bi bi-slash-circle me-1"></i>Blocked</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success"><i class="bi bi-circle-fill me-1"></i>Active</span>
+                    }
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    @if (Model.IsBlocked)
+                    {
+                        <button class="btn btn-warning btn-sm"
+                                onclick="confirmAction('Unblock account for @Model.FullName?', '/Admin/UnBlockPatient/@Model.Id')">
+                            <i class="bi bi-unlock me-1"></i>Unblock Account
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-sm"
+                                onclick="confirmAction('Block account for @Model.FullName? They will not be able to create new care requests.', '/Admin/BlockPatient/@Model.Id')">
+                            <i class="bi bi-lock me-1"></i>Block Account
+                        </button>
+                    }
+
+                    <button class="btn btn-outline-danger btn-sm"
+                            onclick="confirmAction('Permanently delete patient @Model.FullName? This will delete all of their data and cannot be undone!', '/Admin/DeletePatient/@Model.Id')">
+                        <i class="bi bi-trash me-1"></i>Delete Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info details Card -->
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white fw-bold">
+                <i class="bi bi-info-circle me-2"></i>Patient Information
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        <tr>
+                            <th width="200" class="bg-light ps-3">Full Name</th>
+                            <td class="ps-3">@Model.FullName</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Email</th>
+                            <td class="ps-3">@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Phone</th>
+                            <td class="ps-3">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "-" : Model.PhoneNumber)</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Age</th>
+                            <td class="ps-3">@Model.Age</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Gender</th>
+                            <td class="ps-3">@(string.IsNullOrEmpty(Model.Gender) ? "-" : Model.Gender)</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Blood Type</th>
+                            <td class="ps-3">
+                                <span class="badge bg-secondary">@Model.BloodType</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Medical History</th>
+                            <td class="ps-3">
+                                @if (string.IsNullOrEmpty(Model.MedicalHistory))
+                                {
+                                    <span class="text-muted fst-italic">No medical history recorded.</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.MedicalHistory</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Governorate</th>
+                            <td class="ps-3">@(string.IsNullOrEmpty(Model.Governorate) ? "-" : Model.Governorate)</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">City</th>
+                            <td class="ps-3">@(string.IsNullOrEmpty(Model.City) ? "-" : Model.City)</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-3">Address</th>
+                            <td class="ps-3">@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-6" id="confirmMessage">Are you sure?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBtn" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message, url) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmBtn').href = url;
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+}
