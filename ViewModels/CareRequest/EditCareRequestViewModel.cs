@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace NursingCarePlatform.Web.ViewModels.CareRequest
@@ -28,5 +28,25 @@ namespace NursingCarePlatform.Web.ViewModels.CareRequest
         public decimal BudgetMax { get; set; }
 
         public List<SelectListItem> Services { get; set; } = new();
+
+        public string BloodType { get; set; } = string.Empty;
+
+        public string Allergies { get; set; } = string.Empty;
+
+        public string ChronicDiseases { get; set; } = string.Empty;
+
+        public bool ContagiousStatus { get; set; }
+
+        public int RequiredHours { get; set; }
+
+        public bool OvernightStay { get; set; }
+
+        public bool AccommodationAvailable { get; set; }
+
+        public string? PreferredNurseGender { get; set; }
+
+        public string RequestPriority { get; set; } = "Normal";
+
+        public string MatchingType { get; set; } = "Automatic";
     }
 }

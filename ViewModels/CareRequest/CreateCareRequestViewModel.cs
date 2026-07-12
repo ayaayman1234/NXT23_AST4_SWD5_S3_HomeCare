@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NursingCarePlatform.Web.ViewModels.CareRequest
@@ -43,5 +43,13 @@ namespace NursingCarePlatform.Web.ViewModels.CareRequest
 
         public IEnumerable<SelectListItem> Services { get; set; }
             = new List<SelectListItem>();
+
+        public string BloodType { get; set; } = string.Empty;
+
+        public string Allergies { get; set; } = string.Empty;
+
+        public string ChronicDiseases { get; set; } = string.Empty;
+
+        public bool ContagiousStatus { get; set; }
     }
 }

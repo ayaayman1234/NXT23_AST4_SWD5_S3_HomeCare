@@ -1,4 +1,4 @@
-﻿namespace NursingCarePlatform.Web.ViewModels.Payment
+namespace NursingCarePlatform.Web.ViewModels.Payment
 {
     public class PaymentDetailsViewModel
     {
@@ -17,6 +17,8 @@
         public decimal CommissionAmount { get; set; }
 
         public decimal NetAmount { get; set; }
+
+        public decimal NetAmountToNurse => NetAmount;
 
         public string PaymentMethod { get; set; } = string.Empty;
 

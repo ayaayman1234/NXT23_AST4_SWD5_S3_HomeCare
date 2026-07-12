@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -11,13 +11,16 @@ namespace NursingCarePlatform.Web.Services.Implementations
     {
         private readonly NursingDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly INotificationService _notificationService;
 
         public NurseManagementService(
             NursingDbContext context,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            INotificationService notificationService)
         {
             _context = context;
             _environment = environment;
+            _notificationService = notificationService;
         }
 
         // ==========================================
@@ -237,6 +240,18 @@ namespace NursingCarePlatform.Web.Services.Implementations
             _context.NurseDocuments.Add(document);
 
             await _context.SaveChangesAsync();
+
+            // Send notification to all admins
+            var admins = await _context.Admins.ToListAsync();
+            foreach (var admin in admins)
+            {
+                await _notificationService.CreateAsync(
+                    admin.Id,
+                    "Admin",
+                    "New Document Uploaded",
+                    $"A nurse has uploaded a new document ({model.DocumentType}) for review.",
+                    "DocumentUploaded");
+            }
 
             return new ServiceResult
             {

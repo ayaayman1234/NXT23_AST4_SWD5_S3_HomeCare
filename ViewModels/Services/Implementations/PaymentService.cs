@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -130,7 +130,8 @@ namespace NursingCarePlatform.Web.Services.Implementations
             return new ServiceResult
             {
                 Success = true,
-                Message = "Payment completed successfully."
+                Message = "Payment completed successfully.",
+                DataId = payment.Id
             };
         }
 

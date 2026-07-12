@@ -10,10 +10,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
     public class RatingService : IRatingService
     {
         private readonly NursingDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public RatingService(NursingDbContext context)
+        public RatingService(
+            NursingDbContext context,
+            INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<ServiceResult> AddRatingAsync(string userId, CreateRatingViewModel model)
@@ -84,6 +88,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
             _context.Ratings.Add(rating);
 
             await _context.SaveChangesAsync();
+
+            // Send notification to the rated nurse
+            await _notificationService.CreateAsync(
+                model.NurseId,
+                "Nurse",
+                "New Rating Received",
+                $"You have received a new {model.Stars}-star rating from a patient.",
+                "NewRating");
 
             return new ServiceResult
             {

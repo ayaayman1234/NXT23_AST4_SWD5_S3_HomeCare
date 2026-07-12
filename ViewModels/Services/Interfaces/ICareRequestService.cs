@@ -1,5 +1,6 @@
-﻿using NursingCarePlatform.Web.Models;
+using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.ViewModels;
+using NursingCarePlatform.Web.ViewModels.CareRequest;
 
 namespace NursingCarePlatform.Web.Services
 {

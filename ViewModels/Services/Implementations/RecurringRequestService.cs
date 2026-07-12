@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -10,10 +10,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
     public class RecurringRequestService : IRecurringRequestService
     {
         private readonly NursingDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public RecurringRequestService(NursingDbContext context)
+        public RecurringRequestService(
+            NursingDbContext context,
+            INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<ServiceResult> CreateRecurringRequestAsync(CreateRecurringRequestViewModel model)
@@ -42,6 +46,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
             _context.RecurringRequests.Add(recurring);
 
             await _context.SaveChangesAsync();
+
+            // Send notification to the patient
+            await _notificationService.CreateAsync(
+                request.PatientId,
+                "Patient",
+                "Recurring Request Set Up",
+                "Your recurring care request has been scheduled successfully.",
+                "RecurringRequestCreated");
 
             return new ServiceResult
             {

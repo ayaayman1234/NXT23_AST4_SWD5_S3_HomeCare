@@ -1,4 +1,4 @@
-﻿namespace NursingCarePlatform.Web.Models.Responses
+namespace NursingCarePlatform.Web.Models.Responses
 {
     public class ServiceResult
     {
@@ -7,5 +7,7 @@
         public string Message { get; set; } = string.Empty;
 
         public List<string> Errors { get; set; } = new();
+
+        public int DataId { get; set; }
     }
 }

@@ -933,6 +933,20 @@ namespace NursingCarePlatform.Web.Services.Implementations
 
             await _context.SaveChangesAsync();
 
+            // Notify the patient who triggered the SOS
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == sos.TriggeredByUserId);
+
+            if (patient != null)
+            {
+                await _notificationService.CreateAsync(
+                    patient.Id,
+                    "Patient",
+                    "SOS Resolved",
+                    "Your SOS request has been resolved by the administrator.",
+                    "SOSResolved");
+            }
+
             return new ServiceResult
             {
                 Success = true,
@@ -981,6 +995,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
 
             await _context.SaveChangesAsync();
 
+            // Notify the person who requested the cancellation
+            await _notificationService.CreateAsync(
+                cancellation.RequestedById,
+                cancellation.RequestedByType,
+                "Cancellation Approved",
+                "Your cancellation request has been approved by the administrator.",
+                "CancellationApproved");
+
             return new ServiceResult
             {
                 Success = true,
@@ -1004,6 +1026,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
             cancellation.Status = "Rejected";
 
             await _context.SaveChangesAsync();
+
+            // Notify the person who requested the cancellation
+            await _notificationService.CreateAsync(
+                cancellation.RequestedById,
+                cancellation.RequestedByType,
+                "Cancellation Rejected",
+                "Your cancellation request has been rejected by the administrator.",
+                "CancellationRejected");
 
             return new ServiceResult
             {

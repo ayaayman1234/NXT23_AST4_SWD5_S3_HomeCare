@@ -1,53 +1,141 @@
-﻿@*@* ==================== Views/Payment/Create.cshtml ==================== *@
-@model NursingCarePlatform.Web.ViewModels.PaymentViewModel
+@model NursingCarePlatform.Web.ViewModels.Payment.CreatePaymentViewModel
 
 @{
-    ViewData["Title"] = "Create Payment";
+    ViewData["Title"] = "Secure Checkout";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0">New Payment</h4>
-        </div>
-        <div class="card-body">
-            <form asp-controller="Payment" asp-action="Create" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Title -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark"><i class="bi bi-shield-lock-fill text-success me-2"></i>Secure Checkout</h2>
+                <p class="text-muted">Please review your care request details and select a payment method below.</p>
+            </div>
 
-                <div class="mb-3">
-                    <label asp-for="CareRequestId" class="form-label"></label>
-                    <input asp-for="CareRequestId" class="form-control" />
-                    <span asp-validation-for="CareRequestId" class="text-danger"></span>
+            <div class="row g-4">
+                <!-- Left Column: Payment Form -->
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-credit-card-2-front text-primary me-2"></i>Payment Details</h4>
+                        
+                        <form asp-controller="Payment" asp-action="Create" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                            <!-- Hidden Fields -->
+                            <input type="hidden" asp-for="CareRequestId" />
+                            <input type="hidden" asp-for="Amount" />
+
+                            <!-- Payment Method Selection -->
+                            <div class="mb-4">
+                                <label asp-for="PaymentMethod" class="form-label fw-semibold text-muted small uppercase">Select Payment Method</label>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <input type="radio" class="btn-check" name="PaymentMethod" id="methodCard" value="CreditCard" checked>
+                                        <label class="btn btn-outline-primary w-100 py-3 rounded-3 d-flex flex-column align-items-center gap-2" for="methodCard">
+                                            <i class="bi bi-credit-card fs-3"></i>
+                                            <span class="fw-semibold small">Credit/Debit Card</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="radio" class="btn-check" name="PaymentMethod" id="methodWallet" value="Wallet">
+                                        <label class="btn btn-outline-primary w-100 py-3 rounded-3 d-flex flex-column align-items-center gap-2" for="methodWallet">
+                                            <i class="bi bi-wallet2 fs-3"></i>
+                                            <span class="fw-semibold small">Digital Wallet</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="radio" class="btn-check" name="PaymentMethod" id="methodCash" value="Cash">
+                                        <label class="btn btn-outline-primary w-100 py-3 rounded-3 d-flex align-items-center justify-content-center gap-2" for="methodCash">
+                                            <i class="bi bi-cash-stack fs-4"></i>
+                                            <span class="fw-semibold">Cash on Delivery / Direct Cash</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="PaymentMethod" class="text-danger small mt-1 d-block"></span>
+                            </div>
+
+                            <!-- Transaction Reference -->
+                            <div class="mb-4" id="referenceContainer">
+                                <label asp-for="TransactionReference" class="form-label fw-semibold text-muted small uppercase">Transaction Reference (Optional)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-info-circle"></i></span>
+                                    <input asp-for="TransactionReference" class="form-control border-start-0 bg-light-focus" placeholder="Enter bank receipt or transaction ID if applicable" />
+                                </div>
+                                <span asp-validation-for="TransactionReference" class="text-danger small mt-1 d-block"></span>
+                            </div>
+
+                            <!-- Payment Button -->
+                            <button type="submit" class="btn btn-success btn-lg w-100 rounded-3 py-3 fw-bold mt-2 shadow-sm">
+                                <i class="bi bi-lock-fill me-2"></i>Pay @Model.Amount.ToString("N2") EGP
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Amount" class="form-label"></label>
-                    <input asp-for="Amount" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
-                </div>
+                <!-- Right Column: Order Summary -->
+                <div class="col-md-5">
+                    <div class="card border-0 bg-light shadow-sm rounded-4 p-4 h-100">
+                        <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-receipt text-success me-2"></i>Order Summary</h4>
+                        
+                        <div class="mb-4">
+                            <span class="text-muted d-block small fw-semibold text-uppercase">Service Required</span>
+                            <span class="fs-5 fw-bold text-dark">@Model.ServiceName</span>
+                        </div>
 
-                <div class="mb-3">
-                    <label asp-for="PaymentMethod" class="form-label"></label>
-                    <select asp-for="PaymentMethod" class="form-select">
-                        <option value="CreditCard">Credit Card</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Wallet">Digital Wallet</option>
-                    </select>
-                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-                </div>
+                        <hr class="my-3 text-muted">
 
-                <div class="mb-3">
-                    <label asp-for="TransactionReference" class="form-label"></label>
-                    <input asp-for="TransactionReference" class="form-control" />
-                    <span asp-validation-for="TransactionReference" class="text-danger"></span>
-                </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Patient Name</span>
+                                <span class="fw-semibold text-dark">@Model.PatientName</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Assigned Nurse</span>
+                                <span class="fw-semibold text-dark">@Model.NurseName</span>
+                            </div>
+                            <div class="col-12">
+                                <span class="text-muted d-block small">Care Request ID</span>
+                                <span class="fw-mono text-dark">#@Model.CareRequestId</span>
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn btn-success">Submit Payment</button>
-            </form>
+                        <div class="mt-auto bg-white p-3 rounded-3 border border-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-muted">Total Amount</span>
+                                <span class="fs-4 fw-black text-success">@Model.Amount.ToString("N2") EGP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Toggle Transaction Reference helper text/visibility based on selected payment method
+        const radioCard = document.getElementById('methodCard');
+        const radioWallet = document.getElementById('methodWallet');
+        const radioCash = document.getElementById('methodCash');
+        const refInput = document.querySelector('[name="TransactionReference"]');
+
+        function updateUI() {
+            if (radioCash.checked) {
+                refInput.placeholder = "Enter any payment notes or leave blank for COD";
+            } else if (radioWallet.checked) {
+                refInput.placeholder = "Enter Wallet transaction code / mobile number used";
+            } else {
+                refInput.placeholder = "Enter card auth code or leave empty for automatic generation";
+            }
+        }
+
+        radioCard.addEventListener('change', updateUI);
+        radioWallet.addEventListener('change', updateUI);
+        radioCash.addEventListener('change', updateUI);
+        updateUI();
+    </script>
 }

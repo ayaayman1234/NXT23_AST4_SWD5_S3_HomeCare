@@ -95,7 +95,7 @@ namespace NursingCarePlatform.Web.Controllers
             TempData["Success"] = result.Message;
 
             return RedirectToAction(
-                "Pay",
+                "Create",
                 "Payment",
                 new
                 {

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using NursingCarePlatform.Web.Services;
 using NursingCarePlatform.Web.ViewModels;
+using NursingCarePlatform.Web.ViewModels.CareRequest;
 
 namespace NursingCarePlatform.Web.Controllers
 {

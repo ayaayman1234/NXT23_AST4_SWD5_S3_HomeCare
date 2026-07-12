@@ -1,4 +1,4 @@
-﻿namespace NursingCarePlatform.Web.ViewModels.CareRequest
+namespace NursingCarePlatform.Web.ViewModels.CareRequest
 {
     public class CareRequestDetailsViewModel
     {
@@ -19,10 +19,19 @@
         public decimal BudgetMax { get; set; }
 
         public string Status { get; set; } = string.Empty;
-        public int RequiredHours { get; internal set; }
-        public bool OvernightStay { get; internal set; }
-        public bool AccommodationAvailable { get; internal set; }
-        public string? PreferredNurseGender { get; internal set; }
+        public int RequiredHours { get; set; }
+        public bool OvernightStay { get; set; }
+        public bool AccommodationAvailable { get; set; }
+        public string? PreferredNurseGender { get; set; }
         
+        public string RequestPriority { get; set; } = string.Empty;
+        public string RequestStatus { get; set; } = string.Empty;
+        public string MatchingType { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+
+        public string BloodType { get; set; } = string.Empty;
+        public string Allergies { get; set; } = string.Empty;
+        public string ChronicDiseases { get; set; } = string.Empty;
+        public bool ContagiousStatus { get; set; }
     }
 }
