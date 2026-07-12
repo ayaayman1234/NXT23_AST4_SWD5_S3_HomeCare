@@ -124,6 +124,32 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
             }
 
+            // 1. Validation: EndTime must be after StartTime
+            if (model.StartTime >= model.EndTime)
+            {
+                return new ServiceResult
+                {
+                    Success = false,
+                    Message = "End time must be after start time."
+                };
+            }
+
+            // 2. Validation: Prevent overlapping availability slots for the same nurse on the same day
+            var hasOverlap = await _context.Availabilities
+                .AnyAsync(a => a.NurseId == nurse.Id &&
+                               a.Day == model.Day &&
+                               model.StartTime < a.EndTime &&
+                               model.EndTime > a.StartTime);
+
+            if (hasOverlap)
+            {
+                return new ServiceResult
+                {
+                    Success = false,
+                    Message = "This time slot overlaps with an existing slot on the same day."
+                };
+            }
+
             var availability = new Availability
             {
                 NurseId = nurse.Id,
