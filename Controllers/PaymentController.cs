@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingCarePlatform.Web.Services.Interfaces;
 using NursingCarePlatform.Web.ViewModels.Payment;
 
 namespace NursingCarePlatform.Web.Controllers
 {
-    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
@@ -15,35 +13,10 @@ namespace NursingCarePlatform.Web.Controllers
             _paymentService = paymentService;
         }
 
-        
-        public async Task<IActionResult> Index()
-        {
-            var payments = await _paymentService.GetAllPaymentsAsync();
-            return View(payments);
-        }
-
-        public async Task<IActionResult> History()
-        {
-            var history = await _paymentService.GetPaymentHistoryAsync();
-            return View(history);
-        }
-
-        
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var payment = await _paymentService.GetPaymentDetailsAsync(id);
-
-            if (payment == null)
-                return NotFound();
-
-            return View(payment);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Pay(int careRequestId)
-        {
-            var model =
-                await _paymentService.GetPaymentForRequestAsync(careRequestId);
+            var model = await _paymentService.GetPaymentDetailsAsync(id);
 
             if (model == null)
                 return NotFound();
@@ -51,29 +24,36 @@ namespace NursingCarePlatform.Web.Controllers
             return View(model);
         }
 
-      
+        [HttpGet]
+        public async Task<IActionResult> Create(int careRequestId)
+        {
+            var model = await _paymentService.GetPaymentForRequestAsync(careRequestId);
+            
+            if (model == null)
+            {
+                TempData["Error"] = "Payment details not found or already paid.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Pay(CreatePaymentViewModel model)
+        public async Task<IActionResult> Create(CreatePaymentViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result =
-                await _paymentService.CreatePaymentAsync(model);
+            var result = await _paymentService.CreatePaymentAsync(model);
 
             if (!result.Success)
             {
-                ModelState.AddModelError("", result.Message);
+                ModelState.AddModelError(string.Empty, result.Message);
                 return View(model);
             }
 
-            TempData["Success"] = result.Message;
-
-            return RedirectToAction(
-                "RequestDetails",
-                "Patient",
-                new { id = model.CareRequestId });
+            return RedirectToAction(nameof(Details), new { id = result.DataId });
         }
     }
 }
