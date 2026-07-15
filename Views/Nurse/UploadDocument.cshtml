@@ -1,4 +1,4 @@
-﻿@model NursingCarePlatform.Web.ViewModels.Nurse.DocumentViewModel
+@model NursingCarePlatform.Web.ViewModels.Nurse.DocumentViewModel
 
 @{
     ViewData["Title"] = "Upload Document";
@@ -76,6 +76,7 @@
                         </div>
 
                         <button type="submit"
+                                id="submitBtn"
                                 class="btn btn-primary">
 
                             Upload
@@ -102,7 +103,15 @@
 </div>
 
 @section Scripts {
-
     <partial name="_ValidationScriptsPartial" />
-
+    
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                if ($(this).valid()) {
+                    $('#submitBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Uploading...');
+                }
+            });
+        });
+    </script>
 }

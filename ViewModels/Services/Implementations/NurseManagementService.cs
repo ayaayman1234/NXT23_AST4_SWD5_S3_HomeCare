@@ -236,6 +236,22 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
             }
 
+            // Prevent double submissions of the same document type within the last 5 seconds
+            var duplicateThreshold = DateTime.Now.AddSeconds(-5);
+            var isDuplicate = await _context.NurseDocuments
+                .AnyAsync(d => d.NurseId == nurse.Id &&
+                               d.DocumentType == model.DocumentType &&
+                               d.UploadDate >= duplicateThreshold);
+
+            if (isDuplicate)
+            {
+                return new ServiceResult
+                {
+                    Success = true,
+                    Message = "Document uploaded successfully."
+                };
+            }
+
             var folder = Path.Combine(
                 _environment.WebRootPath,
                 "uploads",

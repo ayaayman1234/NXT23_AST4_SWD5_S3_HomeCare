@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -40,22 +40,25 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
             }
 
-            var nurse = await _context.Nurses
-                .FirstOrDefaultAsync(x => x.Id == model.NurseId);
-
-            if (nurse == null)
+            if (model.NurseId.HasValue)
             {
-                return new ServiceResult
+                var nurse = await _context.Nurses
+                    .FirstOrDefaultAsync(x => x.Id == model.NurseId.Value);
+
+                if (nurse == null)
                 {
-                    Success = false,
-                    Message = "Nurse not found."
-                };
+                    return new ServiceResult
+                    {
+                        Success = false,
+                        Message = "Nurse not found."
+                    };
+                }
             }
 
             var complaint = new Complaint
             {
                 PatientId = patient.Id,
-                NurseId = nurse.Id,
+                NurseId = model.NurseId,
                 Title = model.Title,
                 Description = model.Description,
                 Status = "Open",
@@ -175,7 +178,8 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 Title = complaint.Title,
                 Description = complaint.Description,
                 Status = complaint.Status,
-                CreatedAt = complaint.CreatedAt
+                CreatedAt = complaint.CreatedAt,
+                AdminNotes = complaint.AdminNotes
             };
         }
 

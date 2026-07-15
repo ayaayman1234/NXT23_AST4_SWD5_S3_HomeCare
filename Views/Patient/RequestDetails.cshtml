@@ -1,4 +1,4 @@
-﻿@model NursingCarePlatform.Web.Models.CareRequest
+@model NursingCarePlatform.Web.Models.CareRequest
 
 @using NursingCarePlatform.Web.Models
 
@@ -311,7 +311,7 @@
                 Back
             </a>
 
-            @if (Model.RequestStatus == "Completed")
+             @if (Model.RequestStatus == "Completed")
             {
                 @if (!isPaid)
                 {
@@ -336,6 +336,17 @@
                            asp-route-nurseId="@Model.NurseId"
                            class="btn btn-primary">
                         ⭐ Rate Nurse
+                    </a>
+                }
+
+                @if (Model.NurseId.HasValue)
+                {
+                    <a asp-controller="Complaint"
+                       asp-action="Create"
+                       asp-route-nurseId="@Model.NurseId"
+                       class="btn btn-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        File Complaint
                     </a>
                 }
             }

@@ -1,4 +1,4 @@
-﻿namespace NursingCarePlatform.Web.ViewModels.Complaint
+namespace NursingCarePlatform.Web.ViewModels.Complaint
 {
     public class ComplaintDetailsViewModel
     {
@@ -15,5 +15,7 @@
         public string Status { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; }
+        
+        public string? AdminNotes { get; set; }
     }
 }

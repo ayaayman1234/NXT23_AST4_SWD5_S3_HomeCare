@@ -1,45 +1,106 @@
-﻿@model NursingCarePlatform.Web.ViewModels.Complaint.ComplaintDetailsViewModel
+@model NursingCarePlatform.Web.ViewModels.Complaint.ComplaintDetailsViewModel
 
 @{
     ViewData["Title"] = "Complaint Details";
 }
 
-<h2>Complaint Details</h2>
-
-<div class="card shadow">
-
-    <div class="card-body">
-
-        <p>
-            <strong>Patient:</strong>
-            @Model.PatientName
-        </p>
-
-        <p>
-            <strong>Nurse:</strong>
-            @Model.NurseName
-        </p>
-
-        <p>
-            <strong>Title:</strong>
-            @Model.Title
-        </p>
-
-        <p>
-            <strong>Description:</strong>
-            @Model.Description
-        </p>
-
-        <p>
-            <strong>Status:</strong>
-            @Model.Status
-        </p>
-
-        <p>
-            <strong>Date:</strong>
-            @Model.CreatedAt.ToString("dd/MM/yyyy hh:mm tt")
-        </p>
-
+<div class="container py-5" style="max-width: 800px;">
+    <!-- Navigation Back Link -->
+    <div class="mb-4">
+        <a asp-action="MyComplaints" class="text-decoration-none text-muted fw-semibold">
+            <i class="bi bi-arrow-left me-1"></i> Back to My Complaints
+        </a>
     </div>
 
+    <!-- Details Card -->
+    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="border-radius: 24px;">
+        <!-- Header -->
+        <div class="card-header border-0 py-4 text-white" 
+             style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-semibold mb-2" style="font-size: 0.75rem;">
+                        Complaint Record
+                    </span>
+                    <h3 class="fw-bold mb-0">@Model.Title</h3>
+                </div>
+                <div class="text-end">
+                    @if (Model.Status == "Open" || Model.Status == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-hourglass-split me-1"></i> Open
+                        </span>
+                    }
+                    else if (Model.Status == "Resolved")
+                    {
+                        <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-check-circle-fill me-1"></i> Resolved
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-x-circle-fill me-1"></i> @Model.Status
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+            <!-- Metadata Grid -->
+            <div class="row g-4 mb-4 pb-4 border-bottom">
+                <div class="col-6 col-md-4">
+                    <span class="text-uppercase text-secondary small d-block mb-1" style="font-size: 0.72rem; font-weight: 700;">Patient</span>
+                    <span class="fw-bold text-dark"><i class="bi bi-person-fill text-muted me-1"></i> @Model.PatientName</span>
+                </div>
+                <div class="col-6 col-md-4">
+                    <span class="text-uppercase text-secondary small d-block mb-1" style="font-size: 0.72rem; font-weight: 700;">Against Nurse</span>
+                    <span class="fw-bold text-dark"><i class="bi bi-heart-pulse-fill text-danger me-1"></i> @Model.NurseName</span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <span class="text-uppercase text-secondary small d-block mb-1" style="font-size: 0.72rem; font-weight: 700;">Date Submitted</span>
+                    <span class="fw-semibold text-secondary"><i class="bi bi-calendar-event text-muted me-1"></i> @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</span>
+                </div>
+            </div>
+
+            <!-- Complaint Description -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-dark mb-3">Complaint Details</h6>
+                <div class="bg-light p-4 rounded-4 text-secondary" style="font-size: 0.95rem; line-height: 1.6; border-radius: 16px;">
+                    @Model.Description
+                </div>
+            </div>
+
+            <!-- Admin Notes / Feedback (If resolved/has notes) -->
+            @if (!string.IsNullOrEmpty(Model.AdminNotes))
+            {
+                <div class="card border-0 bg-success-subtle p-4 mt-5" style="border-radius: 18px; border-left: 5px solid #198754 !important;">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-reply-all-fill text-success fs-4 me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold text-success mb-2">Admin Resolution Response</h6>
+                            <p class="mb-0 text-dark small" style="line-height: 1.5;">
+                                @Model.AdminNotes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.Status == "Resolved")
+            {
+                <div class="card border-0 bg-success-subtle p-4 mt-5" style="border-radius: 18px; border-left: 5px solid #198754 !important;">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-reply-all-fill text-success fs-4 me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold text-success mb-2">Admin Resolution Response</h6>
+                            <p class="mb-0 text-dark-50 small" style="line-height: 1.5; font-style: italic;">
+                                This complaint has been reviewed and resolved by the administrator.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

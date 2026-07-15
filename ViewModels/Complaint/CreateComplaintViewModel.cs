@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace NursingCarePlatform.Web.ViewModels.Complaint
 {
     public class CreateComplaintViewModel
     {
-        [Required]
         public int? NurseId { get; set; }
 
         [Required]

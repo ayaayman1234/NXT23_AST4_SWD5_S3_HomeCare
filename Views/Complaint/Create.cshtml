@@ -1,36 +1,84 @@
-﻿@model NursingCarePlatform.Web.ViewModels.Complaint.CreateComplaintViewModel
+@model NursingCarePlatform.Web.ViewModels.Complaint.CreateComplaintViewModel
 
 @{
     ViewData["Title"] = "Submit Complaint";
 }
 
-<h2>Submit Complaint</h2>
-
-<form asp-action="Create" method="post">
-
-    <input asp-for="NurseId" type="hidden" />
-
-    <div class="mb-3">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<div class="container py-5" style="max-width: 800px;">
+    <!-- Navigation Back Link -->
+    <div class="mb-4">
+        <a href="javascript:history.back()" class="text-decoration-none text-muted fw-semibold">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description"
-                  rows="6"
-                  class="form-control"></textarea>
+    <div class="card border-0 shadow-lg overflow-hidden" style="border-radius: 24px;">
+        <!-- Header -->
+        <div class="card-header border-0 py-4 text-white text-center" 
+             style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-20 rounded-circle mb-3" style="width: 60px; height: 60px;">
+                <i class="bi bi-exclamation-triangle-fill fs-3 text-white"></i>
+            </div>
+            <h3 class="fw-bold mb-1">Submit a Complaint</h3>
+            <p class="mb-0 text-white-50 small">We value your safety and satisfaction. Please let us know what went wrong.</p>
+        </div>
 
-        <span asp-validation-for="Description"
-              class="text-danger"></span>
+        <div class="card-body p-4 p-md-5">
+            <!-- Warning Callout -->
+            <div class="alert alert-danger border-0 d-flex align-items-start mb-4 p-3" style="border-radius: 12px; background-color: #fdf2f2;">
+                <i class="bi bi-shield-fill-exclamation text-danger fs-5 me-3 mt-1"></i>
+                <div>
+                    <h6 class="fw-bold text-danger mb-1">Important Notice</h6>
+                    <p class="mb-0 text-secondary small" style="line-height: 1.5;">
+                        This complaint will be directly escalated to our quality assurance and admin teams. 
+                        Please ensure the information provided is accurate and detailed. False reports may affect account status.
+                    </p>
+                </div>
+            </div>
+
+            <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                <input asp-for="NurseId" type="hidden" />
+
+                <!-- Title Input -->
+                <div class="mb-4">
+                    <label asp-for="Title" class="form-label fw-bold text-dark mb-2">Complaint Title / Subject</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 12px 0 0 12px;">
+                            <i class="bi bi-tag-fill"></i>
+                        </span>
+                        <input asp-for="Title" class="form-control bg-light border-start-0 py-3" 
+                               placeholder="e.g. Unprofessional behavior, Late arrival..." 
+                               style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required />
+                    </div>
+                    <span asp-validation-for="Title" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <!-- Description Textarea -->
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-bold text-dark mb-2">Detailed Description</label>
+                    <textarea asp-for="Description" rows="6" class="form-control bg-light py-3" 
+                              placeholder="Please describe the incident in detail, including date, time, and specific actions..." 
+                              style="border-radius: 12px; font-size: 0.95rem;" required></textarea>
+                    <span asp-validation-for="Description" class="text-danger small mt-1 d-block"></span>
+                    <div class="form-text text-muted mt-2 small">
+                        Provide as much detail as possible to help us investigate and resolve the issue quickly.
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-3 mt-5">
+                    <a href="javascript:history.back()" class="btn btn-light rounded-pill px-4 py-3 flex-fill fw-bold text-secondary border">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-5 py-3 flex-fill fw-bold shadow-sm"
+                            style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); border: none;">
+                        Submit Report
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <button class="btn btn-danger">
-        Submit Complaint
-    </button>
-
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
