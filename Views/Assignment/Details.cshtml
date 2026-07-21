@@ -1,4 +1,4 @@
-﻿@model NursingCarePlatform.Web.Models.Assignment
+@model NursingCarePlatform.Web.Models.Assignment
 
 @{
     ViewData["Title"] = "Assignment Details";
@@ -113,8 +113,17 @@
 
             @if (Model.NursingNote == null)
             {
-                <div class="alert alert-warning">
-                    No nursing note has been added yet.
+                <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                    <span>No nursing note has been added yet.</span>
+                    @if (Model.AssignmentStatus != "Completed")
+                    {
+                        <a asp-controller="NursingNote" 
+                           asp-action="Create" 
+                           asp-route-assignmentId="@Model.Id" 
+                           class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-circle"></i> Add Note
+                        </a>
+                    }
                 </div>
             }
             else
