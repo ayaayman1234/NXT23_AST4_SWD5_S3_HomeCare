@@ -70,7 +70,7 @@ namespace NursingCarePlatform.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(model);
+            return View("Payment", model);
         }
 
         // ── Create (POST) ─────────────────────────────────────────────────────
@@ -79,14 +79,14 @@ namespace NursingCarePlatform.Web.Controllers
         public async Task<IActionResult> Create(CreatePaymentViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return View("Payment", model);
 
             var result = await _paymentService.CreatePaymentAsync(model);
 
             if (!result.Success)
             {
                 ModelState.AddModelError(string.Empty, result.Message);
-                return View(model);
+                return View("Payment", model);
             }
 
             return RedirectToAction(nameof(Details), new { id = result.DataId });
