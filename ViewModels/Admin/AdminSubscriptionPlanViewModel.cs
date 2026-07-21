@@ -68,6 +68,8 @@ namespace NursingCarePlatform.Web.ViewModels.Admin
 
         public int NurseId { get; set; }
 
+        public int PlanId { get; set; }
+
         public string PlanName { get; set; } = "";
 
         public decimal MonthlyFee { get; set; }
