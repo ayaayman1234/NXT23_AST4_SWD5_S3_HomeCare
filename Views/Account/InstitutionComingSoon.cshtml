@@ -1,0 +1,117 @@
+@{
+    ViewData["Title"] = "Institution Plans — Coming Soon";
+}
+
+<div class="institution-coming-page d-flex align-items-center justify-content-center min-vh-100">
+    <div class="text-center px-4" style="max-width: 680px;">
+
+        <!-- Icon -->
+        <div class="coming-icon mx-auto mb-4">
+            <i class="bi bi-building-fill-check"></i>
+        </div>
+
+        <!-- Badge -->
+        <span class="badge bg-warning-subtle text-warning fw-semibold px-3 py-2 rounded-pill mb-4 d-inline-block">
+            <i class="bi bi-clock-history me-1"></i> Coming Soon
+        </span>
+
+        <h1 class="fw-black display-5 text-dark mb-3">Institution Subscription Plans</h1>
+
+        <p class="text-muted fs-6 mb-4 lh-lg">
+            We're building a dedicated tier for hospitals, clinics, and home-care companies.<br>
+            Book <strong>multiple nurses</strong> at once, get a <strong>dedicated account manager</strong>,
+            and enjoy <strong>bulk pricing</strong> tailored to your team size.
+        </p>
+
+        <!-- Feature previews -->
+        <div class="row g-3 mb-5 text-start">
+            <div class="col-md-6">
+                <div class="feature-preview-card">
+                    <i class="bi bi-people-fill text-primary"></i>
+                    <div>
+                        <div class="fw-bold text-dark small">Bulk Nurse Booking</div>
+                        <div class="text-muted" style="font-size:.82rem;">Request 1–50 nurses in a single order</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-preview-card">
+                    <i class="bi bi-headset text-success"></i>
+                    <div>
+                        <div class="fw-bold text-dark small">Dedicated Support</div>
+                        <div class="text-muted" style="font-size:.82rem;">Priority 24/7 account management</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-preview-card">
+                    <i class="bi bi-graph-up-arrow text-warning"></i>
+                    <div>
+                        <div class="fw-bold text-dark small">Analytics Dashboard</div>
+                        <div class="text-muted" style="font-size:.82rem;">Track nurses, costs & performance</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-preview-card">
+                    <i class="bi bi-shield-fill-check text-purple"></i>
+                    <div>
+                        <div class="fw-bold text-dark small">Custom SLA</div>
+                        <div class="text-muted" style="font-size:.82rem;">Flexible contracts & invoicing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                <i class="bi bi-arrow-left me-2"></i>Back to Registration
+            </a>
+        </div>
+
+        <!-- Progress bar teaser -->
+        <div class="mt-5 text-start">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted fw-semibold">Feature Development Progress</small>
+                <small class="text-primary fw-bold">70%</small>
+            </div>
+            <div class="progress" style="height:8px; border-radius:999px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                     role="progressbar" style="width:70%"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .institution-coming-page {
+            background: linear-gradient(150deg,#f0f9ff 0%,#fdf4ff 100%);
+        }
+
+        .coming-icon {
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg,#dbeafe,#ede9fe);
+            border-radius: 28px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem; color: #4f46e5;
+            box-shadow: 0 8px 24px rgba(79,70,229,.20);
+            animation: float 3s ease-in-out infinite;
+        }
+        @@keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+        }
+
+        .feature-preview-card {
+            display: flex; align-items: flex-start; gap: .75rem;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px; padding: 1rem;
+        }
+        .feature-preview-card i { font-size: 1.4rem; margin-top: 2px; flex-shrink: 0; }
+        .text-purple { color: #7c3aed; }
+    </style>
+}

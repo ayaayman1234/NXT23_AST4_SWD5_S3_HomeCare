@@ -24,11 +24,12 @@ namespace NursingCarePlatform.Web.Controllers
             return View(model);
         }
 
+        // ── Pay (GET) ─────────────────────────────────────────────────────────
         [HttpGet]
-        public async Task<IActionResult> Create(int careRequestId)
+        public async Task<IActionResult> Pay(int careRequestId)
         {
             var model = await _paymentService.GetPaymentForRequestAsync(careRequestId);
-            
+
             if (model == null)
             {
                 TempData["Error"] = "Payment details not found or already paid.";
@@ -38,6 +39,41 @@ namespace NursingCarePlatform.Web.Controllers
             return View(model);
         }
 
+        // ── Pay (POST) ────────────────────────────────────────────────────────
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Pay(CreatePaymentViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _paymentService.CreatePaymentAsync(model);
+
+            if (!result.Success)
+            {
+                ModelState.AddModelError(string.Empty, result.Message);
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Details), new { id = result.DataId });
+        }
+
+        // ── Create (GET) ──────────────────────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> Create(int careRequestId)
+        {
+            var model = await _paymentService.GetPaymentForRequestAsync(careRequestId);
+
+            if (model == null)
+            {
+                TempData["Error"] = "Payment details not found or already paid.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
+        // ── Create (POST) ─────────────────────────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePaymentViewModel model)

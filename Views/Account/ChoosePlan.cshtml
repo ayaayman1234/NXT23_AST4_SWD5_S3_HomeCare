@@ -1,0 +1,248 @@
+@{
+    ViewData["Title"] = "Choose Your Plan";
+    var plans = ViewBag.Plans as List<NursingCarePlatform.Web.ViewModels.Admin.AdminSubscriptionPlanViewModel>
+                ?? new List<NursingCarePlatform.Web.ViewModels.Admin.AdminSubscriptionPlanViewModel>();
+}
+
+<div class="choose-plan-page">
+
+    <!-- Hero -->
+    <div class="text-center mb-5 pt-5">
+        <span class="badge bg-success-subtle text-success fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">
+            <i class="bi bi-stars me-1"></i> Almost there!
+        </span>
+        <h1 class="display-5 fw-black text-dark mb-2">Choose Your Subscription Plan</h1>
+        <p class="text-muted fs-6 mx-auto" style="max-width:520px;">
+            Your plan determines your monthly fee and platform commission rate. You can upgrade anytime from your dashboard.
+        </p>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger text-center mx-auto mb-4" style="max-width:480px;">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    }
+
+    <!-- Plans Grid -->
+    <div class="container pb-5">
+        <div class="row g-4 justify-content-center">
+
+            @{
+                int planIndex = 0;
+                var gradients = new[] {
+                    "linear-gradient(135deg,#f0fdf4,#dcfce7)",
+                    "linear-gradient(135deg,#eff6ff,#dbeafe)",
+                    "linear-gradient(135deg,#faf5ff,#ede9fe)"
+                };
+                var accents = new[] { "#16a34a", "#2563eb", "#7c3aed" };
+                var icons   = new[] { "bi-shield-check", "bi-lightning-charge-fill", "bi-rocket-takeoff-fill" };
+            }
+
+            @foreach (var plan in plans)
+            {
+                var grad   = gradients[planIndex % gradients.Length];
+                var accent = accents[planIndex % accents.Length];
+                var icon   = icons[planIndex % icons.Length];
+                bool isRecommended = planIndex == 1; // middle plan
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="plan-card h-100 @(isRecommended ? "plan-recommended" : "")"
+                         style="background: @grad; border: 2px solid @(isRecommended ? accent : "#e5e7eb");">
+
+                        @if (isRecommended)
+                        {
+                            <div class="recommended-badge" style="background:@accent;">
+                                ⭐ Most Popular
+                            </div>
+                        }
+
+                        <!-- Plan Header -->
+                        <div class="plan-header">
+                            <div class="plan-icon" style="background:@accent20(accent); color:@accent;">
+                                <i class="bi @icon"></i>
+                            </div>
+                            <h3 class="plan-name fw-black">@plan.Name</h3>
+                            <div class="plan-price">
+                                @if (plan.MonthlyFee == 0)
+                                {
+                                    <span class="price-amount" style="color:@accent;">Free</span>
+                                }
+                                else
+                                {
+                                    <span class="price-amount" style="color:@accent;">@plan.MonthlyFee.ToString("N0")</span>
+                                    <span class="price-unit"> EGP / month</span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Features -->
+                        <ul class="plan-features">
+                            <li>
+                                <i class="bi bi-check-circle-fill" style="color:@accent;"></i>
+                                Commission: <strong>@((plan.CommissionRate * 100).ToString("0.#"))%</strong> per booking
+                            </li>
+                            @if (plan.MonthlyFee == 0)
+                            {
+                                <li><i class="bi bi-check-circle-fill" style="color:@accent;"></i>Up to <strong>3 requests/month</strong></li>
+                                <li><i class="bi bi-x-circle-fill text-danger"></i>Limited visibility in search</li>
+                                <li><i class="bi bi-x-circle-fill text-danger"></i>No priority placement</li>
+                            }
+                            else
+                            {
+                                <li><i class="bi bi-check-circle-fill" style="color:@accent;"></i><strong>Unlimited</strong> requests/month</li>
+                                <li><i class="bi bi-check-circle-fill" style="color:@accent;"></i>Full visibility in search</li>
+                                @if (plan.CommissionRate <= 0.05m)
+                                {
+                                    <li><i class="bi bi-check-circle-fill" style="color:@accent;"></i><strong>Priority</strong> placement in results</li>
+                                }
+                            }
+                            @if (!string.IsNullOrWhiteSpace(plan.Description))
+                            {
+                                <li class="plan-desc text-muted small">@plan.Description</li>
+                            }
+                        </ul>
+
+                        <!-- CTA -->
+                        <form asp-action="ChoosePlan" method="post" class="mt-auto">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="selectedPlanId" value="@plan.Id" />
+                            <button type="submit"
+                                    class="btn-select-plan w-100"
+                                    style="background:@accent; @(isRecommended ? "" : "opacity:.9;")">
+                                @(plan.MonthlyFee == 0 ? "Start Free" : "Select Plan")
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+                planIndex++;
+            }
+
+            @if (!plans.Any())
+            {
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+                    No subscription plans available yet. Please contact the administrator.
+                </div>
+            }
+
+        </div>
+
+        <!-- Institution teaser -->
+        <div class="institution-teaser mt-5">
+            <div class="d-flex align-items-center gap-3">
+                <div class="institution-icon">
+                    <i class="bi bi-building-fill-check"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1 text-dark">Are you a Healthcare Institution?</h5>
+                    <p class="text-muted mb-0 small">
+                        Hospitals, clinics &amp; home-care companies get bulk-nurse booking &amp; dedicated support.
+                        <a asp-controller="Account" asp-action="InstitutionComingSoon" class="fw-semibold text-primary ms-1">
+                            Learn more →
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@functions {
+    string accent20(string hex) {
+        // just return a very light tint — we hardcode it per colour
+        return hex switch {
+            "#16a34a" => "rgba(22,163,74,.10)",
+            "#2563eb" => "rgba(37,99,235,.10)",
+            _         => "rgba(124,58,237,.10)"
+        };
+    }
+}
+
+@section Scripts {
+    <style>
+        .choose-plan-page { background: #f9fafb; min-height: 100vh; }
+
+        .plan-card {
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform .25s, box-shadow .25s;
+        }
+        .plan-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,.10);
+        }
+        .plan-recommended {
+            transform: scale(1.03);
+            box-shadow: 0 12px 32px rgba(0,0,0,.14);
+        }
+        .plan-recommended:hover { transform: scale(1.03) translateY(-6px); }
+
+        .recommended-badge {
+            position: absolute;
+            top: 16px; right: -28px;
+            transform: rotate(35deg);
+            padding: 4px 40px;
+            font-size: .72rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: .5px;
+        }
+
+        .plan-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        .plan-name { font-size: 1.4rem; margin-bottom: .5rem; }
+        .price-amount { font-size: 2.4rem; font-weight: 900; line-height: 1; }
+        .price-unit   { font-size: .85rem; color: #6b7280; }
+
+        .plan-features {
+            list-style: none; padding: 0; margin: 1.5rem 0;
+            display: flex; flex-direction: column; gap: .6rem; flex: 1;
+        }
+        .plan-features li {
+            display: flex; align-items: flex-start; gap: .5rem;
+            font-size: .9rem; color: #374151;
+        }
+        .plan-features i { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+        .plan-desc { border-top: 1px dashed #d1d5db; padding-top: .6rem; margin-top: .4rem; }
+
+        .btn-select-plan {
+            border: none; border-radius: 12px;
+            padding: .85rem; font-weight: 700; font-size: 1rem;
+            color: #fff; cursor: pointer;
+            transition: filter .2s, transform .15s;
+        }
+        .btn-select-plan:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        .institution-teaser {
+            background: linear-gradient(135deg,#fff7ed,#fef3c7);
+            border: 1.5px solid #fde68a;
+            border-radius: 20px; padding: 1.5rem 2rem;
+            max-width: 680px; margin: 0 auto;
+        }
+        .institution-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            background: rgba(245,158,11,.15); color: #d97706;
+            font-size: 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+    </style>
+}

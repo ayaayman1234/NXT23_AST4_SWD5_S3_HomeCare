@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -112,6 +113,33 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 };
 
                 _context.Nurses.Add(nurse);
+                await _context.SaveChangesAsync(); // save nurse first to get Id
+
+                // ── Assign subscription plan ──────────────────────────────────
+                int? planId = model.SelectedPlanId;
+
+                // fallback: auto-assign the Free plan if nothing was chosen
+                if (planId == null)
+                {
+                    var freePlan = await _context.SubscriptionPlans
+                        .Where(p => p.IsActive && p.MonthlyFee == 0)
+                        .FirstOrDefaultAsync();
+                    planId = freePlan?.Id;
+                }
+
+                if (planId != null)
+                {
+                    _context.NurseSubscriptions.Add(new NurseSubscription
+                    {
+                        NurseId = nurse.Id,
+                        PlanId = planId.Value,
+                        StartDate = DateTime.Now,
+                        EndDate = DateTime.Now.AddMonths(1),
+                        Status = "Active",
+                        CreatedAt = DateTime.Now
+                    });
+                }
+                // ─────────────────────────────────────────────────────────────
             }
 
             // ===========================

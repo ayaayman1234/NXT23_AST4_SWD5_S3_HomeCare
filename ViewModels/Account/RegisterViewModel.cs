@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace NursingCarePlatform.Web.ViewModels.Account
 {
@@ -58,5 +58,8 @@ namespace NursingCarePlatform.Web.ViewModels.Account
         public int? YearsExperience { get; set; }
 
         public string? Specialization { get; set; }
+
+        /// <summary>Subscription plan chosen by the nurse at registration time.</summary>
+        public int? SelectedPlanId { get; set; }
     }
 }

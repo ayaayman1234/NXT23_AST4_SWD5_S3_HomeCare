@@ -134,6 +134,76 @@
         </div>
     </div>
 
+    <!-- ── Subscription Status Card ───────────────────────────────────── -->
+    @{
+        var sub = ViewBag.ActiveSubscription as NursingCarePlatform.Web.ViewModels.Admin.AdminNurseSubscriptionViewModel;
+    }
+    @if (sub != null)
+    {
+        var daysLeft = (sub.EndDate - DateTime.Now).Days;
+        var isExpiringSoon = daysLeft <= 7;
+        var cardBg = sub.Status == "Active"
+            ? "linear-gradient(135deg,#f0fdf4,#dcfce7)"
+            : "linear-gradient(135deg,#fff7ed,#fef3c7)";
+        var badgeClass = sub.Status == "Active" ? "bg-success" : "bg-warning text-dark";
+        var statusIcon = sub.Status == "Active" ? "bi-patch-check-fill" : "bi-exclamation-triangle-fill";
+
+        <div class="card border-0 shadow-sm mb-4"
+             style="border-radius:20px; background: @cardBg; border: 1.5px solid @(sub.Status == "Active" ? "#bbf7d0" : "#fde68a") !important;">
+            <div class="card-body p-4">
+                <div class="row align-items-center g-3">
+                    <div class="col-auto">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                             style="width:56px;height:56px;background:rgba(22,163,74,.12);font-size:1.6rem;color:#16a34a;">
+                            <i class="bi bi-award-fill"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                            <h5 class="fw-black mb-0 text-dark">@sub.PlanName</h5>
+                            <span class="badge @badgeClass rounded-pill px-2 py-1" style="font-size:.72rem;">
+                                <i class="bi @statusIcon me-1"></i>@sub.Status
+                            </span>
+                            @if (isExpiringSoon && sub.Status == "Active")
+                            {
+                                <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size:.72rem;">
+                                    <i class="bi bi-clock-fill me-1"></i>Expiring in @daysLeft days
+                                </span>
+                            }
+                        </div>
+                        <p class="text-muted mb-0 small">
+                            <i class="bi bi-percent me-1 text-primary"></i>Commission Rate: <strong>@((sub.CommissionRate * 100).ToString("0.#"))%</strong>
+                            &nbsp;·&nbsp;
+                            <i class="bi bi-calendar3 me-1 text-muted"></i>Expires: <strong>@sub.EndDate.ToString("dd MMM yyyy")</strong>
+                            &nbsp;·&nbsp;
+                            <i class="bi bi-cash-coin me-1 text-success"></i>@sub.MonthlyFee.ToString("N0") EGP/month
+                        </p>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-controller="Account" asp-action="InstitutionComingSoon"
+                           class="btn btn-sm btn-outline-success rounded-pill px-3">
+                            <i class="bi bi-arrow-up-circle me-1"></i>Upgrade
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert border-0 shadow-sm mb-4"
+             style="border-radius:16px;background:linear-gradient(135deg,#fff7ed,#fef3c7);">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
+                <div>
+                    <strong>No active subscription.</strong>
+                    <span class="text-muted small ms-2">Contact admin to activate your plan.</span>
+                </div>
+            </div>
+        </div>
+    }
+    <!-- ──────────────────────────────────────────────────────────────── -->
+
 </div>
 
 @section Scripts {

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NursingCarePlatform.Web.Data;
 using NursingCarePlatform.Web.Models;
 using NursingCarePlatform.Web.Models.Responses;
@@ -89,18 +89,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
             var history = new WorkHistory
             {
                 NurseId = assignment.NurseId,
-
                 PatientId = assignment.CareRequest.PatientId,
-
                 CareRequestId = assignment.CareRequestId,
-
                 ServiceId = assignment.CareRequest.ServiceId,
-
                 CompletedAt = assignment.CompletedAt.Value,
-
                 RequiredHours = assignment.CareRequest.RequiredHours,
-
-                TotalAmount = assignment.CareRequest.BudgetMax
+                TotalAmount = assignment.CareRequest.BudgetMax,
+                AssignmentId = assignment.Id,
+                StartTime = assignment.ShiftStart
             };
 
             _context.WorkHistories.Add(history);

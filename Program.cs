@@ -171,6 +171,45 @@ namespace NursingCarePlatform.Web
                         await db.SaveChangesAsync();
                     }
                 }
+
+                // ==========================================
+                // Seed Subscription Plans
+                // ==========================================
+
+                if (!db.SubscriptionPlans.Any())
+                {
+                    db.SubscriptionPlans.AddRange(
+                        new NursingCarePlatform.Web.Models.SubscriptionPlan
+                        {
+                            Name           = "Free",
+                            Description    = "Get started with up to 3 requests per month. Best for new nurses just joining the platform.",
+                            MonthlyFee     = 0m,
+                            CommissionRate = 0.15m,   // 15%
+                            IsActive       = true,
+                            CreatedAt      = DateTime.Now
+                        },
+                        new NursingCarePlatform.Web.Models.SubscriptionPlan
+                        {
+                            Name           = "Basic",
+                            Description    = "Unlimited requests per month with full search visibility and reduced commission.",
+                            MonthlyFee     = 150m,
+                            CommissionRate = 0.08m,   // 8%
+                            IsActive       = true,
+                            CreatedAt      = DateTime.Now
+                        },
+                        new NursingCarePlatform.Web.Models.SubscriptionPlan
+                        {
+                            Name           = "Pro",
+                            Description    = "Maximum earnings — lowest commission rate, priority placement in search results, and unlimited requests.",
+                            MonthlyFee     = 350m,
+                            CommissionRate = 0.03m,   // 3%
+                            IsActive       = true,
+                            CreatedAt      = DateTime.Now
+                        }
+                    );
+
+                    await db.SaveChangesAsync();
+                }
             }
 
             app.Run();

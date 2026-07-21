@@ -12,13 +12,16 @@ namespace NursingCarePlatform.Web.Controllers
     {
         private readonly INurseService _nurseService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ISubscriptionService _subscriptionService;
 
         public NurseController(
             INurseService nurseService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            ISubscriptionService subscriptionService)
         {
             _nurseService = nurseService;
             _userManager = userManager;
+            _subscriptionService = subscriptionService;
         }
 
         public override async Task OnActionExecutionAsync(
@@ -48,8 +51,21 @@ namespace NursingCarePlatform.Web.Controllers
         // Dashboard
         // =====================================
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var nurse = await _nurseService.GetNurseByUserIdAsync(user.Id);
+                if (nurse != null)
+                {
+                    var subs = await _subscriptionService.GetNurseSubscriptionsAsync(nurse.Id);
+                    ViewBag.ActiveSubscription = subs
+                        .Where(s => s.Status == "Active" && s.EndDate >= DateTime.Now)
+                        .OrderByDescending(s => s.StartDate)
+                        .FirstOrDefault();
+                }
+            }
             return View();
         }
 

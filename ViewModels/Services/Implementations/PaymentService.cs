@@ -10,12 +10,14 @@ namespace NursingCarePlatform.Web.Services.Implementations
     public class PaymentService : IPaymentService
     {
         private readonly NursingDbContext _context;
+        private readonly INotificationService _notificationService;
 
         private const decimal CommissionRate = 0.10m;
 
-        public PaymentService(NursingDbContext context)
+        public PaymentService(NursingDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<CreatePaymentViewModel?> GetPaymentForRequestAsync(int careRequestId)
@@ -68,6 +70,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
             }
 
             var request = await _context.CareRequests
+                .Include(x => x.Service)
                 .FirstOrDefaultAsync(x => x.Id == model.CareRequestId);
 
             if (request == null)
@@ -116,6 +119,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
             request.RequestStatus = "Completed";
 
             await _context.SaveChangesAsync();
+
             if (request.NurseId != null)
             {
                 var nurse = await _context.Nurses
@@ -124,8 +128,31 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 if (nurse != null)
                 {
                     request.Nurse.IsAvailable = true;
+                    await _context.SaveChangesAsync();
                 }
             }
+
+            // ── Send receipt notification to the patient ──────────────────────
+            var receiptMessage =
+                $"✅ Payment Receipt\n" +
+                $"──────────────────────────────\n" +
+                $"Reference  : {payment.TransactionReference}\n" +
+                $"Service    : {request.Service?.Name ?? "Nursing Care"}\n" +
+                $"Amount Paid: {payment.Amount:N2} EGP\n" +
+                $"Platform Fee (10%): {payment.CommissionAmount:N2} EGP\n" +
+                $"Net to Nurse: {payment.NetAmount:N2} EGP\n" +
+                $"Method     : {payment.PaymentMethod}\n" +
+                $"Date       : {payment.PaymentDate:dd/MM/yyyy hh:mm tt}\n" +
+                $"Status     : {payment.PaymentStatus}";
+
+            await _notificationService.CreateAsync(
+                receiverId: request.PatientId,
+                receiverType: "Patient",
+                title: $"Payment Confirmed — Receipt #{payment.TransactionReference}",
+                message: receiptMessage,
+                notificationType: "PaymentReceipt"
+            );
+            // ─────────────────────────────────────────────────────────────────
 
             return new ServiceResult
             {
