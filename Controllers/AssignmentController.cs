@@ -94,13 +94,7 @@ namespace NursingCarePlatform.Web.Controllers
 
             TempData["Success"] = result.Message;
 
-            return RedirectToAction(
-                "Create",
-                "Payment",
-                new
-                {
-                    careRequestId = assignment.CareRequestId
-                });
+            return RedirectToAction(nameof(MyAssignments));
         }
 
     }
