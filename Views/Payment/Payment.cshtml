@@ -48,6 +48,31 @@
                                 <span asp-validation-for="PaymentMethod" class="text-danger small mt-1 d-block"></span>
                             </div>
 
+                            <!-- Dynamic Payment Fields (Simulated for UI) -->
+                            <div id="cardFields" class="mb-4">
+                                <label class="form-label fw-semibold text-muted small uppercase">Card Details</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-credit-card"></i></span>
+                                    <input type="text" class="form-control border-start-0 bg-light-focus" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" />
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control bg-light-focus" placeholder="MM/YY" maxlength="5" />
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control bg-light-focus" placeholder="CVV" maxlength="3" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="walletFields" class="mb-4" style="display: none;">
+                                <label class="form-label fw-semibold text-muted small uppercase">Wallet Mobile Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-phone"></i></span>
+                                    <input type="text" class="form-control border-start-0 bg-light-focus" placeholder="01X XXXX XXXX" maxlength="11" />
+                                </div>
+                            </div>
+
                             <!-- Transaction Reference -->
                             <div class="mb-4" id="referenceContainer">
                                 <label asp-for="TransactionReference" class="form-label fw-semibold text-muted small uppercase">Transaction Reference (Optional)</label>
@@ -110,16 +135,22 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
     <script>
-        // Toggle Transaction Reference helper text/visibility based on selected payment method
+        // Toggle UI elements based on selected payment method
         const radioCard = document.getElementById('methodCard');
         const radioWallet = document.getElementById('methodWallet');
         const refInput = document.querySelector('[name="TransactionReference"]');
+        const cardFields = document.getElementById('cardFields');
+        const walletFields = document.getElementById('walletFields');
 
         function updateUI() {
             if (radioWallet.checked) {
-                refInput.placeholder = "Enter Wallet transaction code / mobile number used";
+                refInput.placeholder = "Enter Wallet transaction code if applicable";
+                cardFields.style.display = 'none';
+                walletFields.style.display = 'block';
             } else {
-                refInput.placeholder = "Enter card auth code or leave empty for automatic generation";
+                refInput.placeholder = "Enter bank receipt or leave empty for automatic generation";
+                cardFields.style.display = 'block';
+                walletFields.style.display = 'none';
             }
         }
 
