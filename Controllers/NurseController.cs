@@ -60,10 +60,30 @@ namespace NursingCarePlatform.Web.Controllers
                 if (nurse != null)
                 {
                     var subs = await _subscriptionService.GetNurseSubscriptionsAsync(nurse.Id);
-                    ViewBag.ActiveSubscription = subs
+                    var activeSub = subs
                         .Where(s => s.Status == "Active" && s.EndDate >= DateTime.Now)
                         .OrderByDescending(s => s.StartDate)
                         .FirstOrDefault();
+
+                    // Fallback for old nurses created before the subscription system
+                    if (activeSub == null)
+                    {
+                        var plans = await _subscriptionService.GetAllPlansAsync();
+                        var freePlan = plans.FirstOrDefault(p => p.MonthlyFee == 0);
+                        if (freePlan != null)
+                        {
+                            await _subscriptionService.AssignPlanToNurseAsync(nurse.Id, freePlan.Id, DateTime.Now, DateTime.Now.AddYears(10));
+                            
+                            // Reload after assignment
+                            subs = await _subscriptionService.GetNurseSubscriptionsAsync(nurse.Id);
+                            activeSub = subs
+                                .Where(s => s.Status == "Active" && s.EndDate >= DateTime.Now)
+                                .OrderByDescending(s => s.StartDate)
+                                .FirstOrDefault();
+                        }
+                    }
+
+                    ViewBag.ActiveSubscription = activeSub;
                 }
             }
             return View();
