@@ -28,6 +28,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 .Include(r => r.Nurse)
                     .ThenInclude(n => n.User)
                 .Include(r => r.Service)
+                .Include(r => r.Offers)
                 .FirstOrDefaultAsync(r => r.Id == careRequestId);
 
             if (request == null)
@@ -38,10 +39,13 @@ namespace NursingCarePlatform.Web.Services.Implementations
             if (alreadyPaid)
                 return null;
 
+            var acceptedOffer = request.Offers.FirstOrDefault(o => o.OfferStatus == "Accepted");
+            decimal finalAmount = acceptedOffer != null ? acceptedOffer.ProposedPrice : request.BudgetMax;
+
             return new CreatePaymentViewModel
             {
                 CareRequestId = request.Id,
-                Amount = request.BudgetMax,
+                Amount = finalAmount,
                 PaymentMethod = string.Empty,
                 TransactionReference = string.Empty,
 

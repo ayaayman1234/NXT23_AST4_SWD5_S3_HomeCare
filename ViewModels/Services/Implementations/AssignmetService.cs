@@ -70,6 +70,8 @@ namespace NursingCarePlatform.Web.Services.Implementations
             var assignment = await _context.Assignments
                 .Include(a => a.CareRequest)
                     .ThenInclude(c => c.Patient)
+                .Include(a => a.CareRequest)
+                    .ThenInclude(c => c.Offers)
                 .Include(a => a.Nurse)
                 .FirstOrDefaultAsync(a => a.Id == assignmentId);
 
@@ -86,6 +88,10 @@ namespace NursingCarePlatform.Web.Services.Implementations
 
             assignment.CareRequest.RequestStatus = "Completed";
             assignment.CompletedAt = DateTime.Now;
+
+            var acceptedOffer = assignment.CareRequest.Offers.FirstOrDefault(o => o.OfferStatus == "Accepted");
+            decimal finalAmount = acceptedOffer != null ? acceptedOffer.ProposedPrice : assignment.CareRequest.BudgetMax;
+
             var history = new WorkHistory
             {
                 NurseId = assignment.NurseId,
@@ -94,7 +100,7 @@ namespace NursingCarePlatform.Web.Services.Implementations
                 ServiceId = assignment.CareRequest.ServiceId,
                 CompletedAt = assignment.CompletedAt.Value,
                 RequiredHours = assignment.CareRequest.RequiredHours,
-                TotalAmount = assignment.CareRequest.BudgetMax,
+                TotalAmount = finalAmount,
                 AssignmentId = assignment.Id,
                 StartTime = assignment.ShiftStart
             };
