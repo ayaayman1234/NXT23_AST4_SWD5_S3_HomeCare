@@ -11,21 +11,7 @@
         <p class="lead text-muted">Upgrade your plan to reduce commission rates and boost your earnings!</p>
     </div>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
 
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center justify-content-center">
         @foreach (var plan in Model)
@@ -69,27 +55,102 @@
                             </li>
                         </ul>
                         
-                        <form asp-action="SubscribeToPlan" method="post" class="mt-auto">
-                            <input type="hidden" name="planId" value="@plan.Id" />
-                            @if (isCurrent)
-                            {
-                                <button type="button" class="w-100 btn btn-lg btn-outline-success" disabled>
-                                    Active
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="w-100 btn btn-lg btn-success" onclick="return confirm('Are you sure you want to subscribe to @plan.Name?');">
+                        @if (isCurrent)
+                        {
+                            <button type="button" class="w-100 btn btn-lg btn-outline-success mt-auto" disabled>
+                                Active
+                            </button>
+                        }
+                        else if (isFree)
+                        {
+                            <form asp-action="SubscribeToPlan" method="post" class="mt-auto">
+                                <input type="hidden" name="planId" value="@plan.Id" />
+                                <button type="submit" class="w-100 btn btn-lg btn-success" onclick="return confirm('Subscribe to @plan.Name for Free?');">
                                     Subscribe Now
                                 </button>
-                            }
-                        </form>
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="w-100 btn btn-lg btn-success mt-auto" 
+                                    onclick="openPaymentModal(@plan.Id, '@plan.Name', @plan.MonthlyFee)">
+                                Subscribe Now
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+      <div class="modal-header bg-light border-0" style="border-radius: 16px 16px 0 0;">
+        <h5 class="modal-title fw-bold text-dark" id="paymentModalLabel">
+            <i class="bi bi-credit-card-fill text-primary me-2"></i>Secure Checkout
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-info mb-4" style="border-radius: 12px;">
+            <p class="mb-1 small text-muted">You are subscribing to:</p>
+            <h5 class="mb-0 fw-bold" id="modalPlanName"></h5>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between">
+                <span class="text-muted">Total Amount:</span>
+                <strong class="text-success fs-5"><span id="modalPlanFee"></span> EGP</strong>
+            </div>
+        </div>
+
+        <form id="paymentForm" asp-action="SubscribeToPlan" method="post">
+            <input type="hidden" id="modalPlanId" name="planId" value="" />
+            
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold">Name on Card</label>
+                <input type="text" class="form-control form-control-lg" placeholder="John Doe" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold">Card Number</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-credit-card text-muted"></i></span>
+                    <input type="text" class="form-control form-control-lg" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-6">
+                    <label class="form-label text-muted small fw-bold">Expiry Date</label>
+                    <input type="text" class="form-control form-control-lg" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="col-6">
+                    <label class="form-label text-muted small fw-bold">CVV</label>
+                    <input type="password" class="form-control form-control-lg" placeholder="123" maxlength="3" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm" style="border-radius: 12px;">
+                <i class="bi bi-shield-lock-fill me-2"></i>Pay & Subscribe
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function openPaymentModal(planId, planName, fee) {
+        document.getElementById('modalPlanId').value = planId;
+        document.getElementById('modalPlanName').innerText = planName + ' Plan';
+        document.getElementById('modalPlanFee').innerText = fee.toLocaleString();
+        
+        var modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        modal.show();
+    }
+</script>
 
 <style>
     .card:hover {
