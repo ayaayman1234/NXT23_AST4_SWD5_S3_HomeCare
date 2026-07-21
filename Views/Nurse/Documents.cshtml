@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NursingCarePlatform.Web.Models.NurseDocument>
+@model IEnumerable<NursingCarePlatform.Web.Models.NurseDocument>
 
 @{
     ViewData["Title"] = "My Documents";
@@ -24,14 +24,7 @@
 
     </div>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">
 
-            @TempData["Success"]
-
-        </div>
-    }
 
     @if (!Model.Any())
     {
