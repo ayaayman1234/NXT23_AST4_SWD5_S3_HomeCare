@@ -44,13 +44,6 @@
                                             <span class="fw-semibold small">Digital Wallet</span>
                                         </label>
                                     </div>
-                                    <div class="col-12">
-                                        <input type="radio" class="btn-check" name="PaymentMethod" id="methodCash" value="Cash">
-                                        <label class="btn btn-outline-primary w-100 py-3 rounded-3 d-flex align-items-center justify-content-center gap-2" for="methodCash">
-                                            <i class="bi bi-cash-stack fs-4"></i>
-                                            <span class="fw-semibold">Cash on Delivery / Direct Cash</span>
-                                        </label>
-                                    </div>
                                 </div>
                                 <span asp-validation-for="PaymentMethod" class="text-danger small mt-1 d-block"></span>
                             </div>
@@ -120,13 +113,10 @@
         // Toggle Transaction Reference helper text/visibility based on selected payment method
         const radioCard = document.getElementById('methodCard');
         const radioWallet = document.getElementById('methodWallet');
-        const radioCash = document.getElementById('methodCash');
         const refInput = document.querySelector('[name="TransactionReference"]');
 
         function updateUI() {
-            if (radioCash.checked) {
-                refInput.placeholder = "Enter any payment notes or leave blank for COD";
-            } else if (radioWallet.checked) {
+            if (radioWallet.checked) {
                 refInput.placeholder = "Enter Wallet transaction code / mobile number used";
             } else {
                 refInput.placeholder = "Enter card auth code or leave empty for automatic generation";
@@ -135,7 +125,6 @@
 
         radioCard.addEventListener('change', updateUI);
         radioWallet.addEventListener('change', updateUI);
-        radioCash.addEventListener('change', updateUI);
         updateUI();
     </script>
 }
