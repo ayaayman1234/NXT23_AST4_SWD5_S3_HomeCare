@@ -90,6 +90,59 @@ namespace NursingCarePlatform.Web.Controllers
         }
 
         // =====================================
+        // Subscription Plans
+        // =====================================
+
+        public async Task<IActionResult> Plans()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var nurse = await _nurseService.GetNurseByUserIdAsync(user.Id);
+            if (nurse == null) return NotFound();
+
+            var plans = await _subscriptionService.GetAllPlansAsync();
+            var subs = await _subscriptionService.GetNurseSubscriptionsAsync(nurse.Id);
+            
+            var activeSub = subs
+                .Where(s => s.Status == "Active" && s.EndDate >= DateTime.Now)
+                .OrderByDescending(s => s.StartDate)
+                .FirstOrDefault();
+
+            ViewBag.ActivePlanId = activeSub?.PlanId;
+            return View(plans.Where(p => p.IsActive).ToList());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubscribeToPlan(int planId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var nurse = await _nurseService.GetNurseByUserIdAsync(user.Id);
+            if (nurse == null) return NotFound();
+
+            // Typically subscriptions last 1 year or 1 month. We'll give them 1 year.
+            var result = await _subscriptionService.AssignPlanToNurseAsync(
+                nurse.Id, 
+                planId, 
+                DateTime.Now, 
+                DateTime.Now.AddYears(1)
+            );
+
+            if (result.Success)
+            {
+                TempData["Success"] = "Successfully subscribed to the new plan!";
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(Plans));
+        }
+
+        // =====================================
         // Profile
         // =====================================
 
